@@ -438,6 +438,55 @@ els.taskList.addEventListener('click', e => {
   renderTask();
 });
 
+// ─── Contract tabs ────────────────────────────────────────────────────────────
+
+document.querySelectorAll('.contract-tabs').forEach(tabBar => {
+  tabBar.addEventListener('click', e => {
+    const tab = e.target.closest('.contract-tab');
+    if (!tab) return;
+    tabBar.querySelectorAll('.contract-tab').forEach(t => {
+      t.classList.toggle('is-active', t === tab);
+      t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+    });
+    const paneId = tab.dataset.target;
+    tabBar.closest('section').querySelectorAll('.contract-pane').forEach(p => {
+      p.hidden = p.id !== paneId;
+    });
+  });
+});
+
+function renderContractRootstocks() {
+  const simEl = document.getElementById('simRootstockCards');
+  const hwEl  = document.getElementById('hwRootstockCards');
+
+  const simRootstocks = state.catalog?.rootstocks ?? [];
+  const hwRootstocks  = state.catalog?.panther_rootstocks ?? [];
+
+  function cardHtml(r) {
+    const name = escapeHtml(r.name ?? '');
+    const desc = escapeHtml(r.description ?? '');
+    const svg  = r.bt_svg ?? '';
+    return `<div class="contract-rootstock">
+      <div class="contract-rootstock__head">
+        <span class="contract-rootstock__name">${name}</span>
+        <span class="contract-rootstock__desc">${desc}</span>
+      </div>
+      ${svg ? `<div class="contract-rootstock__svg">${svg}</div>` : ''}
+    </div>`;
+  }
+
+  if (simEl) {
+    simEl.innerHTML = simRootstocks.length
+      ? simRootstocks.map(cardHtml).join('')
+      : '<div class="muted-note">No rootstocks found.</div>';
+  }
+  if (hwEl) {
+    hwEl.innerHTML = hwRootstocks.length
+      ? hwRootstocks.map(cardHtml).join('')
+      : '<div class="muted-note">No rootstocks found.</div>';
+  }
+}
+
 // ─── Boot ─────────────────────────────────────────────────────────────────────
 
 async function loadCatalog() {
@@ -450,7 +499,7 @@ async function loadCatalog() {
 applyAnonymousMode();
 
 loadCatalog()
-  .then(render)
+  .then(() => { render(); renderContractRootstocks(); })
   .catch(err => {
     els.taskListMeta.textContent = `Failed to load catalog: ${err.message}`;
   });

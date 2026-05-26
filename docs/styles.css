@@ -367,6 +367,161 @@ a { color: var(--accent); }
   border-top: 1px solid var(--line);
 }
 
+/* ─── Robot Contract ─────────────────────────────────────────────────────────── */
+.contract-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--line);
+  margin-bottom: 20px;
+}
+.contract-tab {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 9px 20px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.contract-tab:hover { color: var(--ink); }
+.contract-tab.is-active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.contract-pane { /* always in flow; hidden attr hides non-active */ }
+
+.contract-block {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  background: var(--paper);
+}
+.contract-block__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+.contract-block__head::marker,
+.contract-block__head::-webkit-details-marker { display: none; }
+.contract-block__head::before {
+  content: "▸";
+  font-size: 0.75rem;
+  color: var(--muted);
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+.contract-block[open] > .contract-block__head::before { transform: rotate(90deg); }
+.contract-block__name {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.contract-count {
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: #f4f4f4;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+.contract-table-wrap {
+  padding: 0 18px 16px;
+  overflow-x: auto;
+}
+.contract-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+.contract-table th,
+.contract-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.contract-table th {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #f8f8f8;
+}
+.contract-table code {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: #f0f0f0;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.rootstock-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  padding: 0 18px 18px;
+}
+.contract-rootstock {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 13px 15px;
+  background: #f8f8f8;
+}
+.contract-rootstock__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.contract-rootstock__name {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+.contract-rootstock__desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.contract-rootstock__svg {
+  margin: 8px 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fffdf8;
+  overflow-x: auto;
+  padding: 4px;
+}
+.contract-rootstock__svg svg { width: 100%; height: auto; }
+.contract-rootstock__meta {
+  font-size: 0.78rem;
+  color: var(--ink-2);
+  line-height: 1.5;
+  font-family: var(--font-mono);
+  background: #f0f0f0;
+  border-radius: 5px;
+  padding: 6px 9px;
+}
+.contract-meta-label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 3px;
+}
+
 /* ─── BibTeX ─────────────────────────────────────────────────────────────────── */
 .bibtex-block {
   font-family: var(--font-mono);

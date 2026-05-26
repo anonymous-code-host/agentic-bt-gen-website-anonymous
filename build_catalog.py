@@ -23,6 +23,7 @@ OUTPUT_PATH = APP_ROOT / "docs" / "data" / "catalog.json"
 PAPER_ROOT = APP_ROOT.parent / "agentic-bt-gen-paper"
 PAPER_TABLE_ROOT = PAPER_ROOT / "tables"
 ROOTSTOCKS_PATH = APP_ROOT.parent / "pyrobosim" / "pyrobosim" / "pyrobosim" / "mcp" / "data" / "rootstocks.yaml"
+PANTHER_ROOTSTOCKS_PATH = APP_ROOT.parent / "panther-mcp-server" / "panther_mcp" / "data" / "rootstocks.yaml"
 
 METHOD_ORDER = {"M-Core": 0, "B1": 1, "B0": 2, "Other": 3}
 
@@ -185,6 +186,77 @@ def load_rootstocks() -> list[dict[str, Any]]:
                 "bt_svg": render_bt_svg(template),
             }
         )
+    return items
+
+
+_BT_OPEN_RE = re.compile(r"<([A-Z][A-Za-z]+)[\s>]")
+
+
+def extract_xml_snippets_from_raw(raw_block: str) -> list[str]:
+    """Extract all well-formed XML snippets from a raw YAML entry string."""
+    snippets: list[str] = []
+    i = 0
+    while i < len(raw_block):
+        m = _BT_OPEN_RE.search(raw_block, i)
+        if not m:
+            break
+        start = m.start()
+        tag = m.group(1)
+        close_tag = f"</{tag}>"
+        open_tag = f"<{tag}"
+        depth = 0
+        j = start + len(open_tag)
+        found = False
+        while j < len(raw_block):
+            open_pos = raw_block.find(open_tag, j)
+            close_pos = raw_block.find(close_tag, j)
+            if close_pos == -1:
+                break
+            if open_pos != -1 and open_pos < close_pos:
+                depth += 1
+                j = open_pos + len(open_tag)
+            else:
+                if depth == 0:
+                    end = close_pos + len(close_tag)
+                    snippets.append(raw_block[start:end].strip())
+                    i = end
+                    found = True
+                    break
+                depth -= 1
+                j = close_pos + len(close_tag)
+        if not found:
+            i = start + 1
+    return snippets
+
+
+def load_panther_rootstocks() -> list[dict[str, Any]]:
+    """Parse Panther rootstocks directly from raw YAML text (no PyYAML needed)."""
+    if not PANTHER_ROOTSTOCKS_PATH.exists():
+        return []
+    text = PANTHER_ROOTSTOCKS_PATH.read_text(encoding="utf-8")
+    # Split on each rootstock entry boundary
+    raw_entries = re.split(r"^\s{2}- name:", text, flags=re.MULTILINE)
+    items: list[dict[str, Any]] = []
+    for entry in raw_entries[1:]:  # skip preamble
+        name_match = re.match(r"\s*(\S+)", entry)
+        if not name_match:
+            continue
+        name = name_match.group(1)
+        desc_match = re.search(r"description:\s*(.+)", entry)
+        description = desc_match.group(1).strip() if desc_match else ""
+        xml_snippets = extract_xml_snippets_from_raw(entry)
+        # Use the longest snippet (most complete tree)
+        xml_snippet = max(xml_snippets, key=len) if xml_snippets else None
+        bt_json: dict[str, Any] | None = None
+        if xml_snippet:
+            wrapped = f"<root><BehaviorTree>{xml_snippet}</BehaviorTree></root>"
+            bt_json = parse_xml_bt(wrapped)
+        items.append({
+            "name": name,
+            "description": description,
+            "bt_xml": xml_snippet,
+            "bt_svg": render_bt_svg(bt_json) if bt_json else None,
+        })
     return items
 
 
@@ -843,6 +915,7 @@ def build_catalog() -> dict[str, Any]:
     suites = load_suites()
     paper_tables = load_paper_tables()
     rootstocks = load_rootstocks()
+    panther_rootstocks = load_panther_rootstocks()
     batches: list[dict[str, Any]] = []
     tasks_by_batch: dict[str, list[dict[str, Any]]] = {}
 
@@ -901,6 +974,7 @@ def build_catalog() -> dict[str, Any]:
         "suites": suite_index,
         "paper_tables": paper_tables,
         "rootstocks": rootstocks,
+        "panther_rootstocks": panther_rootstocks,
         "batches": batches,
         "tasks_by_batch": tasks_by_batch,
     }

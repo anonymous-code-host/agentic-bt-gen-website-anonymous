@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 420" width="740" height="420" font-family="Avenir Next, Segoe UI, system-ui, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#333" stroke-width="1.2"/>
+    </marker>
+    <marker id="arrow-back" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+      <path d="M8,0 L0,3 L8,6" fill="none" stroke="#333" stroke-width="1.2"/>
+    </marker>
+  </defs>
+
+  <!-- Robot boundary -->
+  <rect x="270" y="16" width="454" height="388" rx="14" fill="#fef6e8" stroke="#c4943a" stroke-width="1.5"/>
+  <text x="284" y="38" font-size="13" font-weight="700" fill="#9a7400" letter-spacing="0.05em">ROBOT</text>
+
+  <!-- Contract box -->
+  <rect x="288" y="52" width="418" height="200" rx="10" fill="#fff" stroke="#c4943a" stroke-width="1" stroke-dasharray="6,3"/>
+  <text x="302" y="72" font-size="12" font-weight="700" fill="#9a7400">Contract</text>
+
+  <!-- Skill Library -->
+  <rect x="300" y="84" width="124" height="120" rx="8" fill="#e5e8ee" stroke="#7c8391" stroke-width="1"/>
+  <text x="362" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#172033">Skill Library</text>
+  <line x1="316" y1="112" x2="408" y2="112" stroke="#b0b4bc" stroke-width="0.5"/>
+  <text x="362" y="128" text-anchor="middle" font-size="10" fill="#3c3a36">Navigate</text>
+  <text x="362" y="142" text-anchor="middle" font-size="10" fill="#3c3a36">Detect · Pick · Place</text>
+  <text x="362" y="156" text-anchor="middle" font-size="10" fill="#3c3a36">Open · Close</text>
+  <text x="362" y="178" text-anchor="middle" font-size="9" fill="#8a8a8a" font-style="italic">typed param schemas</text>
+
+  <!-- BT Operators -->
+  <rect x="436" y="84" width="124" height="120" rx="8" fill="#e5e8ee" stroke="#7c8391" stroke-width="1"/>
+  <text x="498" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#172033">BT Operators</text>
+  <line x1="452" y1="112" x2="544" y2="112" stroke="#b0b4bc" stroke-width="0.5"/>
+  <text x="498" y="128" text-anchor="middle" font-size="10" fill="#3c3a36">Sequence</text>
+  <text x="498" y="142" text-anchor="middle" font-size="10" fill="#3c3a36">Selector</text>
+  <text x="498" y="156" text-anchor="middle" font-size="10" fill="#3c3a36">Parallel · Condition</text>
+  <text x="498" y="178" text-anchor="middle" font-size="9" fill="#8a8a8a" font-style="italic">permitted node set</text>
+
+  <!-- Rootstocks -->
+  <rect x="572" y="84" width="124" height="120" rx="8" fill="#ffd24f" stroke="#9a7400" stroke-width="1"/>
+  <text x="634" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#172033">Rootstocks</text>
+  <line x1="588" y1="112" x2="680" y2="112" stroke="#c4943a" stroke-width="0.5"/>
+  <text x="634" y="128" text-anchor="middle" font-size="10" fill="#3c3a36">detect_pick</text>
+  <text x="634" y="142" text-anchor="middle" font-size="10" fill="#3c3a36">search_pick_selector</text>
+  <text x="634" y="156" text-anchor="middle" font-size="10" fill="#3c3a36">search_pick_deliver</text>
+  <text x="634" y="178" text-anchor="middle" font-size="9" fill="#8a8a8a" font-style="italic">M-Core only</text>
+
+  <!-- World Vocabulary -->
+  <rect x="300" y="216" width="396" height="28" rx="6" fill="#f0f0f0" stroke="#b0b4bc" stroke-width="0.8"/>
+  <text x="498" y="235" text-anchor="middle" font-size="10" fill="#6b6560">World Vocabulary: rooms, objects, locations, hallways</text>
+
+  <!-- Task prompt -->
+  <rect x="12" y="60" width="176" height="100" rx="8" fill="#f8f8f8" stroke="#ccc" stroke-width="1"/>
+  <text x="22" y="80" font-size="10" fill="#6b6560" font-weight="600">NL Task Prompt</text>
+  <text x="22" y="98" font-size="11" fill="#1a1917" font-style="italic">"Search pantry, then</text>
+  <text x="22" y="114" font-size="11" fill="#1a1917" font-style="italic">fridge for bread.</text>
+  <text x="22" y="130" font-size="11" fill="#1a1917" font-style="italic">If found, pick it up."</text>
+
+  <!-- Arrow: prompt → agent -->
+  <line x1="100" y1="160" x2="100" y2="210" stroke="#333" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- Coding Agent -->
+  <rect x="28" y="218" width="144" height="76" rx="10" fill="#1a1917" stroke="#1a1917" stroke-width="1"/>
+  <text x="100" y="248" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Coding Agent</text>
+  <text x="100" y="268" text-anchor="middle" font-size="10" fill="#aaa">synthesizes BT spec</text>
+
+  <!-- Arrow: agent ←── query contract (L-shaped: right then up) -->
+  <path d="M172,238 L228,238 L228,150 L288,150" fill="none" stroke="#333" stroke-width="1.2" marker-start="url(#arrow-back)"/>
+  <text x="234" y="190" font-size="10" fill="#6b6560" font-weight="600">query</text>
+  <text x="234" y="202" font-size="10" fill="#6b6560" font-weight="600">contract</text>
+
+  <!-- Arrow: agent ──> send BT (L-shaped: down then right) -->
+  <path d="M172,272 L228,272 L228,340 L340,340" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="234" y="308" font-size="10" fill="#6b6560" font-weight="600">send</text>
+  <text x="234" y="320" font-size="10" fill="#6b6560" font-weight="600">BT spec</text>
+
+  <!-- Validation Gate -->
+  <rect x="342" y="310" width="148" height="60" rx="8" fill="#d4edda" stroke="#1e6e28" stroke-width="1.2"/>
+  <text x="416" y="334" text-anchor="middle" font-size="11" font-weight="700" fill="#1e6e28">Validation Gate</text>
+  <text x="416" y="350" text-anchor="middle" font-size="9.5" fill="#3c7a3c">schema · skills · params</text>
+
+  <!-- Arrow: validation → runtime -->
+  <line x1="490" y1="340" x2="540" y2="340" stroke="#333" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- BT Runtime -->
+  <rect x="548" y="310" width="148" height="60" rx="8" fill="#e5e8ee" stroke="#7c8391" stroke-width="1.2"/>
+  <text x="622" y="334" text-anchor="middle" font-size="11" font-weight="700" fill="#172033">BT Runtime</text>
+  <text x="622" y="350" text-anchor="middle" font-size="9.5" fill="#6b6560">compile → execute</text>
+
+  <!-- Retry arrow (routes below validation gate, back to agent) -->
+  <path d="M342,358 L300,358 L300,395 L120,395 L120,296" fill="none" stroke="#91202a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <text x="190" y="390" font-size="9" fill="#91202a" font-style="italic">retry if invalid</text>
+
+  <!-- MCP labels on the robot boundary -->
+  <rect x="254" y="141" width="36" height="18" rx="4" fill="#fff" stroke="#c4943a" stroke-width="0.8"/>
+  <text x="272" y="154" text-anchor="middle" font-size="9" font-weight="700" fill="#9a7400">MCP</text>
+
+  <rect x="254" y="331" width="36" height="18" rx="4" fill="#fff" stroke="#c4943a" stroke-width="0.8"/>
+  <text x="272" y="344" text-anchor="middle" font-size="9" font-weight="700" fill="#9a7400">MCP</text>
+</svg>

@@ -21,6 +21,7 @@
       <nav class="hero-section__links">
         <a class="pill-link" href="#" aria-disabled="true">Paper (coming soon)</a>
         <a class="pill-link" href="#gallery">Sim Gallery</a>
+        <a class="pill-link" href="#contract">Contract</a>
         <a class="pill-link" href="#explorer">BT Explorer</a>
         <a class="pill-link" href="#results">Results</a>
         <a class="pill-link" href="#video">Video</a>
@@ -59,7 +60,7 @@
         retains authority over skill implementation, BT instantiation, and execution.
       </p>
       <figure class="method-figure">
-        <img src="./bt-mcp-server.svg" alt="System architecture: coding agent ↔ MCP server ↔ robot runtime" class="method-figure__img">
+        <img src="./bt-mcp-server-v2.svg" alt="System architecture: coding agent ↔ MCP server ↔ robot runtime" class="method-figure__img">
         <figcaption class="method-figure__caption">
           <strong>Fig. 1.</strong> Client–server architecture for contract-grounded BT synthesis.
           The agent retrieves the skill schema, BT schema, and rootstocks through MCP tools,
@@ -67,6 +68,134 @@
           the runtime instantiates and executes it.
         </figcaption>
       </figure>
+    </section>
+
+    <!-- ─── ROBOT CONTRACT ──────────────────────────────────────────────────── -->
+    <section class="content-section content-section--wide" id="contract">
+      <h2 class="section-title">Robot Contract</h2>
+      <p class="section-lede">
+        The agent is grounded by a machine-readable contract exposed through MCP tools:
+        a skill library, a set of permitted BT composition nodes, and optional rootstock
+        templates. Below are the full contracts for both experimental platforms.
+      </p>
+
+      <div class="contract-tabs" role="tablist">
+        <button class="contract-tab is-active" role="tab" aria-selected="true"  data-target="contract-sim">Simulation (PyRoboSim)</button>
+        <button class="contract-tab"            role="tab" aria-selected="false" data-target="contract-hw">Hardware (Panther)</button>
+      </div>
+
+      <!-- ── Simulation pane ── -->
+      <div class="contract-pane" id="contract-sim">
+
+        <details class="contract-block" open>
+          <summary class="contract-block__head">
+            <span class="contract-block__name">Skill Library</span>
+            <span class="contract-count">6 skills</span>
+          </summary>
+          <div class="contract-table-wrap"><table class="contract-table">
+            <thead><tr><th>Skill</th><th>Parameters</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>navigate</code></td><td><code>location: str</code></td><td>Move to a named location in the environment.</td></tr>
+              <tr><td><code>detect_object</code></td><td><code>object_type: str</code></td><td>Detect whether an object of the given type is present at the current location.</td></tr>
+              <tr><td><code>pick_object</code></td><td><code>object_type: str</code></td><td>Pick up an object of the given type at the current location.</td></tr>
+              <tr><td><code>place_object</code></td><td><code>object_type: str</code></td><td>Place the held object of the given type at the current location.</td></tr>
+              <tr><td><code>open_location</code></td><td><code>location: str</code></td><td>Open a container or door at the specified location.</td></tr>
+              <tr><td><code>close_location</code></td><td><code>location: str</code></td><td>Close a container or door at the specified location.</td></tr>
+            </tbody>
+          </table></div>
+        </details>
+
+        <details class="contract-block">
+          <summary class="contract-block__head">
+            <span class="contract-block__name">BT Composition Nodes</span>
+            <span class="contract-count">6 node types</span>
+          </summary>
+          <div class="contract-table-wrap"><table class="contract-table">
+            <thead><tr><th>Node</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>Sequence</code></td><td>Control</td><td>Executes children left-to-right; succeeds only if all succeed.</td></tr>
+              <tr><td><code>Selector</code></td><td>Control</td><td>Executes children left-to-right; succeeds when the first child succeeds.</td></tr>
+              <tr><td><code>Parallel</code></td><td>Control</td><td>Executes all children simultaneously; configurable success threshold.</td></tr>
+              <tr><td><code>Repeat</code></td><td>Decorator</td><td>Repeats its child a fixed number of times or indefinitely.</td></tr>
+              <tr><td><code>RetryUntilSuccessful</code></td><td>Decorator</td><td>Retries the child until it succeeds or a max attempt limit is reached.</td></tr>
+              <tr><td><code>Inverter</code></td><td>Decorator</td><td>Inverts the result of its child (SUCCESS ↔ FAILURE).</td></tr>
+            </tbody>
+          </table></div>
+        </details>
+
+        <details class="contract-block">
+          <summary class="contract-block__head">
+            <span class="contract-block__name">Rootstock Templates</span>
+            <span class="contract-count">3 rootstocks</span>
+          </summary>
+          <div class="rootstock-cards" id="simRootstockCards">
+            <div class="muted-note">Loading…</div>
+          </div>
+        </details>
+
+      </div><!-- /contract-sim -->
+
+      <!-- ── Hardware pane ── -->
+      <div class="contract-pane" id="contract-hw" hidden>
+
+        <details class="contract-block" open>
+          <summary class="contract-block__head">
+            <span class="contract-block__name">Skill Library</span>
+            <span class="contract-count">8 skills</span>
+          </summary>
+          <div class="contract-table-wrap"><table class="contract-table">
+            <thead><tr><th>Skill</th><th>Parameters</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>NavigateToLocation</code></td><td><code>location: str</code></td><td>Navigate to a named location via Nav2. Returns SUCCESS on arrival.</td></tr>
+              <tr><td><code>Spin</code></td><td><code>target_yaw: float</code>, <code>time_allowance: float</code></td><td>Rotate in place by a given angle (radians). 6.28 = full 360°.</td></tr>
+              <tr><td><code>Wait</code></td><td><code>wait_duration: float</code></td><td>Pause for the given number of seconds.</td></tr>
+              <tr><td><code>WaitForDetection</code></td><td><code>class_name: str</code>, <code>timeout: float</code></td><td>Block until an object of the given class is detected. 0 = wait forever.</td></tr>
+              <tr><td><code>CheckDetection</code></td><td><code>class_name: str</code>, <code>max_age: float</code></td><td>Condition node: SUCCESS if a detection arrived within max_age seconds.</td></tr>
+              <tr><td><code>MoveForward</code></td><td><code>forward_dist: float</code></td><td>Drive forward the specified distance in meters.</td></tr>
+              <tr><td><code>BackUp</code></td><td><code>backup_dist: float</code></td><td>Reverse the specified distance in meters.</td></tr>
+              <tr><td><code>HeadingController</code></td><td><code>class_name: str</code>, <code>timeout: float</code></td><td>Yaw to keep camera aligned with a detected object. Returns SUCCESS on alignment.</td></tr>
+            </tbody>
+          </table></div>
+        </details>
+
+        <details class="contract-block">
+          <summary class="contract-block__head">
+            <span class="contract-block__name">BT Composition Nodes</span>
+            <span class="contract-count">14 node types</span>
+          </summary>
+          <div class="contract-table-wrap"><table class="contract-table">
+            <thead><tr><th>Node</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>Sequence</code></td><td>Control</td><td>Executes children left-to-right; succeeds only if all succeed. Halting resets child index.</td></tr>
+              <tr><td><code>SequenceWithMemory</code></td><td>Control</td><td>Like Sequence but preserves child index across halts — resumes from interrupted child.</td></tr>
+              <tr><td><code>Fallback</code></td><td>Control</td><td>Tries children left-to-right; succeeds on first success.</td></tr>
+              <tr><td><code>Parallel</code></td><td>Control</td><td>Ticks all children each tick; configurable success/failure thresholds. Latches child results.</td></tr>
+              <tr><td><code>ReactiveSequence</code></td><td>Control</td><td>Like Sequence but re-ticks earlier-SUCCESS children every tick. Interrupts on precondition failure.</td></tr>
+              <tr><td><code>ReactiveFallback</code></td><td>Control</td><td>Like Fallback but re-ticks earlier-FAILURE children every tick. The canonical "do X until detected" pattern.</td></tr>
+              <tr><td><code>KeepRunningUntilFailure</code></td><td>Decorator</td><td>Converts child SUCCESS → RUNNING to loop an action indefinitely until failure.</td></tr>
+              <tr><td><code>Repeat</code></td><td>Decorator</td><td>Retries child up to <code>num_cycles</code> times; counts only SUCCESS results.</td></tr>
+              <tr><td><code>RetryUntilSuccessful</code></td><td>Decorator</td><td>Retries child until success or <code>num_attempts</code> exhausted.</td></tr>
+              <tr><td><code>Inverter</code></td><td>Decorator</td><td>Inverts child result (SUCCESS ↔ FAILURE). Safe for conditions, not for fallible actions.</td></tr>
+              <tr><td><code>ForceSuccess</code></td><td>Decorator</td><td>Converts any child result to SUCCESS. Makes optional steps non-blocking.</td></tr>
+              <tr><td><code>ForceFailure</code></td><td>Decorator</td><td>Converts any child result to FAILURE.</td></tr>
+              <tr><td><code>RunOnce</code></td><td>Decorator</td><td>Ticks child only on first execution; caches result for subsequent ticks.</td></tr>
+              <tr><td><code>AlwaysSuccess</code></td><td>Leaf</td><td>Leaf node that always returns SUCCESS. Use as final Fallback branch for graceful degradation.</td></tr>
+            </tbody>
+          </table></div>
+        </details>
+
+        <details class="contract-block">
+          <summary class="contract-block__head">
+            <span class="contract-block__name">Rootstock Templates</span>
+            <span class="contract-count">7 rootstocks</span>
+          </summary>
+          <div class="rootstock-cards" id="hwRootstockCards">
+            <div class="muted-note">Loading…</div>
+          </div>
+        </details>
+
+      </div><!-- /contract-hw -->
+
     </section>
 
     <!-- ─── VIDEO ────────────────────────────────────────────────────────────── -->
