@@ -498,8 +498,20 @@ async function loadCatalog() {
 
 applyAnonymousMode();
 
+function renderVideoBt() {
+  const el = document.getElementById('videoBtTree');
+  if (!el) return;
+  const tasks = state.catalog?.tasks_by_batch?.['panther_gemma_mcore'] ?? [];
+  const task = tasks.find(t => t.id === 'task13_multi_phase');
+  if (task?.bt_svg) {
+    el.innerHTML = task.bt_svg;
+  } else {
+    el.innerHTML = '<div class="bt-tree-empty">BT not found.</div>';
+  }
+}
+
 loadCatalog()
-  .then(() => { render(); renderContractRootstocks(); })
+  .then(() => { render(); renderContractRootstocks(); renderVideoBt(); })
   .catch(err => {
     els.taskListMeta.textContent = `Failed to load catalog: ${err.message}`;
   });

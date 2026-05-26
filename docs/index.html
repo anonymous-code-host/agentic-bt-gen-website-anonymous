@@ -199,16 +199,32 @@
     </section>
 
     <!-- ─── VIDEO ────────────────────────────────────────────────────────────── -->
-    <section class="content-section" id="video">
+    <section class="content-section content-section--wide" id="video">
       <h2 class="section-title">Robot Demo</h2>
       <p class="section-lede">
         Hardware demonstration on the Husarion Panther mobile robot running a precompiled
         ROS2 Nav2 navigation stack with YOLO-based detection.
       </p>
-      <div class="video-wrap">
-        <div class="video-placeholder">
-          <span class="video-placeholder__icon">▶</span>
-          <span class="video-placeholder__label">Video coming soon</span>
+      <div class="video-demo-grid">
+        <div class="video-demo-grid__video">
+          <div class="video-wrap">
+            <video controls preload="metadata" playsinline>
+              <source src="./data/robot_demo.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <p class="video-caption">Video played at 2× speed.</p>
+        </div>
+        <div class="video-demo-grid__bt">
+          <div class="video-bt-meta">
+            <span class="badge">Gemma4:31b</span>
+            <span class="badge">M-Core</span>
+            <span class="badge">Panther 14</span>
+          </div>
+          <p class="video-bt-prompt">"Patrol continuously between the NRG entrance, mid hallway, between hallways, and kitchen entrance. Whenever you spot a person, stop and face them until they are out of frame. Then resume patrolling. Keep going indefinitely."</p>
+          <div class="video-bt-tree" id="videoBtTree">
+            <div class="bt-tree-empty">Loading BT…</div>
+          </div>
         </div>
       </div>
     </section>
