@@ -20,6 +20,7 @@
       <p class="hero-section__affil"   id="affilLine">Anonymous Institution</p>
       <nav class="hero-section__links">
         <a class="pill-link" href="#" aria-disabled="true">Paper (coming soon)</a>
+        <a class="pill-link" href="#gallery">Sim Gallery</a>
         <a class="pill-link" href="#explorer">BT Explorer</a>
         <a class="pill-link" href="#results">Results</a>
         <a class="pill-link" href="#video">Video</a>
@@ -168,6 +169,246 @@
           </tbody>
         </table>
       </div>
+    </section>
+
+    <!-- ─── SIMULATION GALLERY ─────────────────────────────────────────────────── -->
+    <section class="content-section content-section--wide" id="gallery">
+      <h2 class="section-title">Simulation Gallery</h2>
+      <p class="section-lede">
+        Curated PyRoboSim executions showing clean task completion, reactive search behavior,
+        the structural impact of rootstock templates (M-Core vs B1), language robustness,
+        and representative failure modes. Click a group heading to expand.
+      </p>
+
+      <!-- Group 1 — Clean sequential -->
+      <details class="gallery-group" open>
+        <summary class="gallery-group__head">Sequential Execution (Sonnet M-Core)</summary>
+        <p class="gallery-group__desc">Baseline tasks showing clean pick, pick-and-deliver, and pick-and-place.</p>
+        <div class="gallery-list">
+          <figure class="gallery-card">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/01_go_to_pantry_detect_and_pick_bread_41d287.gif" alt="Go to pantry, detect bread, pick it up" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/01_go_to_pantry_detect_and_pick_bread_41d287.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 01</span>"Go to pantry, detect bread, and pick it up."</figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/08_fridge_pick_soda_deliver_office_9e3f60.gif" alt="Fridge pick soda deliver to office" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/08_fridge_pick_soda_deliver_office_9e3f60.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 08</span>"Go to fridge, detect soda, pick it up, then go to office."</figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/21_pick_bread_pantry_to_table_ab2ba4.gif" alt="Pick bread from pantry, place on table" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/21_pick_bread_pantry_to_table_ab2ba4.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 21</span>"Pick bread from pantry and place it on table."</figcaption>
+          </figure>
+        </div>
+      </details>
+
+      <!-- Group 2 — Reactive search -->
+      <details class="gallery-group">
+        <summary class="gallery-group__head">Reactive Search (Sonnet M-Core)</summary>
+        <p class="gallery-group__desc">Selector-based fallback: the robot searches one location, and if the object isn't found, falls back to the next.</p>
+        <div class="gallery-list">
+          <figure class="gallery-card">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/11_search_pantry_fridge_pick_bread_da9c15.gif" alt="Search pantry then fridge for bread" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/11_search_pantry_fridge_pick_bread_da9c15.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 11</span>"Search pantry, then fridge for bread. If found, pick it up."</figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/31_search_pantry_fridge_deliver_bread_89c63b.gif" alt="Search and place bread" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/31_search_pantry_fridge_deliver_bread_89c63b.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 31</span>"Search pantry, then fridge for bread. If found, place it on table."</figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/41_search_bread_return_dining_7b6c66.gif" alt="Search, pick bread, return to dining" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/41_search_bread_return_dining_7b6c66.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 41</span>"Search pantry, then fridge for bread. If found, pick it up and return to dining."</figcaption>
+          </figure>
+        </div>
+      </details>
+
+      <!-- Group 3 — M-Core vs B1 -->
+      <details class="gallery-group">
+        <summary class="gallery-group__head">M-Core vs B1 Comparison</summary>
+        <p class="gallery-group__desc">Same task prompt under both methods. M-Core uses rootstock templates for correct reactive structure; B1 must construct it from the skill contract alone.</p>
+
+        <div class="comparison-pair">
+          <p class="comparison-pair__prompt">"Search pantry, then fridge for bread. If found, pick it up." <span class="comparison-pair__model">Gemma4:31b · Core60 · Task 11</span></p>
+          <div class="comparison-pair__cards">
+            <figure class="gallery-card gallery-card--success">
+              <div class="gallery-card__media gallery-card__media--stacked">
+                <img src="./data/gifs/11_search_pantry_fridge_bread_2743b4.gif" alt="Gemma M-Core — success" loading="lazy">
+                <div class="gallery-card__svg"><img src="./data/gifs/11_search_pantry_fridge_bread_2743b4.svg" alt="BT visualization" loading="lazy"></div>
+              </div>
+              <figcaption><span class="gallery-tag gallery-tag--good">Gemma4:31b · M-Core — Success</span></figcaption>
+            </figure>
+            <figure class="gallery-card gallery-card--fail">
+              <div class="gallery-card__media gallery-card__media--stacked">
+                <img src="./data/gifs/11_search_pantry_fridge_for_bread_ffa75a.gif" alt="Gemma B1 — fail" loading="lazy">
+                <div class="gallery-card__svg"><img src="./data/gifs/11_search_pantry_fridge_for_bread_ffa75a.svg" alt="BT visualization" loading="lazy"></div>
+              </div>
+              <figcaption><span class="gallery-tag gallery-tag--bad">Gemma4:31b · B1 — Fail</span></figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="comparison-pair">
+          <p class="comparison-pair__prompt">"Search pantry, then fridge for bread. If found, place it on table." <span class="comparison-pair__model">Gemma4:31b · Core60 · Task 31</span></p>
+          <div class="comparison-pair__cards">
+            <figure class="gallery-card gallery-card--success">
+              <div class="gallery-card__media gallery-card__media--stacked">
+                <img src="./data/gifs/31_search_bread_deliver_eaffd5.gif" alt="Gemma M-Core — success" loading="lazy">
+                <div class="gallery-card__svg"><img src="./data/gifs/31_search_bread_deliver_eaffd5.svg" alt="BT visualization" loading="lazy"></div>
+              </div>
+              <figcaption><span class="gallery-tag gallery-tag--good">Gemma4:31b · M-Core — Success</span></figcaption>
+            </figure>
+            <figure class="gallery-card gallery-card--fail">
+              <div class="gallery-card__media gallery-card__media--stacked">
+                <img src="./data/gifs/31_find_bread_and_place_50d49a.gif" alt="Gemma B1 — fail" loading="lazy">
+                <div class="gallery-card__svg"><img src="./data/gifs/31_find_bread_and_place_50d49a.svg" alt="BT visualization" loading="lazy"></div>
+              </div>
+              <figcaption><span class="gallery-tag gallery-tag--bad">Gemma4:31b · B1 — Fail</span></figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="comparison-pair">
+          <p class="comparison-pair__prompt">"Search pantry, then fridge for snacks. If found, pick it up." <span class="comparison-pair__model">Sonnet 4.6 · Core60 · Task 13</span></p>
+          <div class="comparison-pair__cards">
+            <figure class="gallery-card gallery-card--success">
+              <div class="gallery-card__media gallery-card__media--stacked">
+                <img src="./data/gifs/13_search_pantry_fridge_pick_snacks_b5ae88.gif" alt="Sonnet M-Core — success" loading="lazy">
+                <div class="gallery-card__svg"><img src="./data/gifs/13_search_pantry_fridge_pick_snacks_b5ae88.svg" alt="BT visualization" loading="lazy"></div>
+              </div>
+              <figcaption><span class="gallery-tag gallery-tag--good">Sonnet 4.6 · M-Core — Success</span></figcaption>
+            </figure>
+            <figure class="gallery-card gallery-card--success">
+              <div class="gallery-card__media gallery-card__media--stacked">
+                <img src="./data/gifs/13_search_pantry_fridge_snacks_fbc51d.gif" alt="Sonnet B1 — success" loading="lazy">
+                <div class="gallery-card__svg"><img src="./data/gifs/13_search_pantry_fridge_snacks_fbc51d.svg" alt="BT visualization" loading="lazy"></div>
+              </div>
+              <figcaption><span class="gallery-tag gallery-tag--good">Sonnet 4.6 · B1 — Success</span></figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="comparison-pair">
+          <p class="comparison-pair__prompt">"Search for bread. Pick it up and return to dining." <span class="comparison-pair__model">Gemma4:31b · Core60 · Task 41</span></p>
+          <div class="comparison-pair__cards">
+            <figure class="gallery-card gallery-card--success">
+              <div class="gallery-card__media gallery-card__media--stacked">
+                <img src="./data/gifs/41_search_for_bread_df96e6.gif" alt="Gemma M-Core — success" loading="lazy">
+                <div class="gallery-card__svg"><img src="./data/gifs/41_search_for_bread_df96e6.svg" alt="BT visualization" loading="lazy"></div>
+              </div>
+              <figcaption><span class="gallery-tag gallery-tag--good">Gemma4:31b · M-Core — Success</span></figcaption>
+            </figure>
+            <figure class="gallery-card gallery-card--fail">
+              <div class="gallery-card__media gallery-card__media--stacked">
+                <img src="./data/gifs/45_search_and_return_waste_909229.gif" alt="Gemma B1 — fail" loading="lazy">
+                <div class="gallery-card__svg"><img src="./data/gifs/45_search_and_return_waste_909229.svg" alt="BT visualization" loading="lazy"></div>
+              </div>
+              <figcaption><span class="gallery-tag gallery-tag--bad">Gemma4:31b · B1 — Fail</span></figcaption>
+            </figure>
+          </div>
+        </div>
+      </details>
+
+      <!-- Group 4 — Language variation -->
+      <details class="gallery-group">
+        <summary class="gallery-group__head">Language Robustness (Sonnet M-Core)</summary>
+        <p class="gallery-group__desc">Same underlying tasks with different phrasing styles — paraphrase, lexical substitution, constraint wording, and clause reordering — all succeed.</p>
+        <div class="gallery-list">
+          <figure class="gallery-card">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/01_pantry_detect_pick_bread_df7f57.gif" alt="Paraphrase variant" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/01_pantry_detect_pick_bread_df7f57.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Lang50 · Task 01</span><span class="gallery-tag">Paraphrase</span>"Head to pantry, detect bread, and pick it up."</figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/11_search_pick_bread_pantry_fridge_ae191e.gif" alt="Lexical substitution variant" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/11_search_pick_bread_pantry_fridge_ae191e.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Lang50 · Task 11</span><span class="gallery-tag">Lexical</span>"Check pantry, then fridge for bread. If found, pick it up."</figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/31_search_pantry_fridge_deliver_bread_963d8f.gif" alt="Constraint wording variant" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/31_search_pantry_fridge_deliver_bread_963d8f.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Lang50 · Task 31</span><span class="gallery-tag">Constraint</span>"Search pantry, and only if needed then fridge for bread."</figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/41_search_bread_return_dining_29851d.gif" alt="Clause reordering variant" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/41_search_bread_return_dining_29851d.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Lang50 · Task 41</span><span class="gallery-tag">Reordering</span>"Return to dining while holding bread, but only after you have found and picked it up."</figcaption>
+          </figure>
+        </div>
+      </details>
+
+      <!-- Group 5 — Failures -->
+      <details class="gallery-group">
+        <summary class="gallery-group__head">Failure Cases</summary>
+        <p class="gallery-group__desc">Representative failures: incorrect BT control-flow structure, runtime errors from malformed reactive branches, and rare M-Core failures.</p>
+        <div class="gallery-list">
+          <figure class="gallery-card gallery-card--fail">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/17_search_and_pick_waste_b06e79.gif" alt="Gemma B1 bt_construction failure" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/17_search_and_pick_waste_b06e79.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Gemma4:31b · B1 · Core60 · Task 17</span><span class="gallery-tag gallery-tag--bad">BT construction failure</span>"Search bin, then desk for waste. If found, pick it up."</figcaption>
+          </figure>
+          <figure class="gallery-card gallery-card--fail">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/34_search_soda_fridge_pantry_9369d0.gif" alt="Gemma B1 bt_construction failure" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/34_search_soda_fridge_pantry_9369d0.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Gemma4:31b · B1 · Core60 · Task 34</span><span class="gallery-tag gallery-tag--bad">BT construction failure</span>"Search fridge, then pantry for soda. Place at pantry."</figcaption>
+          </figure>
+          <figure class="gallery-card gallery-card--fail">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/52_search_soda_desk_fridge_pantry_7eba0d.gif" alt="Sonnet B1 bt_construction failure" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/52_search_soda_desk_fridge_pantry_7eba0d.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · B1 · Core60 · Task 52</span><span class="gallery-tag gallery-tag--bad">BT construction failure</span>"Search desk, fridge, pantry for soda. If found, pick it up."</figcaption>
+          </figure>
+          <figure class="gallery-card gallery-card--fail">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/31_find_bread_pantry_fridge_to_table_465d9e.gif" alt="Gemma B1 constraint wording failure" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/31_find_bread_pantry_fridge_to_table_465d9e.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Gemma4:31b · B1 · Lang50 · Task 31</span><span class="gallery-tag gallery-tag--bad">BT construction failure</span>"Search pantry, and only if needed then fridge for bread."</figcaption>
+          </figure>
+          <figure class="gallery-card gallery-card--fail">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/47_return_to_dining_with_snacks_27beec.gif" alt="Sonnet B1 clause reordering failure" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/47_return_to_dining_with_snacks_27beec.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Sonnet 4.6 · B1 · Lang50 · Task 47</span><span class="gallery-tag gallery-tag--bad">BT construction failure</span>"Return to dining while holding snacks, but only after you have found and picked it up."</figcaption>
+          </figure>
+          <figure class="gallery-card gallery-card--fail">
+            <div class="gallery-card__media">
+              <img src="./data/gifs/13_search_for_snacks_2babaf.gif" alt="Gemma M-Core rare failure" loading="lazy">
+              <div class="gallery-card__svg"><img src="./data/gifs/13_search_for_snacks_2babaf.svg" alt="BT visualization" loading="lazy"></div>
+            </div>
+            <figcaption><span class="gallery-meta">Gemma4:31b · M-Core · Core60 · Task 13</span><span class="gallery-tag gallery-tag--warn">BT construction failure (rare)</span>"Search pantry, then fridge for snacks. If found, pick it up."</figcaption>
+          </figure>
+        </div>
+      </details>
     </section>
 
     <!-- ─── BT EXPLORER ───────────────────────────────────────────────────────── -->

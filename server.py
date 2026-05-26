@@ -13,7 +13,7 @@ from urllib.request import Request, urlopen
 from build_catalog import OUTPUT_PATH, build_catalog
 
 APP_ROOT = Path(__file__).resolve().parent
-PUBLIC_ROOT = APP_ROOT / "public"
+PUBLIC_ROOT = APP_ROOT / "docs"
 
 
 def ensure_catalog() -> None:
@@ -102,6 +102,10 @@ class Handler(BaseHTTPRequestHandler):
             content_type = "application/json; charset=utf-8"
         elif target.suffix == ".png":
             content_type = "image/png"
+        elif target.suffix == ".svg":
+            content_type = "image/svg+xml"
+        elif target.suffix == ".gif":
+            content_type = "image/gif"
         self._send_bytes(target.read_bytes(), content_type)
 
     def do_GET(self) -> None:
