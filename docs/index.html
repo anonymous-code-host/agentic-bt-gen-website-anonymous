@@ -95,12 +95,12 @@
           <div class="contract-table-wrap"><table class="contract-table">
             <thead><tr><th>Skill</th><th>Parameters</th><th>Description</th></tr></thead>
             <tbody>
-              <tr><td><code>navigate</code></td><td><code>location: str</code></td><td>Move to a named location in the environment.</td></tr>
-              <tr><td><code>detect_object</code></td><td><code>object_type: str</code></td><td>Detect whether an object of the given type is present at the current location.</td></tr>
-              <tr><td><code>pick_object</code></td><td><code>object_type: str</code></td><td>Pick up an object of the given type at the current location.</td></tr>
-              <tr><td><code>place_object</code></td><td><code>object_type: str</code></td><td>Place the held object of the given type at the current location.</td></tr>
-              <tr><td><code>open_location</code></td><td><code>location: str</code></td><td>Open a container or door at the specified location.</td></tr>
-              <tr><td><code>close_location</code></td><td><code>location: str</code></td><td>Close a container or door at the specified location.</td></tr>
+              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>navigate</code></a></td><td><code>location: str</code></td><td>Move to a named location in the environment.</td></tr>
+              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>detect_object</code></a></td><td><code>object_type: str</code></td><td>Detect whether an object of the given type is present at the current location.</td></tr>
+              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>pick_object</code></a></td><td><code>object_type: str</code></td><td>Pick up an object of the given type at the current location.</td></tr>
+              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>place_object</code></a></td><td><code>object_type: str</code></td><td>Place the held object of the given type at the current location.</td></tr>
+              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>open_location</code></a></td><td><code>location: str</code></td><td>Open a container or door at the specified location.</td></tr>
+              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>close_location</code></a></td><td><code>location: str</code></td><td>Close a container or door at the specified location.</td></tr>
             </tbody>
           </table></div>
         </details>
@@ -113,12 +113,12 @@
           <div class="contract-table-wrap"><table class="contract-table">
             <thead><tr><th>Node</th><th>Type</th><th>Description</th></tr></thead>
             <tbody>
-              <tr><td><code>Sequence</code></td><td>Control</td><td>Executes children left-to-right; succeeds only if all succeed.</td></tr>
-              <tr><td><code>Selector</code></td><td>Control</td><td>Executes children left-to-right; succeeds when the first child succeeds.</td></tr>
-              <tr><td><code>Parallel</code></td><td>Control</td><td>Executes all children simultaneously; configurable success threshold.</td></tr>
-              <tr><td><code>Repeat</code></td><td>Decorator</td><td>Repeats its child a fixed number of times or indefinitely.</td></tr>
-              <tr><td><code>RetryUntilSuccessful</code></td><td>Decorator</td><td>Retries the child until it succeeds or a max attempt limit is reached.</td></tr>
-              <tr><td><code>Inverter</code></td><td>Decorator</td><td>Inverts the result of its child (SUCCESS ↔ FAILURE).</td></tr>
+              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/composites.html#sequence" target="_blank"><code>Sequence</code></a></td><td>Control</td><td>Executes children left-to-right; succeeds only if all succeed.</td></tr>
+              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/composites.html#selector" target="_blank"><code>Selector</code></a></td><td>Control</td><td>Executes children left-to-right; succeeds when the first child succeeds.</td></tr>
+              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/composites.html#parallel" target="_blank"><code>Parallel</code></a></td><td>Control</td><td>Executes all children simultaneously; configurable success threshold.</td></tr>
+              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/decorators.html#py_trees.decorators.Repeat" target="_blank"><code>Repeat</code></a></td><td>Decorator</td><td>Repeats its child a fixed number of times or indefinitely.</td></tr>
+              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/decorators.html#py_trees.decorators.Retry" target="_blank"><code>RetryUntilSuccessful</code></a></td><td>Decorator</td><td>Retries the child until it succeeds or a max attempt limit is reached.</td></tr>
+              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/decorators.html#py_trees.decorators.Inverter" target="_blank"><code>Inverter</code></a></td><td>Decorator</td><td>Inverts the result of its child (SUCCESS ↔ FAILURE).</td></tr>
             </tbody>
           </table></div>
         </details>
@@ -166,20 +166,20 @@
           <div class="contract-table-wrap"><table class="contract-table">
             <thead><tr><th>Node</th><th>Type</th><th>Description</th></tr></thead>
             <tbody>
-              <tr><td><code>Sequence</code></td><td>Control</td><td>Executes children left-to-right; succeeds only if all succeed. Halting resets child index.</td></tr>
-              <tr><td><code>SequenceWithMemory</code></td><td>Control</td><td>Like Sequence but preserves child index across halts — resumes from interrupted child.</td></tr>
-              <tr><td><code>Fallback</code></td><td>Control</td><td>Tries children left-to-right; succeeds on first success.</td></tr>
-              <tr><td><code>Parallel</code></td><td>Control</td><td>Ticks all children each tick; configurable success/failure thresholds. Latches child results.</td></tr>
-              <tr><td><code>ReactiveSequence</code></td><td>Control</td><td>Like Sequence but re-ticks earlier-SUCCESS children every tick. Interrupts on precondition failure.</td></tr>
-              <tr><td><code>ReactiveFallback</code></td><td>Control</td><td>Like Fallback but re-ticks earlier-FAILURE children every tick. The canonical "do X until detected" pattern.</td></tr>
-              <tr><td><code>KeepRunningUntilFailure</code></td><td>Decorator</td><td>Converts child SUCCESS → RUNNING to loop an action indefinitely until failure.</td></tr>
-              <tr><td><code>Repeat</code></td><td>Decorator</td><td>Retries child up to <code>num_cycles</code> times; counts only SUCCESS results.</td></tr>
-              <tr><td><code>RetryUntilSuccessful</code></td><td>Decorator</td><td>Retries child until success or <code>num_attempts</code> exhausted.</td></tr>
-              <tr><td><code>Inverter</code></td><td>Decorator</td><td>Inverts child result (SUCCESS ↔ FAILURE). Safe for conditions, not for fallible actions.</td></tr>
-              <tr><td><code>ForceSuccess</code></td><td>Decorator</td><td>Converts any child result to SUCCESS. Makes optional steps non-blocking.</td></tr>
-              <tr><td><code>ForceFailure</code></td><td>Decorator</td><td>Converts any child result to FAILURE.</td></tr>
-              <tr><td><code>RunOnce</code></td><td>Decorator</td><td>Ticks child only on first execution; caches result for subsequent ticks.</td></tr>
-              <tr><td><code>AlwaysSuccess</code></td><td>Leaf</td><td>Leaf node that always returns SUCCESS. Use as final Fallback branch for graceful degradation.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d9/ddd/class_b_t_1_1_sequence_node.html" target="_blank"><code>Sequence</code></a></td><td>Control</td><td>Executes children left-to-right; succeeds only if all succeed. Halting resets child index.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/de/d69/class_b_t_1_1_sequence_with_memory.html" target="_blank"><code>SequenceWithMemory</code></a></td><td>Control</td><td>Like Sequence but preserves child index across halts — resumes from interrupted child.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/dc/da6/class_b_t_1_1_fallback_node.html" target="_blank"><code>Fallback</code></a></td><td>Control</td><td>Tries children left-to-right; succeeds on first success.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d1/dee/class_b_t_1_1_parallel_node.html" target="_blank"><code>Parallel</code></a></td><td>Control</td><td>Ticks all children each tick; configurable success/failure thresholds. Latches child results.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/de/d9f/class_b_t_1_1_reactive_sequence.html" target="_blank"><code>ReactiveSequence</code></a></td><td>Control</td><td>Like Sequence but re-ticks earlier-SUCCESS children every tick. Interrupts on precondition failure.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/dc/d04/class_b_t_1_1_reactive_fallback.html" target="_blank"><code>ReactiveFallback</code></a></td><td>Control</td><td>Like Fallback but re-ticks earlier-FAILURE children every tick. The canonical "do X until detected" pattern.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/de/d22/class_b_t_1_1_keep_running_until_failure_node.html" target="_blank"><code>KeepRunningUntilFailure</code></a></td><td>Decorator</td><td>Converts child SUCCESS → RUNNING to loop an action indefinitely until failure.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d6/d78/class_b_t_1_1_repeat_node.html" target="_blank"><code>Repeat</code></a></td><td>Decorator</td><td>Retries child up to <code>num_cycles</code> times; counts only SUCCESS results.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/dd/de4/class_b_t_1_1_retry_node.html" target="_blank"><code>RetryUntilSuccessful</code></a></td><td>Decorator</td><td>Retries child until success or <code>num_attempts</code> exhausted.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d2/ded/class_b_t_1_1_inverter_node.html" target="_blank"><code>Inverter</code></a></td><td>Decorator</td><td>Inverts child result (SUCCESS ↔ FAILURE). Safe for conditions, not for fallible actions.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d7/db8/class_b_t_1_1_force_success_node.html" target="_blank"><code>ForceSuccess</code></a></td><td>Decorator</td><td>Converts any child result to SUCCESS. Makes optional steps non-blocking.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d4/d8c/class_b_t_1_1_force_failure_node.html" target="_blank"><code>ForceFailure</code></a></td><td>Decorator</td><td>Converts any child result to FAILURE.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/dd/dbd/class_b_t_1_1_run_once_node.html" target="_blank"><code>RunOnce</code></a></td><td>Decorator</td><td>Ticks child only on first execution; caches result for subsequent ticks.</td></tr>
+              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/dd/dce/class_b_t_1_1_always_success_node.html" target="_blank"><code>AlwaysSuccess</code></a></td><td>Leaf</td><td>Leaf node that always returns SUCCESS. Use as final Fallback branch for graceful degradation.</td></tr>
             </tbody>
           </table></div>
         </details>

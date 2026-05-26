@@ -390,13 +390,24 @@ a { color: var(--accent); }
 .contract-tab:hover { color: var(--ink); }
 .contract-tab.is-active { color: var(--accent); border-bottom-color: var(--accent); }
 
-.contract-pane { /* always in flow; hidden attr hides non-active */ }
+.contract-pane {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-start;
+}
+.contract-pane[hidden] { display: none; }
 
 .contract-block {
+  flex: 1;
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  margin-bottom: 14px;
   background: var(--paper);
+}
+
+.contract-block[open] {
+  flex: 0 0 100%;
 }
 .contract-block__head {
   display: flex;
@@ -463,6 +474,20 @@ a { color: var(--accent); }
   background: #f0f0f0;
   padding: 1px 5px;
   border-radius: 3px;
+}
+.contract-table a {
+  text-decoration: none;
+  color: inherit;
+}
+.contract-table a:hover code {
+  background: #e0ecf0;
+  color: var(--accent);
+}
+.contract-table a code::after {
+  content: " ↗";
+  font-size: 0.65rem;
+  color: var(--muted);
+  opacity: 0.6;
 }
 
 .rootstock-cards {
