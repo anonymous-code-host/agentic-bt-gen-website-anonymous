@@ -8,10 +8,10 @@ const DATA_URL = 'data/catalog.json';
 const state = {
   catalog: null,
   batches: [],
-  currentEnv:    'all',
-  currentModel:  'all',
-  currentMethod: 'all',
-  currentSuite:  'all',
+  currentEnv:    null,
+  currentModel:  null,
+  currentMethod: null,
+  currentSuite:  null,
   currentBatch:  null,
   currentTask:   null,
 };
@@ -38,6 +38,7 @@ const els = {
   resultView:        document.getElementById('resultView'),
   rootstocksPanel:   document.getElementById('rootstocksPanel'),
   rootstocksView:    document.getElementById('rootstocksView'),
+  explorerBody:      document.getElementById('explorerBody'),
 };
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
@@ -97,12 +98,16 @@ function allModels() {
   return state.catalog?.models ?? [];
 }
 
+function allSelected() {
+  return state.currentEnv && state.currentModel && state.currentMethod && state.currentSuite;
+}
+
 function filteredBatches() {
   return state.batches.filter(b => {
-    if (state.currentEnv    !== 'all' && b.environment !== state.currentEnv)   return false;
-    if (state.currentModel  !== 'all' && b.model       !== state.currentModel) return false;
-    if (state.currentMethod !== 'all' && b.method      !== state.currentMethod) return false;
-    if (state.currentSuite  !== 'all' && b.suite_id    !== state.currentSuite)  return false;
+    if (state.currentEnv    && b.environment !== state.currentEnv)    return false;
+    if (state.currentModel  && b.model       !== state.currentModel)  return false;
+    if (state.currentMethod && b.method      !== state.currentMethod) return false;
+    if (state.currentSuite  && b.suite_id    !== state.currentSuite)  return false;
     return true;
   });
 }
@@ -124,39 +129,51 @@ function currentTaskRecord() {
 function renderSelectors() {
   const envs = allBatchEnvs();
   setOptions(els.envSelect, [
-    {value:'all', label:'All environments'},
+    {value:'', label:'— Select —'},
     ...envs.map(e => ({value:e, label: e === 'panther' ? 'Panther (hardware)' : 'PyRoboSim (simulation)'})),
-  ], state.currentEnv);
+  ], state.currentEnv ?? '');
 
   const models = allModels();
   setOptions(els.modelSelect, [
-    {value:'all', label:'All models'},
+    {value:'', label:'— Select —'},
     ...models.map(m => ({value:m, label:m})),
-  ], state.currentModel);
+  ], state.currentModel ?? '');
 
   const methods = state.catalog?.methods ?? [];
   setOptions(els.methodSelect, [
-    {value:'all', label:'All methods'},
+    {value:'', label:'— Select —'},
     ...methods.map(m => ({value:m, label:m})),
-  ], state.currentMethod);
+  ], state.currentMethod ?? '');
 
+  // Suite options are filtered by whatever env/model/method are already selected
+  const partialFiltered = state.batches.filter(b => {
+    if (state.currentEnv    && b.environment !== state.currentEnv)    return false;
+    if (state.currentModel  && b.model       !== state.currentModel)  return false;
+    if (state.currentMethod && b.method      !== state.currentMethod) return false;
+    return true;
+  });
   const visible = filteredBatches();
-  const suiteIds = [...new Set(visible.map(b => b.suite_id))];
+  const suiteIds = [...new Set(partialFiltered.map(b => b.suite_id))];
   const suiteMap = state.catalog?.suites ?? {};
   setOptions(els.suiteSelect, [
-    {value:'all', label:'All suites'},
+    {value:'', label:'— Select —'},
     ...suiteIds.map(id => ({value:id, label: suiteMap[id]?.label ?? id})),
-  ], state.currentSuite);
+  ], state.currentSuite ?? '');
 
-  // Resolve current batch
-  if (!visible.some(b => b.name === state.currentBatch)) {
-    state.currentBatch = visible[0]?.name ?? null;
-    state.currentTask  = null;
+  // Resolve current batch only if all selected
+  if (allSelected()) {
+    if (!visible.some(b => b.name === state.currentBatch)) {
+      state.currentBatch = visible[0]?.name ?? null;
+      state.currentTask  = null;
+    }
+    const tasks = tasksForCurrentBatch();
+    if (!tasks.some(t => t.id === state.currentTask)) {
+      state.currentTask = tasks[0]?.id ?? null;
+    }
   }
-  const tasks = tasksForCurrentBatch();
-  if (!tasks.some(t => t.id === state.currentTask)) {
-    state.currentTask = tasks[0]?.id ?? null;
-  }
+
+  // Show/hide body
+  if (els.explorerBody) els.explorerBody.hidden = !allSelected();
 }
 
 // ─── Batch summary ────────────────────────────────────────────────────────────
@@ -394,22 +411,22 @@ function render() {
 // ─── Event listeners ──────────────────────────────────────────────────────────
 
 els.envSelect.addEventListener('change', () => {
-  state.currentEnv   = els.envSelect.value;
+  state.currentEnv   = els.envSelect.value   || null;
   state.currentBatch = null; state.currentTask = null;
   render();
 });
 els.modelSelect.addEventListener('change', () => {
-  state.currentModel = els.modelSelect.value;
+  state.currentModel = els.modelSelect.value || null;
   state.currentBatch = null; state.currentTask = null;
   render();
 });
 els.methodSelect.addEventListener('change', () => {
-  state.currentMethod = els.methodSelect.value;
+  state.currentMethod = els.methodSelect.value || null;
   state.currentBatch  = null; state.currentTask = null;
   render();
 });
 els.suiteSelect.addEventListener('change', () => {
-  state.currentSuite = els.suiteSelect.value;
+  state.currentSuite = els.suiteSelect.value || null;
   state.currentBatch = null; state.currentTask = null;
   render();
 });

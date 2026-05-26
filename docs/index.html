@@ -8,16 +8,6 @@
 </head>
 <body>
 
-  <!-- ─── HERO ─────────────────────────────────────────────────────────────── -->
-  <header class="site-header">
-    <div class="site-header__inner">
-      <div class="site-header__logos">
-        <img src="./nrg_logo_gs.png" alt="NRG logo" class="site-header__logo site-header__logo--nrg">
-        <img src="./ut_seal.svg"     alt="University of Texas seal" class="site-header__logo site-header__logo--ut">
-      </div>
-      <p class="site-header__venue">IEEE Robotics and Automation Letters (RA-L) — under review</p>
-    </div>
-  </header>
 
   <main class="page">
 
@@ -208,6 +198,9 @@
         </div>
       </div>
 
+      <!-- Everything below filters is hidden until all four are selected -->
+      <div id="explorerBody" hidden>
+
       <!-- Batch summary strip -->
       <div class="batch-summary panel" id="batchSummary"></div>
 
@@ -280,6 +273,8 @@
           </div>
         </article>
       </div>
+
+      </div><!-- /explorerBody -->
     </section>
 
     <!-- ─── BIBTEX ────────────────────────────────────────────────────────────── -->
