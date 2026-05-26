@@ -1,0 +1,130 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "Go to Pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "Open Pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "Detect Bread in Pantry",
+                "outputs": {
+                  "detected_objects": "pantry_objs"
+                },
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              },
+              {
+                "key": "pantry_objs",
+                "name": "Bread in Pantry?",
+                "operator": "contains",
+                "type": "condition",
+                "value": "bread"
+              },
+              {
+                "action": "pick",
+                "name": "Pick Bread from Pantry",
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "Go to Fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "Open Fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "Detect Bread in Fridge",
+                "outputs": {
+                  "detected_objects": "fridge_objs"
+                },
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              },
+              {
+                "key": "fridge_objs",
+                "name": "Bread in Fridge?",
+                "operator": "contains",
+                "type": "condition",
+                "value": "bread"
+              },
+              {
+                "action": "pick",
+                "name": "Pick Bread from Fridge",
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "Go to Table",
+            "params": {
+              "target_location": "table"
+            },
+            "type": "action"
+          },
+          {
+            "action": "place",
+            "name": "Place Bread on Table",
+            "params": {},
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

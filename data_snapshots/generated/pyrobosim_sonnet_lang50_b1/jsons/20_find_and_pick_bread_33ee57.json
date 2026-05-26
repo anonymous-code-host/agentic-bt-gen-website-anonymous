@@ -1,0 +1,97 @@
+{
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "memory": true,
+        "name": "Check pantry for bread",
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to pantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open pantry",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect bread at pantry",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "status": "pantry_detect_status"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick bread from pantry",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "memory": true,
+        "name": "Check table for bread",
+        "children": [
+          {
+            "type": "decorator",
+            "decorator": "inverter",
+            "child": {
+              "type": "decorator",
+              "decorator": "inverter",
+              "child": {
+                "type": "action",
+                "name": "Close pantry",
+                "action": "close",
+                "params": {
+                  "target_location": "pantry"
+                }
+              }
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to table",
+            "action": "navigate",
+            "params": {
+              "target_location": "table"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Detect bread at table",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "status": "table_detect_status"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick bread from table",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

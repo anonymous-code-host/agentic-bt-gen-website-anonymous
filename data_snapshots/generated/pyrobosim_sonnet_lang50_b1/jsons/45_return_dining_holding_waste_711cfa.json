@@ -1,0 +1,109 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "name": "Return to dining holding waste after ordered search",
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "name": "Find and pick waste: bin_disposal first, then desk_desktop",
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Check bin_disposal for waste",
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to bin_disposal",
+                "action": "navigate",
+                "params": {
+                  "target_location": "bin_disposal"
+                },
+                "outputs": {
+                  "status": "nav_bin_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Detect waste at bin_disposal",
+                "action": "detect",
+                "params": {
+                  "object": "waste"
+                },
+                "outputs": {
+                  "detected_objects": "detected_at_bin",
+                  "status": "detect_bin_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick waste at bin_disposal",
+                "action": "pick",
+                "params": {
+                  "object": "waste"
+                },
+                "outputs": {
+                  "status": "pick_bin_status"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Check desk_desktop for waste",
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to desk_desktop",
+                "action": "navigate",
+                "params": {
+                  "target_location": "desk_desktop"
+                },
+                "outputs": {
+                  "status": "nav_desk_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Detect waste at desk_desktop",
+                "action": "detect",
+                "params": {
+                  "object": "waste"
+                },
+                "outputs": {
+                  "detected_objects": "detected_at_desk",
+                  "status": "detect_desk_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick waste at desk_desktop",
+                "action": "pick",
+                "params": {
+                  "object": "waste"
+                },
+                "outputs": {
+                  "status": "pick_desk_status"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "Navigate to dining",
+        "action": "navigate",
+        "params": {
+          "target_location": "dining"
+        },
+        "outputs": {
+          "status": "nav_dining_status"
+        }
+      }
+    ]
+  }
+}

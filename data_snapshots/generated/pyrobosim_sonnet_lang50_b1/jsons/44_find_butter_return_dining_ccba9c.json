@@ -1,0 +1,113 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to table",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table"
+                },
+                "outputs": {
+                  "status": "nav_table_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Detect butter at table_tabletop",
+                "action": "detect",
+                "params": {
+                  "object": "butter"
+                },
+                "outputs": {
+                  "status": "detect_table_status",
+                  "detected_objects": "detected_table_objects"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick butter from table",
+                "action": "pick",
+                "params": {
+                  "object": "butter"
+                },
+                "outputs": {
+                  "status": "pick_table_status"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to fridge",
+                "action": "navigate",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "outputs": {
+                  "status": "nav_fridge_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open fridge",
+                "action": "open",
+                "outputs": {
+                  "status": "open_fridge_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Detect butter at fridge",
+                "action": "detect",
+                "params": {
+                  "object": "butter"
+                },
+                "outputs": {
+                  "status": "detect_fridge_status",
+                  "detected_objects": "detected_fridge_objects"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick butter from fridge",
+                "action": "pick",
+                "params": {
+                  "object": "butter"
+                },
+                "outputs": {
+                  "status": "pick_fridge_status"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "Navigate to dining",
+        "action": "navigate",
+        "params": {
+          "target_location": "dining"
+        },
+        "outputs": {
+          "status": "nav_dining_status"
+        }
+      }
+    ]
+  }
+}

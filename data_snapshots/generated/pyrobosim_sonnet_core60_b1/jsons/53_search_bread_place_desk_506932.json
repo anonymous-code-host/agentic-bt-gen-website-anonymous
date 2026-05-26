@@ -1,0 +1,152 @@
+{
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to table_tabletop",
+            "action": "navigate",
+            "params": {
+              "target_location": "table_tabletop"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Detect bread at table",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick bread from table",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to desk_desktop",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Place bread on desk",
+            "action": "place",
+            "params": {}
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to pantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open pantry",
+            "action": "open",
+            "params": {}
+          },
+          {
+            "type": "action",
+            "name": "Detect bread at pantry",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick bread from pantry",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to desk_desktop",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Place bread on desk",
+            "action": "place",
+            "params": {}
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to fridge",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open fridge",
+            "action": "open",
+            "params": {}
+          },
+          {
+            "type": "action",
+            "name": "Detect bread at fridge",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick bread from fridge",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to desk_desktop",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Place bread on desk",
+            "action": "place",
+            "params": {}
+          }
+        ]
+      }
+    ]
+  }
+}

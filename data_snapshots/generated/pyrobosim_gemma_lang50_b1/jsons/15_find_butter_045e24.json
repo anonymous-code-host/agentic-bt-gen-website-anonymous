@@ -1,0 +1,123 @@
+{
+  "blackboard": {
+    "initial": {}
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_fridge",
+            "params": {
+              "target_location": {
+                "literal": "fridge"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_fridge",
+            "params": {
+              "target_location": {
+                "literal": "fridge"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_butter_fridge",
+            "outputs": {
+              "detected_objects": "found_items"
+            },
+            "params": {
+              "object": {
+                "literal": "butter"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_items",
+            "name": "check_butter_fridge",
+            "operator": "contains",
+            "type": "condition",
+            "value": "butter"
+          },
+          {
+            "action": "pick",
+            "name": "pick_butter_fridge",
+            "params": {
+              "object": {
+                "literal": "butter"
+              }
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_pantry",
+            "params": {
+              "target_location": {
+                "literal": "pantry"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_pantry",
+            "params": {
+              "target_location": {
+                "literal": "pantry"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_butter_pantry",
+            "outputs": {
+              "detected_objects": "found_items"
+            },
+            "params": {
+              "object": {
+                "literal": "butter"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_items",
+            "name": "check_butter_pantry",
+            "operator": "contains",
+            "type": "condition",
+            "value": "butter"
+          },
+          {
+            "action": "pick",
+            "name": "pick_butter_pantry",
+            "params": {
+              "object": {
+                "literal": "butter"
+              }
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

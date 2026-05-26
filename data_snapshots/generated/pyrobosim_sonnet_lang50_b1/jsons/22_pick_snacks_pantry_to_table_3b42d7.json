@@ -1,0 +1,88 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        },
+        "outputs": {
+          "status": "nav_pantry_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open pantry",
+        "action": "open",
+        "outputs": {
+          "status": "open_pantry_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Detect snacks in pantry",
+        "action": "detect",
+        "params": {
+          "object": "snacks"
+        },
+        "outputs": {
+          "status": "detect_status",
+          "detected_objects": "found_snacks"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Pick snacks",
+        "action": "pick",
+        "params": {
+          "object": "snacks"
+        },
+        "outputs": {
+          "status": "pick_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to table",
+        "action": "navigate",
+        "params": {
+          "target_location": "table"
+        },
+        "outputs": {
+          "status": "nav_table_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Place snacks on table_tabletop",
+        "action": "place",
+        "outputs": {
+          "status": "place_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate back to pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        },
+        "outputs": {
+          "status": "nav_back_pantry_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Close pantry",
+        "action": "close",
+        "outputs": {
+          "status": "close_pantry_status"
+        }
+      }
+    ]
+  }
+}

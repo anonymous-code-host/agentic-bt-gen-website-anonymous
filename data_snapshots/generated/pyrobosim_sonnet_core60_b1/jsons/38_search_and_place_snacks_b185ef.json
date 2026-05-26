@@ -1,0 +1,101 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "name": "Search and Place Snacks",
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "name": "Find and Pick Snacks from Pantry or Fridge",
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Search Pantry for Snacks",
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to Pantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open Pantry",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Detect Snacks at Pantry",
+                "action": "detect",
+                "params": {
+                  "object": "snacks"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick Snacks from Pantry",
+                "action": "pick",
+                "params": {
+                  "object": "snacks"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Search Fridge for Snacks",
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to Fridge",
+                "action": "navigate",
+                "params": {
+                  "target_location": "fridge"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open Fridge",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Detect Snacks at Fridge",
+                "action": "detect",
+                "params": {
+                  "object": "snacks"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick Snacks from Fridge",
+                "action": "pick",
+                "params": {
+                  "object": "snacks"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "Navigate to Desk",
+        "action": "navigate",
+        "params": {
+          "target_location": "desk"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Place Snacks on Desk Desktop",
+        "action": "place"
+      }
+    ]
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "Go to Pantry",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "Open Pantry",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "Detect Snacks in Pantry",
+            "outputs": {
+              "detected_objects": "snacks_in_pantry"
+            },
+            "params": {
+              "object": "snacks"
+            },
+            "type": "action"
+          },
+          {
+            "key": "snacks_in_pantry",
+            "name": "Check Snacks in Pantry",
+            "operator": "contains",
+            "type": "condition",
+            "value": "snacks"
+          },
+          {
+            "action": "pick",
+            "name": "Pick Snacks from Pantry",
+            "params": {
+              "object": "snacks"
+            },
+            "type": "action"
+          },
+          {
+            "action": "navigate",
+            "name": "Go to Table",
+            "params": {
+              "target_location": "table"
+            },
+            "type": "action"
+          },
+          {
+            "action": "place",
+            "name": "Place Snacks on Table",
+            "params": {},
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "Go to Desk",
+            "params": {
+              "target_location": "desk"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "Detect Snacks on Desk",
+            "outputs": {
+              "detected_objects": "snacks_in_desk"
+            },
+            "params": {
+              "object": "snacks"
+            },
+            "type": "action"
+          },
+          {
+            "key": "snacks_in_desk",
+            "name": "Check Snacks on Desk",
+            "operator": "contains",
+            "type": "condition",
+            "value": "snacks"
+          },
+          {
+            "action": "pick",
+            "name": "Pick Snacks from Desk",
+            "params": {
+              "object": "snacks"
+            },
+            "type": "action"
+          },
+          {
+            "action": "navigate",
+            "name": "Go to Table",
+            "params": {
+              "target_location": "table"
+            },
+            "type": "action"
+          },
+          {
+            "action": "place",
+            "name": "Place Snacks on Table",
+            "params": {},
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

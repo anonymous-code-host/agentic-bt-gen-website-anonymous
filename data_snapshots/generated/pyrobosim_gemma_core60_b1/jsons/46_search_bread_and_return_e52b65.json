@@ -1,0 +1,117 @@
+{
+  "blackboard": {
+    "initial": {
+      "found_bread": []
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "nav_to_table",
+            "params": {
+              "target_location": "table"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_bread_table",
+            "outputs": {
+              "detected_objects": "found_bread"
+            },
+            "params": {
+              "object": "bread"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_bread",
+            "name": "has_bread_table",
+            "operator": "contains",
+            "type": "condition",
+            "value": "bread"
+          },
+          {
+            "action": "pick",
+            "name": "pick_bread_table",
+            "params": {
+              "object": "bread"
+            },
+            "type": "action"
+          },
+          {
+            "action": "navigate",
+            "name": "return_to_dining_1",
+            "params": {
+              "target_location": "dining"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "nav_to_pantry",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_pantry",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_bread_pantry",
+            "outputs": {
+              "detected_objects": "found_bread"
+            },
+            "params": {
+              "object": "bread"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_bread",
+            "name": "has_bread_pantry",
+            "operator": "contains",
+            "type": "condition",
+            "value": "bread"
+          },
+          {
+            "action": "pick",
+            "name": "pick_bread_pantry",
+            "params": {
+              "object": "bread"
+            },
+            "type": "action"
+          },
+          {
+            "action": "navigate",
+            "name": "return_to_dining_2",
+            "params": {
+              "target_location": "dining"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

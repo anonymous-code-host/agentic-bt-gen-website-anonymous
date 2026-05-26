@@ -1,0 +1,133 @@
+{
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "name": "Find and deliver snacks",
+    "children": [
+      {
+        "type": "sequence",
+        "memory": true,
+        "name": "Search pantry for snacks",
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to pantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open pantry",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect snacks in pantry",
+            "action": "detect",
+            "params": {
+              "object": "snacks"
+            },
+            "outputs": {
+              "detected_objects": "pantry_snacks"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "Snacks found in pantry?",
+            "key": "pantry_snacks",
+            "operator": "truthy"
+          },
+          {
+            "type": "action",
+            "name": "Pick snacks from pantry",
+            "action": "pick",
+            "params": {
+              "object": "snacks"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to desk",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Place snacks on desk",
+            "action": "place"
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "memory": true,
+        "name": "Search fridge for snacks (fallback)",
+        "children": [
+          {
+            "type": "action",
+            "name": "Close pantry",
+            "action": "close",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to fridge",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open fridge",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect snacks in fridge",
+            "action": "detect",
+            "params": {
+              "object": "snacks"
+            },
+            "outputs": {
+              "detected_objects": "fridge_snacks"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "Snacks found in fridge?",
+            "key": "fridge_snacks",
+            "operator": "truthy"
+          },
+          {
+            "type": "action",
+            "name": "Pick snacks from fridge",
+            "action": "pick",
+            "params": {
+              "object": "snacks"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to desk",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Place snacks on desk",
+            "action": "place"
+          }
+        ]
+      }
+    ]
+  }
+}

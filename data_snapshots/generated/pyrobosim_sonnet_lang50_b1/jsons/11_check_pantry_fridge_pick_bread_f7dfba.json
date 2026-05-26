@@ -1,0 +1,95 @@
+{
+  "root": {
+    "type": "selector",
+    "name": "CheckBreadAndPick",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "name": "CheckPantryForBread",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "NavigateToPantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "OpenPantry",
+            "action": "open",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "DetectBreadAtPantry",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "PickBreadFromPantry",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "name": "CheckFridgeForBread",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "ClosePantry",
+            "action": "close",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "NavigateToFridge",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "OpenFridge",
+            "action": "open",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "DetectBreadAtFridge",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "PickBreadFromFridge",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

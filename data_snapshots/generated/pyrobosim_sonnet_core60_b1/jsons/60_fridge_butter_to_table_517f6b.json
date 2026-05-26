@@ -1,0 +1,69 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        },
+        "outputs": {
+          "status": "nav_fridge_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open fridge",
+        "action": "open",
+        "outputs": {
+          "status": "open_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Detect butter",
+        "action": "detect",
+        "params": {
+          "object": "butter"
+        },
+        "outputs": {
+          "status": "detect_status",
+          "detected_objects": "detected_objects"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Pick butter",
+        "action": "pick",
+        "params": {
+          "object": "butter0"
+        },
+        "outputs": {
+          "status": "pick_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to table",
+        "action": "navigate",
+        "params": {
+          "target_location": "table"
+        },
+        "outputs": {
+          "status": "nav_table_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Place butter on table_tabletop",
+        "action": "place",
+        "outputs": {
+          "status": "place_status"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "navigate_primary",
+            "action": "navigate",
+            "params": {
+              "target_location": "bin_disposal"
+            }
+          },
+          {
+            "type": "action",
+            "name": "detect_primary",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            }
+          },
+          {
+            "type": "action",
+            "name": "pick_primary",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            }
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "navigate_fallback",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            }
+          },
+          {
+            "type": "action",
+            "name": "detect_fallback",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            }
+          },
+          {
+            "type": "action",
+            "name": "pick_fallback",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to Fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        },
+        "outputs": {
+          "status": "nav_fridge_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open Fridge",
+        "action": "open",
+        "outputs": {
+          "status": "open_fridge_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Pick Soda",
+        "action": "pick",
+        "params": {
+          "object": "soda"
+        },
+        "outputs": {
+          "status": "pick_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to Pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        },
+        "outputs": {
+          "status": "nav_pantry_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open Pantry",
+        "action": "open",
+        "outputs": {
+          "status": "open_pantry_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Place Soda at Pantry",
+        "action": "place",
+        "outputs": {
+          "status": "place_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Close Pantry",
+        "action": "close",
+        "outputs": {
+          "status": "close_pantry_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate back to Fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        },
+        "outputs": {
+          "status": "nav_back_fridge_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Close Fridge",
+        "action": "close",
+        "outputs": {
+          "status": "close_fridge_status"
+        }
+      }
+    ]
+  }
+}

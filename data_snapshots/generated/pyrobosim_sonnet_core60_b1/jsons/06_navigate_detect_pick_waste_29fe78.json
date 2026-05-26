@@ -1,0 +1,42 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to bin_disposal",
+        "action": "navigate",
+        "params": {
+          "target_location": "bin_disposal"
+        },
+        "outputs": {
+          "status": "nav_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Detect waste",
+        "action": "detect",
+        "params": {
+          "object": "waste"
+        },
+        "outputs": {
+          "status": "detect_status",
+          "detected_objects": "detected_objects"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Pick waste",
+        "action": "pick",
+        "params": {
+          "object": "waste"
+        },
+        "outputs": {
+          "status": "pick_status"
+        }
+      }
+    ]
+  }
+}

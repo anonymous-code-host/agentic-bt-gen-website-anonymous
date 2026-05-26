@@ -1,0 +1,37 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "go_to_desk",
+        "params": {
+          "target_location": "desk_desktop"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "pick_waste",
+        "params": {
+          "object": "waste"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "go_to_dumpster",
+        "params": {
+          "target_location": "dumpster_disposal"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "place_waste",
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

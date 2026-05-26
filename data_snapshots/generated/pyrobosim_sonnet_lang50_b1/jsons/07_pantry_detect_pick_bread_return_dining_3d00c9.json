@@ -1,0 +1,62 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to Pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        },
+        "outputs": {
+          "status": "nav_pantry_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open Pantry",
+        "action": "open",
+        "params": {},
+        "outputs": {
+          "status": "open_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Detect Bread",
+        "action": "detect",
+        "params": {
+          "object": "bread"
+        },
+        "outputs": {
+          "status": "detect_status",
+          "detected_objects": "detected_objects"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Pick Bread",
+        "action": "pick",
+        "params": {
+          "object": "bread"
+        },
+        "outputs": {
+          "status": "pick_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to Dining",
+        "action": "navigate",
+        "params": {
+          "target_location": "dining"
+        },
+        "outputs": {
+          "status": "nav_dining_status"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence>
+      <Fallback>
+        <ReactiveSequence>
+          <Inverter>
+            <CheckDetection class_name="person" min_confidence="0.5" max_age="2.0"/>
+          </Inverter>
+          <NavigateToLocation location="vending_machine"/>
+        </ReactiveSequence>
+        <RetryUntilSuccessful num_attempts="-1">
+          <Sequence>
+            <Wait wait_duration="10.0"/>
+            <ReactiveSequence>
+              <Inverter>
+                <CheckDetection class_name="person" min_confidence="0.5" max_age="2.0"/>
+              </Inverter>
+              <NavigateToLocation location="vending_machine"/>
+            </ReactiveSequence>
+          </Sequence>
+        </RetryUntilSuccessful>
+      </Fallback>
+      <NavigateToLocation location="nrg_entrance"/>
+    </Sequence>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="Wait">
+      <input_port name="wait_duration"/>
+    </Action>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+  </TreeNodesModel>
+</root>

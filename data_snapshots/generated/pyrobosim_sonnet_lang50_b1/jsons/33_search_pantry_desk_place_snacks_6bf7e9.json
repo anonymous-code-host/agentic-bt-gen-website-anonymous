@@ -1,0 +1,124 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "name": "Find and pick snacks",
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "name": "Search pantry for snacks",
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "name": "Navigate to pantry",
+                "type": "action",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "outputs": {
+                  "status": "nav_pantry_status"
+                }
+              },
+              {
+                "name": "Open pantry",
+                "type": "action",
+                "action": "open",
+                "outputs": {
+                  "status": "open_pantry_status"
+                }
+              },
+              {
+                "name": "Detect snacks at pantry",
+                "type": "action",
+                "action": "detect",
+                "params": {
+                  "object": "snacks"
+                },
+                "outputs": {
+                  "status": "detect_pantry_status",
+                  "detected_objects": "detected_snacks"
+                }
+              },
+              {
+                "name": "Pick snacks from pantry",
+                "type": "action",
+                "action": "pick",
+                "params": {
+                  "object": "snacks"
+                },
+                "outputs": {
+                  "status": "pick_status"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Search desk_desktop for snacks",
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "name": "Navigate to desk",
+                "type": "action",
+                "action": "navigate",
+                "params": {
+                  "target_location": "desk"
+                },
+                "outputs": {
+                  "status": "nav_desk_status"
+                }
+              },
+              {
+                "name": "Detect snacks at desk",
+                "type": "action",
+                "action": "detect",
+                "params": {
+                  "object": "snacks"
+                },
+                "outputs": {
+                  "status": "detect_desk_status",
+                  "detected_objects": "detected_snacks"
+                }
+              },
+              {
+                "name": "Pick snacks from desk",
+                "type": "action",
+                "action": "pick",
+                "params": {
+                  "object": "snacks"
+                },
+                "outputs": {
+                  "status": "pick_status"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Navigate to table",
+        "type": "action",
+        "action": "navigate",
+        "params": {
+          "target_location": "table"
+        },
+        "outputs": {
+          "status": "nav_table_status"
+        }
+      },
+      {
+        "name": "Place snacks on table_tabletop",
+        "type": "action",
+        "action": "place",
+        "outputs": {
+          "status": "place_status"
+        }
+      }
+    ]
+  }
+}

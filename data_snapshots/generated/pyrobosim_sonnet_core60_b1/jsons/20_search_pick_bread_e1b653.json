@@ -1,0 +1,104 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open pantry",
+        "action": "open"
+      },
+      {
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "Detect bread at pantry",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "pantry_detected_objects"
+                }
+              },
+              {
+                "type": "condition",
+                "name": "Bread found at pantry?",
+                "key": "pantry_detected_objects",
+                "operator": "contains",
+                "value": "bread"
+              },
+              {
+                "type": "action",
+                "name": "Pick bread at pantry",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "Close pantry",
+                "action": "close"
+              },
+              {
+                "type": "action",
+                "name": "Navigate to table_tabletop",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table_tabletop"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Detect bread at table",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "table_detected_objects"
+                }
+              },
+              {
+                "type": "condition",
+                "name": "Bread found at table?",
+                "key": "table_detected_objects",
+                "operator": "contains",
+                "value": "bread"
+              },
+              {
+                "type": "action",
+                "name": "Pick bread at table",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

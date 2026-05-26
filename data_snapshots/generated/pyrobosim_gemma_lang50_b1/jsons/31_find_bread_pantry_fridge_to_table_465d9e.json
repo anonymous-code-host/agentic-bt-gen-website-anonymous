@@ -1,0 +1,127 @@
+{
+  "blackboard": {
+    "fridge_bread": [],
+    "pantry_bread": []
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "nav_pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_bread_pantry",
+                "outputs": {
+                  "detected_objects": "pantry_bread"
+                },
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              },
+              {
+                "key": "pantry_bread",
+                "name": "has_bread_pantry",
+                "operator": "contains",
+                "type": "condition",
+                "value": "bread"
+              },
+              {
+                "action": "pick",
+                "name": "pick_bread_pantry",
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "nav_fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_bread_fridge",
+                "outputs": {
+                  "detected_objects": "fridge_bread"
+                },
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              },
+              {
+                "key": "fridge_bread",
+                "name": "has_bread_fridge",
+                "operator": "contains",
+                "type": "condition",
+                "value": "bread"
+              },
+              {
+                "action": "pick",
+                "name": "pick_bread_fridge",
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "navigate",
+        "name": "nav_table",
+        "params": {
+          "target_location": "table"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "place_bread",
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

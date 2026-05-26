@@ -1,0 +1,107 @@
+{
+  "batch": "sonnet_lang50_mcore",
+  "suite_names": [
+    "pyrobosim_language50"
+  ],
+  "environments": [
+    "pyrobosim"
+  ],
+  "count": 50,
+  "valid_rate": 1.0,
+  "grounded_rate": 1.0,
+  "params_rate": 1.0,
+  "struct_comp_rate": 0.84,
+  "success_rate": 0.96,
+  "goal_satisfied_rate": 0.96,
+  "avg_tick_count": 30.8,
+  "avg_runtime_ms": 3558.1,
+  "exec_status_counts": {
+    "SUCCESS": 48,
+    "FAILURE": 2
+  },
+  "failure_cause_counts": {
+    "runtime_failure": 2
+  },
+  "archetypes": {
+    "sequential_pick": {
+      "count": 10,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 1.0,
+      "success_rate": 1.0,
+      "goal_satisfied_rate": 1.0,
+      "avg_tick_count": 26.1,
+      "avg_runtime_ms": 3110.0,
+      "failure_breakdown": {}
+    },
+    "selector_search": {
+      "count": 10,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 1.0,
+      "success_rate": 1.0,
+      "goal_satisfied_rate": 1.0,
+      "avg_tick_count": 25.2,
+      "avg_runtime_ms": 3043.3,
+      "failure_breakdown": {}
+    },
+    "pick_and_place": {
+      "count": 10,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 0.8,
+      "success_rate": 0.8,
+      "goal_satisfied_rate": 0.8,
+      "avg_tick_count": 36.7,
+      "avg_runtime_ms": 4306.9,
+      "failure_breakdown": {
+        "runtime_failure": 2
+      }
+    },
+    "search_and_place": {
+      "count": 10,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 0.8,
+      "success_rate": 1.0,
+      "goal_satisfied_rate": 1.0,
+      "avg_tick_count": 35.0,
+      "avg_runtime_ms": 3977.5,
+      "failure_breakdown": {}
+    },
+    "pick_and_return": {
+      "count": 10,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 0.6,
+      "success_rate": 1.0,
+      "goal_satisfied_rate": 1.0,
+      "avg_tick_count": 31.1,
+      "avg_runtime_ms": 3353.0,
+      "failure_breakdown": {}
+    }
+  },
+  "remaining_failures": [
+    {
+      "id": "lang23_task23_place_soda_pantry",
+      "archetype": "pick_and_place",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "runtime_failure",
+      "failure_notes": "Execution did not finish successfully in the simulator/control server."
+    },
+    {
+      "id": "lang28_task28_place_butter_pantry",
+      "archetype": "pick_and_place",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "runtime_failure",
+      "failure_notes": "Execution did not finish successfully in the simulator/control server."
+    }
+  ]
+}

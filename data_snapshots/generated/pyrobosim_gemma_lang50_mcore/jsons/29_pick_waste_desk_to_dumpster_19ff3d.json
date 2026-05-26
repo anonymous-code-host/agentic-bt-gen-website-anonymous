@@ -1,0 +1,46 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "nav_to_desk",
+        "params": {
+          "target_location": "desk_desktop"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "detect_waste",
+        "params": {
+          "object": "waste"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "pick_waste",
+        "params": {
+          "object": "waste"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "nav_to_dumpster",
+        "params": {
+          "target_location": "dumpster_disposal"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "place_waste",
+        "params": {},
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "navigate_to_bin",
+                "params": {
+                  "target_location": "bin_disposal"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_waste_bin",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "pick_waste_bin",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "navigate_to_desk",
+                "params": {
+                  "target_location": "desk_desktop"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_waste_desk",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "pick_waste_desk",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "navigate",
+        "name": "navigate_to_dumpster",
+        "params": {
+          "target_location": "dumpster_disposal"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "place_waste",
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

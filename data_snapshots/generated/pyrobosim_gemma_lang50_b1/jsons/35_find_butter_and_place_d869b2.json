@@ -1,0 +1,121 @@
+{
+  "blackboard": {
+    "initial": {
+      "found_butter": []
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "nav_fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_fridge",
+                "outputs": {
+                  "detected_objects": "found_butter"
+                },
+                "params": {
+                  "object": "butter"
+                },
+                "type": "action"
+              },
+              {
+                "key": "found_butter",
+                "name": "check_fridge",
+                "operator": "contains",
+                "type": "condition",
+                "value": "butter"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "nav_pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_pantry",
+                "outputs": {
+                  "detected_objects": "found_butter"
+                },
+                "params": {
+                  "object": "butter"
+                },
+                "type": "action"
+              },
+              {
+                "key": "found_butter",
+                "name": "check_pantry",
+                "operator": "contains",
+                "type": "condition",
+                "value": "butter"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "pick",
+        "name": "pick_butter",
+        "params": {
+          "object": "butter"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "nav_desk",
+        "params": {
+          "target_location": "desk"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "place_butter",
+        "params": {},
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

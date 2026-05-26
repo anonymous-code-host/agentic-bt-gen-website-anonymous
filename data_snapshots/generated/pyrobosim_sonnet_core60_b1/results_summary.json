@@ -1,0 +1,127 @@
+{
+  "batch": "pyrobosim_sonnet_core60_b1",
+  "suite_names": [
+    "pyrobosim_core60"
+  ],
+  "environments": [
+    "pyrobosim"
+  ],
+  "count": 60,
+  "valid_rate": 1.0,
+  "grounded_rate": 1.0,
+  "params_rate": 1.0,
+  "struct_comp_rate": 0.6667,
+  "success_rate": 0.9333,
+  "goal_satisfied_rate": 0.9333,
+  "avg_tick_count": 18.9,
+  "avg_runtime_ms": 2036.2,
+  "exec_status_counts": {
+    "SUCCESS": 56,
+    "FAILURE": 4
+  },
+  "failure_cause_counts": {
+    "runtime_failure": 3,
+    "bt_construction": 1
+  },
+  "archetypes": {
+    "sequential_pick": {
+      "count": 12,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 1.0,
+      "success_rate": 1.0,
+      "goal_satisfied_rate": 1.0,
+      "avg_tick_count": 16.8,
+      "avg_runtime_ms": 1810.7,
+      "failure_breakdown": {}
+    },
+    "selector_search": {
+      "count": 12,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 0.8333,
+      "success_rate": 0.8333,
+      "goal_satisfied_rate": 0.8333,
+      "avg_tick_count": 13.6,
+      "avg_runtime_ms": 1477.8,
+      "failure_breakdown": {
+        "runtime_failure": 1,
+        "bt_construction": 1
+      }
+    },
+    "pick_and_place": {
+      "count": 12,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 0.0,
+      "success_rate": 1.0,
+      "goal_satisfied_rate": 1.0,
+      "avg_tick_count": 21.1,
+      "avg_runtime_ms": 2262.2,
+      "failure_breakdown": {}
+    },
+    "search_and_place": {
+      "count": 12,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 0.5,
+      "success_rate": 0.8333,
+      "goal_satisfied_rate": 0.8333,
+      "avg_tick_count": 22.7,
+      "avg_runtime_ms": 2442.2,
+      "failure_breakdown": {
+        "runtime_failure": 2
+      }
+    },
+    "pick_and_return": {
+      "count": 12,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 1.0,
+      "success_rate": 1.0,
+      "goal_satisfied_rate": 1.0,
+      "avg_tick_count": 20.2,
+      "avg_runtime_ms": 2188.4,
+      "failure_breakdown": {}
+    }
+  },
+  "remaining_failures": [
+    {
+      "id": "task20_search_bread_pantry_table",
+      "archetype": "selector_search",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "runtime_failure",
+      "failure_notes": "Execution did not finish successfully in the simulator/control server."
+    },
+    {
+      "id": "task31_search_place_bread_table",
+      "archetype": "search_and_place",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "runtime_failure",
+      "failure_notes": "Execution did not finish successfully in the simulator/control server."
+    },
+    {
+      "id": "task34_search_place_soda_pantry",
+      "archetype": "search_and_place",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "runtime_failure",
+      "failure_notes": "Execution did not finish successfully in the simulator/control server."
+    },
+    {
+      "id": "task52_search_soda_desk_fridge_pantry",
+      "archetype": "selector_search",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "bt_construction",
+      "failure_notes": "Search-family BT failed in a detect/fallback branch despite passing static validation."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        },
+        "outputs": {
+          "status": "nav_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open fridge",
+        "action": "open",
+        "outputs": {
+          "status": "open_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Detect soda",
+        "action": "detect",
+        "params": {
+          "object": "soda"
+        },
+        "outputs": {
+          "detected_objects": "detected_objects",
+          "status": "detect_status"
+        }
+      },
+      {
+        "type": "condition",
+        "name": "Soda detected?",
+        "key": "detected_objects",
+        "operator": "truthy",
+        "value": true
+      },
+      {
+        "type": "action",
+        "name": "Pick soda",
+        "action": "pick",
+        "params": {
+          "object": "soda"
+        },
+        "outputs": {
+          "status": "pick_status"
+        }
+      }
+    ]
+  }
+}

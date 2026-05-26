@@ -1,0 +1,121 @@
+{
+  "blackboard": {
+    "initial": {
+      "found_waste": []
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "Navigate to desk",
+            "params": {
+              "target_location": "desk_desktop"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "Detect waste at desk",
+            "outputs": {
+              "detected_objects": "found_waste"
+            },
+            "params": {
+              "object": "waste"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_waste",
+            "name": "Waste present at desk?",
+            "operator": "contains",
+            "type": "condition",
+            "value": "waste"
+          },
+          {
+            "action": "pick",
+            "name": "Pick waste from desk",
+            "params": {
+              "object": "waste"
+            },
+            "type": "action"
+          },
+          {
+            "action": "navigate",
+            "name": "Navigate to dumpster",
+            "params": {
+              "target_location": "dumpster_disposal"
+            },
+            "type": "action"
+          },
+          {
+            "action": "place",
+            "name": "Place waste in dumpster",
+            "params": {},
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "Navigate to bin",
+            "params": {
+              "target_location": "bin_disposal"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "Detect waste in bin",
+            "outputs": {
+              "detected_objects": "found_waste"
+            },
+            "params": {
+              "object": "waste"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_waste",
+            "name": "Waste present in bin?",
+            "operator": "contains",
+            "type": "condition",
+            "value": "waste"
+          },
+          {
+            "action": "pick",
+            "name": "Pick waste from bin",
+            "params": {
+              "object": "waste"
+            },
+            "type": "action"
+          },
+          {
+            "action": "navigate",
+            "name": "Navigate to dumpster",
+            "params": {
+              "target_location": "dumpster_disposal"
+            },
+            "type": "action"
+          },
+          {
+            "action": "place",
+            "name": "Place waste in dumpster",
+            "params": {},
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

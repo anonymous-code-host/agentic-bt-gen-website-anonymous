@@ -1,0 +1,135 @@
+{
+  "blackboard": {
+    "initial": {
+      "found_items": []
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "go_to_fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "find_bread_fridge",
+                "outputs": {
+                  "detected_objects": "found_items"
+                },
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              },
+              {
+                "key": "found_items",
+                "name": "bread_in_fridge",
+                "operator": "contains",
+                "type": "condition",
+                "value": "bread"
+              },
+              {
+                "action": "pick",
+                "name": "pick_bread_fridge",
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "go_to_pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "find_bread_pantry",
+                "outputs": {
+                  "detected_objects": "found_items"
+                },
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              },
+              {
+                "key": "found_items",
+                "name": "bread_in_pantry",
+                "operator": "contains",
+                "type": "condition",
+                "value": "bread"
+              },
+              {
+                "action": "pick",
+                "name": "pick_bread_pantry",
+                "params": {
+                  "object": "bread"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_table",
+            "params": {
+              "target_location": "table"
+            },
+            "type": "action"
+          },
+          {
+            "action": "place",
+            "name": "place_bread",
+            "params": {},
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

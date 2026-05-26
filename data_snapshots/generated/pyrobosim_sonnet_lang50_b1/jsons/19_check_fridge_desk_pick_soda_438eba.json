@@ -1,0 +1,75 @@
+{
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "name": "Find and pick soda at fridge",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "name": "Navigate to fridge",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "name": "Open fridge",
+            "type": "action",
+            "action": "open"
+          },
+          {
+            "name": "Detect soda at fridge",
+            "type": "action",
+            "action": "detect",
+            "params": {
+              "object": "soda"
+            }
+          },
+          {
+            "name": "Pick soda from fridge",
+            "type": "action",
+            "action": "pick",
+            "params": {
+              "object": "soda"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Find and pick soda at desk_desktop",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "name": "Navigate to desk_desktop",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            }
+          },
+          {
+            "name": "Detect soda at desk",
+            "type": "action",
+            "action": "detect",
+            "params": {
+              "object": "soda"
+            }
+          },
+          {
+            "name": "Pick soda from desk",
+            "type": "action",
+            "action": "pick",
+            "params": {
+              "object": "soda"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

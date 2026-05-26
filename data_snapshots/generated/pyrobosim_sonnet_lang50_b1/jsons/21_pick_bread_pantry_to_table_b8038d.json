@@ -1,0 +1,42 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to Pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open Pantry",
+        "action": "open"
+      },
+      {
+        "type": "action",
+        "name": "Pick Bread",
+        "action": "pick",
+        "params": {
+          "object": "bread"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to Table",
+        "action": "navigate",
+        "params": {
+          "target_location": "table"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Place Bread on Table Tabletop",
+        "action": "place"
+      }
+    ]
+  }
+}

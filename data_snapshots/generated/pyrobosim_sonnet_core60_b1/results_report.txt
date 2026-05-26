@@ -1,0 +1,66 @@
+Batch: pyrobosim_sonnet_core60_b1
+Suites: pyrobosim_core60
+Environments: pyrobosim
+Tasks: 60
+
+Overall
+  Success rate: 0.9333
+  Goal satisfied rate: 0.9333
+  Valid rate: 1.0
+  Grounded rate: 1.0
+  Params rate: 1.0
+  Struct comp rate: 0.6667
+  Avg tick count: 18.9
+  Avg runtime ms: 2036.2
+
+Execution Status Counts
+  FAILURE: 4
+  SUCCESS: 56
+
+Failure Cause Counts
+  bt_construction: 1
+  runtime_failure: 3
+
+By Archetype
+  pick_and_place
+    count: 12
+    success_rate: 1.0
+    struct_comp_rate: 0.0
+    avg_tick_count: 21.1
+    avg_runtime_ms: 2262.2
+    failure_breakdown: none
+  pick_and_return
+    count: 12
+    success_rate: 1.0
+    struct_comp_rate: 1.0
+    avg_tick_count: 20.2
+    avg_runtime_ms: 2188.4
+    failure_breakdown: none
+  search_and_place
+    count: 12
+    success_rate: 0.8333
+    struct_comp_rate: 0.5
+    avg_tick_count: 22.7
+    avg_runtime_ms: 2442.2
+    failure_runtime_failure: 2
+  selector_search
+    count: 12
+    success_rate: 0.8333
+    struct_comp_rate: 0.8333
+    avg_tick_count: 13.6
+    avg_runtime_ms: 1477.8
+    failure_bt_construction: 1
+    failure_runtime_failure: 1
+  sequential_pick
+    count: 12
+    success_rate: 1.0
+    struct_comp_rate: 1.0
+    avg_tick_count: 16.8
+    avg_runtime_ms: 1810.7
+    failure_breakdown: none
+
+Remaining Failures
+  task20_search_bread_pantry_table | selector_search | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  task31_search_place_bread_table | search_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  task34_search_place_soda_pantry | search_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  task52_search_soda_desk_fridge_pantry | selector_search | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.

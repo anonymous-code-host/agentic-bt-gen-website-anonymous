@@ -1,0 +1,34 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <ReactiveFallback>
+      <ReactiveSequence name="face_person_reactive">
+        <CheckDetection class_name="person" min_confidence="0.5"/>
+        <KeepRunningUntilFailure>
+          <HeadingController class_name="person" timeout="0.0" detection_loss_timeout="1.0"/>
+        </KeepRunningUntilFailure>
+      </ReactiveSequence>
+      <KeepRunningUntilFailure>
+        <SequenceWithMemory name="hallway_patrol">
+          <NavigateToLocation location="nrg_entrance"/>
+          <NavigateToLocation location="mid_hallway"/>
+          <NavigateToLocation location="between_hallways"/>
+        </SequenceWithMemory>
+      </KeepRunningUntilFailure>
+    </ReactiveFallback>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+    <Action ID="HeadingController">
+      <input_port name="class_name"/>
+      <input_port name="timeout"/>
+      <input_port name="detection_loss_timeout"/>
+    </Action>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+  </TreeNodesModel>
+</root>

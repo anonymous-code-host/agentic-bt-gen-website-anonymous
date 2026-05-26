@@ -1,0 +1,82 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "navigate_to_table",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table"
+                }
+              },
+              {
+                "type": "action",
+                "name": "detect_waste_table",
+                "action": "detect",
+                "params": {
+                  "object": "waste"
+                }
+              },
+              {
+                "type": "action",
+                "name": "pick_waste_table",
+                "action": "pick",
+                "params": {
+                  "object": "waste"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "navigate_to_desk",
+                "action": "navigate",
+                "params": {
+                  "target_location": "desk"
+                }
+              },
+              {
+                "type": "action",
+                "name": "detect_waste_desk",
+                "action": "detect",
+                "params": {
+                  "object": "waste"
+                }
+              },
+              {
+                "type": "action",
+                "name": "pick_waste_desk",
+                "action": "pick",
+                "params": {
+                  "object": "waste"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "navigate_to_dining",
+        "action": "navigate",
+        "params": {
+          "target_location": "dining"
+        }
+      }
+    ]
+  }
+}

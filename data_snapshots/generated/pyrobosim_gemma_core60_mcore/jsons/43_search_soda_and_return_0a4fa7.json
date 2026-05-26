@@ -1,0 +1,98 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "navigate_to_fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_soda_fridge",
+                "params": {
+                  "object": "soda"
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "pick_soda_fridge",
+                "params": {
+                  "object": "soda"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "navigate_to_pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_soda_pantry",
+                "params": {
+                  "object": "soda"
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "pick_soda_pantry",
+                "params": {
+                  "object": "soda"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "navigate",
+        "name": "return_to_dining",
+        "params": {
+          "target_location": "dining"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

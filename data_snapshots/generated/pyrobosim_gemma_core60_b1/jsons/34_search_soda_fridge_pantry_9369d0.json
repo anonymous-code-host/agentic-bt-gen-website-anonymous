@@ -1,0 +1,115 @@
+{
+  "blackboard": {
+    "initial": {
+      "found_soda": ""
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_soda_fridge",
+            "outputs": {
+              "detected_objects": "found_soda"
+            },
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_soda",
+            "name": "soda_in_fridge",
+            "operator": "contains",
+            "type": "condition",
+            "value": "soda"
+          },
+          {
+            "action": "pick",
+            "name": "pick_soda_fridge",
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          },
+          {
+            "action": "navigate",
+            "name": "go_to_pantry",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "place",
+            "name": "place_soda_pantry",
+            "params": {},
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_pantry_search",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_pantry",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_soda_pantry",
+            "outputs": {
+              "detected_objects": "found_soda"
+            },
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_soda",
+            "name": "soda_in_pantry",
+            "operator": "contains",
+            "type": "condition",
+            "value": "soda"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "Navigate to Fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "Open Fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "Detect Soda",
+        "params": {
+          "object": "soda0"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "Pick Soda",
+        "params": {
+          "object": "soda0"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "Navigate to Table",
+        "params": {
+          "target_location": "table"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "Place Soda on Tabletop",
+        "params": {},
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

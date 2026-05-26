@@ -1,0 +1,52 @@
+<![CDATA[<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="main">
+
+      <!-- Try the elevator up to 3 times; always proceed to return-home afterward -->
+      <ForceSuccess name="elevator_attempts">
+        <Fallback name="try_3_times">
+
+          <!-- Attempt 1: straight navigate -->
+          <NavigateToLocation name="attempt_1" location="elevator"/>
+
+          <!-- Attempt 2: back up safely, wait, then retry -->
+          <Sequence name="recover_and_attempt_2">
+            <ForceSuccess>
+              <BackUp name="backup_1" backup_dist="0.5" backup_speed="0.1"/>
+            </ForceSuccess>
+            <Wait name="wait_1" wait_duration="3.0"/>
+            <NavigateToLocation name="attempt_2" location="elevator"/>
+          </Sequence>
+
+          <!-- Attempt 3: back up safely, wait, then retry -->
+          <Sequence name="recover_and_attempt_3">
+            <ForceSuccess>
+              <BackUp name="backup_2" backup_dist="0.5" backup_speed="0.1"/>
+            </ForceSuccess>
+            <Wait name="wait_2" wait_duration="3.0"/>
+            <NavigateToLocation name="attempt_3" location="elevator"/>
+          </Sequence>
+
+        </Fallback>
+      </ForceSuccess>
+
+      <!-- Always return home after 3 attempts -->
+      <NavigateToLocation name="return_home" location="nrg_entrance"/>
+
+    </Sequence>
+  </BehaviorTree>
+
+  <TreeNodesModel>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+    <Action ID="BackUp">
+      <input_port name="backup_dist"/>
+      <input_port name="backup_speed"/>
+      <input_port name="time_allowance"/>
+    </Action>
+    <Action ID="Wait">
+      <input_port name="wait_duration"/>
+    </Action>
+  </TreeNodesModel>
+</root>]]>

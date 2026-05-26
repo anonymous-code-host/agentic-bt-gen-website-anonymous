@@ -1,0 +1,32 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "Navigate to bin_disposal",
+        "params": {
+          "target_location": "bin_disposal"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "Detect waste",
+        "params": {
+          "object": "waste"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "Pick up waste",
+        "params": {
+          "object": "waste"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

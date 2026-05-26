@@ -1,0 +1,48 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "navigate to pantry",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "open pantry",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "detect snacks",
+        "params": {
+          "object": "snacks"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "pick snacks",
+        "params": {
+          "object": "snacks"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "navigate to kitchen",
+        "params": {
+          "target_location": "kitchen"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

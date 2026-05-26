@@ -1,0 +1,56 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="main_mission">
+
+      <!-- Phase 1: Navigate to vending_machine, stop immediately if person detected,
+           wait for them to leave, wait 10s, then resume -->
+      <RetryUntilSuccessful num_attempts="1000">
+        <Fallback name="nav_or_handle_person">
+
+          <!-- Navigate to vending_machine; abort the instant a person is detected -->
+          <ReactiveSequence name="nav_with_person_check">
+            <Inverter>
+              <CheckDetection name="watch_for_person" class_name="person" min_confidence="0.5" max_age="2.0"/>
+            </Inverter>
+            <NavigateToLocation name="go_to_vending" location="vending_machine"/>
+          </ReactiveSequence>
+
+          <!-- Person was detected: wait until they leave, wait 10s, then force retry -->
+          <ForceFailure>
+            <Sequence name="handle_person_detected">
+              <!-- Block until person leaves the frame -->
+              <ReactiveFallback name="wait_for_person_gone">
+                <Inverter>
+                  <CheckDetection name="check_person_present" class_name="person" min_confidence="0.5" max_age="2.0"/>
+                </Inverter>
+                <KeepRunningUntilFailure>
+                  <Wait name="poll_wait" wait_duration="0.5"/>
+                </KeepRunningUntilFailure>
+              </ReactiveFallback>
+              <!-- Wait 10 seconds before resuming -->
+              <Wait name="wait_10s" wait_duration="10.0"/>
+            </Sequence>
+          </ForceFailure>
+
+        </Fallback>
+      </RetryUntilSuccessful>
+
+      <!-- Phase 2: Return to NRG entrance -->
+      <NavigateToLocation name="return_to_nrg" location="nrg_entrance"/>
+
+    </Sequence>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+    <Action ID="Wait">
+      <input_port name="wait_duration"/>
+    </Action>
+  </TreeNodesModel>
+</root>

@@ -1,0 +1,87 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "navigate_primary",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table_tabletop"
+                }
+              },
+              {
+                "type": "action",
+                "name": "detect_primary",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                }
+              },
+              {
+                "type": "action",
+                "name": "pick_primary",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "navigate_fallback",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry_storage"
+                }
+              },
+              {
+                "type": "action",
+                "name": "open_fallback",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "detect_fallback",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                }
+              },
+              {
+                "type": "action",
+                "name": "pick_fallback",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "navigate_destination",
+        "action": "navigate",
+        "params": {
+          "target_location": "dining"
+        }
+      }
+    ]
+  }
+}

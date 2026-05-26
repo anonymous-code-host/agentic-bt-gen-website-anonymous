@@ -1,0 +1,78 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "Go to fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "Open fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "Pick soda",
+        "params": {
+          "object": "soda"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "Go to pantry",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "Open pantry",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "Place soda",
+        "params": {},
+        "type": "action"
+      },
+      {
+        "action": "close",
+        "name": "Close pantry",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "Go to fridge to close",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "close",
+        "name": "Close fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

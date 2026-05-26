@@ -1,0 +1,106 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "name": "Search fridge for soda",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to fridge",
+                "action": "navigate",
+                "params": {
+                  "target_location": "fridge"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open fridge",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Detect soda in fridge",
+                "action": "detect",
+                "params": {
+                  "object": "soda"
+                },
+                "outputs": {
+                  "detected_objects": "soda_detected"
+                }
+              },
+              {
+                "type": "condition",
+                "name": "Soda found in fridge?",
+                "key": "soda_detected",
+                "operator": "truthy",
+                "value": true
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "name": "Close fridge and search pantry for soda",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "Close fridge",
+                "action": "close",
+                "params": {
+                  "target_location": "fridge"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Navigate to pantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open pantry",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Detect soda in pantry",
+                "action": "detect",
+                "params": {
+                  "object": "soda"
+                },
+                "outputs": {
+                  "detected_objects": "soda_detected"
+                }
+              },
+              {
+                "type": "condition",
+                "name": "Soda found in pantry?",
+                "key": "soda_detected",
+                "operator": "truthy",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "Pick up soda",
+        "action": "pick",
+        "params": {
+          "object": "soda"
+        }
+      }
+    ]
+  }
+}

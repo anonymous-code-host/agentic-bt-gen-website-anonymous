@@ -1,0 +1,99 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "name": "Return to dining with snacks",
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "name": "Find and pick snacks (table then pantry)",
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Try table_tabletop first",
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to table_tabletop",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table_tabletop"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Detect snacks at table",
+                "action": "detect",
+                "params": {
+                  "object": "snacks"
+                },
+                "outputs": {
+                  "status": "detect_table_status",
+                  "detected_objects": "detected_at_table"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick snacks from table",
+                "action": "pick",
+                "params": {
+                  "object": "snacks"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Try pantry second",
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to pantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open pantry",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Detect snacks at pantry",
+                "action": "detect",
+                "params": {
+                  "object": "snacks"
+                },
+                "outputs": {
+                  "status": "detect_pantry_status",
+                  "detected_objects": "detected_at_pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick snacks from pantry",
+                "action": "pick",
+                "params": {
+                  "object": "snacks"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "Navigate to dining",
+        "action": "navigate",
+        "params": {
+          "target_location": "dining"
+        }
+      }
+    ]
+  }
+}

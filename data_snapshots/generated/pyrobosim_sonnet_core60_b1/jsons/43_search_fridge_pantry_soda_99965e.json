@@ -1,0 +1,128 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "name": "Search fridge then pantry for soda",
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open fridge",
+        "action": "open"
+      },
+      {
+        "type": "selector",
+        "memory": true,
+        "name": "Find and retrieve soda",
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Get soda from fridge",
+            "children": [
+              {
+                "type": "action",
+                "name": "Detect soda in fridge",
+                "action": "detect",
+                "params": {
+                  "object": "soda"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick soda from fridge",
+                "action": "pick",
+                "params": {
+                  "object": "soda"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Navigate to dining",
+                "action": "navigate",
+                "params": {
+                  "target_location": "dining"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Try pantry for soda",
+            "children": [
+              {
+                "type": "action",
+                "name": "Close fridge",
+                "action": "close"
+              },
+              {
+                "type": "action",
+                "name": "Navigate to pantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open pantry",
+                "action": "open"
+              },
+              {
+                "type": "selector",
+                "memory": true,
+                "name": "Get soda from pantry or finish gracefully",
+                "children": [
+                  {
+                    "type": "sequence",
+                    "memory": true,
+                    "name": "Get soda from pantry",
+                    "children": [
+                      {
+                        "type": "action",
+                        "name": "Detect soda in pantry",
+                        "action": "detect",
+                        "params": {
+                          "object": "soda"
+                        }
+                      },
+                      {
+                        "type": "action",
+                        "name": "Pick soda from pantry",
+                        "action": "pick",
+                        "params": {
+                          "object": "soda"
+                        }
+                      },
+                      {
+                        "type": "action",
+                        "name": "Navigate to dining",
+                        "action": "navigate",
+                        "params": {
+                          "target_location": "dining"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "action",
+                    "name": "Close pantry (soda not found)",
+                    "action": "close"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

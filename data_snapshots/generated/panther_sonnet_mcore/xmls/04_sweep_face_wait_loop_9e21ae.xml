@@ -1,0 +1,41 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <!-- Outer KRUF: loop forever — neither a failed Spin nor HeadingController loss will terminate -->
+    <KeepRunningUntilFailure name="mission_loop">
+      <ReactiveFallback name="watch_or_sweep">
+
+        <!-- Branch 1 (higher priority): person visible → face them -->
+        <ReactiveSequence name="face_if_person">
+          <CheckDetection class_name="person" min_confidence="0.5" max_age="2.0"/>
+          <!-- KRUF converts HeadingController SUCCESS (centered) back to RUNNING so tracking continues -->
+          <KeepRunningUntilFailure>
+            <HeadingController class_name="person" timeout="0.0" detection_loss_timeout="1.0"/>
+          </KeepRunningUntilFailure>
+        </ReactiveSequence>
+
+        <!-- Branch 2 (lower priority): no person → sweep in place indefinitely -->
+        <KeepRunningUntilFailure name="sweep_loop">
+          <Spin target_yaw="6.28" time_allowance="15.0"/>
+        </KeepRunningUntilFailure>
+
+      </ReactiveFallback>
+    </KeepRunningUntilFailure>
+  </BehaviorTree>
+
+  <TreeNodesModel>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+    <Action ID="HeadingController">
+      <input_port name="class_name"/>
+      <input_port name="timeout"/>
+      <input_port name="detection_loss_timeout"/>
+    </Action>
+    <Action ID="Spin">
+      <input_port name="target_yaw"/>
+      <input_port name="time_allowance"/>
+    </Action>
+  </TreeNodesModel>
+</root>

@@ -1,0 +1,115 @@
+{
+  "blackboard": {
+    "initial": {}
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_table",
+            "params": {
+              "target_location": "table"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_butter_table",
+            "outputs": {
+              "detected_objects": "found_at_table"
+            },
+            "params": {
+              "object": "butter"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_at_table",
+            "name": "is_butter_at_table",
+            "operator": "contains",
+            "type": "condition",
+            "value": "butter"
+          },
+          {
+            "action": "pick",
+            "name": "pick_butter_table",
+            "params": {
+              "object": "butter"
+            },
+            "type": "action"
+          },
+          {
+            "action": "navigate",
+            "name": "go_to_dining_from_table",
+            "params": {
+              "target_location": "dining"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_butter_fridge",
+            "outputs": {
+              "detected_objects": "found_at_fridge"
+            },
+            "params": {
+              "object": "butter"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_at_fridge",
+            "name": "is_butter_at_fridge",
+            "operator": "contains",
+            "type": "condition",
+            "value": "butter"
+          },
+          {
+            "action": "pick",
+            "name": "pick_butter_fridge",
+            "params": {
+              "object": "butter"
+            },
+            "type": "action"
+          },
+          {
+            "action": "navigate",
+            "name": "go_to_dining_from_fridge",
+            "params": {
+              "target_location": "dining"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

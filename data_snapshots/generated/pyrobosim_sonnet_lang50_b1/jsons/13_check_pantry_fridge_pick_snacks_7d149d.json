@@ -1,0 +1,114 @@
+{
+  "blackboard": {
+    "initial": {
+      "pantry_snacks": null,
+      "fridge_snacks": null
+    }
+  },
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "name": "Check pantry for snacks",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "name": "Navigate to pantry",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "name": "Open pantry",
+            "type": "action",
+            "action": "open"
+          },
+          {
+            "name": "Detect snacks in pantry",
+            "type": "action",
+            "action": "detect",
+            "params": {
+              "object": "snacks"
+            },
+            "outputs": {
+              "detected_objects": "pantry_snacks"
+            }
+          },
+          {
+            "name": "Snacks found in pantry?",
+            "type": "condition",
+            "key": "pantry_snacks",
+            "operator": "truthy",
+            "value": null
+          },
+          {
+            "name": "Pick snacks from pantry",
+            "type": "action",
+            "action": "pick",
+            "params": {
+              "object": "snacks"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Check fridge for snacks",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "name": "Close pantry before leaving",
+            "type": "action",
+            "action": "close",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "name": "Navigate to fridge",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "name": "Open fridge",
+            "type": "action",
+            "action": "open"
+          },
+          {
+            "name": "Detect snacks in fridge",
+            "type": "action",
+            "action": "detect",
+            "params": {
+              "object": "snacks"
+            },
+            "outputs": {
+              "detected_objects": "fridge_snacks"
+            }
+          },
+          {
+            "name": "Snacks found in fridge?",
+            "type": "condition",
+            "key": "fridge_snacks",
+            "operator": "truthy",
+            "value": null
+          },
+          {
+            "name": "Pick snacks from fridge",
+            "type": "action",
+            "action": "pick",
+            "params": {
+              "object": "snacks"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

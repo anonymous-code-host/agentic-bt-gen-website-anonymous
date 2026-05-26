@@ -1,0 +1,116 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "Go to Pantry",
+                "params": {
+                  "target_location": {
+                    "literal": "pantry"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "Open Pantry",
+                "params": {
+                  "target_location": {
+                    "literal": "pantry"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "Detect Bread in Pantry",
+                "params": {
+                  "object": {
+                    "literal": "bread"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "Pick Bread from Pantry",
+                "params": {
+                  "object": {
+                    "literal": "bread"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "Go to Fridge",
+                "params": {
+                  "target_location": {
+                    "literal": "fridge"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "Open Fridge",
+                "params": {
+                  "target_location": {
+                    "literal": "fridge"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "Detect Bread in Fridge",
+                "params": {
+                  "object": {
+                    "literal": "bread"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "Pick Bread from Fridge",
+                "params": {
+                  "object": {
+                    "literal": "bread"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "navigate",
+        "name": "Return to Dining",
+        "params": {
+          "target_location": {
+            "literal": "dining"
+          }
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

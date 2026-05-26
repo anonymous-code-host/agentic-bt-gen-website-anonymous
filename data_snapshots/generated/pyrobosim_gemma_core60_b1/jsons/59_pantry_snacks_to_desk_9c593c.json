@@ -1,0 +1,54 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "Go to pantry",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "Open pantry",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "Detect snacks",
+        "params": {
+          "object": "snacks"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "Pick up snacks",
+        "params": {
+          "object": "snacks"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "Go to desk",
+        "params": {
+          "target_location": "desk"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "Place snacks on desk",
+        "params": {},
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

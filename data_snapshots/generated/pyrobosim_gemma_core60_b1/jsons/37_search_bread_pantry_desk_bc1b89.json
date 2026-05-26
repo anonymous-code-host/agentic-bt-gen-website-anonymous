@@ -1,0 +1,146 @@
+{
+  "blackboard": {
+    "initial": {
+      "desk_results": [],
+      "pantry_results": []
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_pantry",
+            "params": {
+              "target_location": {
+                "source": "literal",
+                "value": "pantry"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_pantry",
+            "params": {
+              "target_location": {
+                "source": "literal",
+                "value": "pantry"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "search_pantry",
+            "outputs": {
+              "detected_objects": "pantry_results"
+            },
+            "params": {
+              "object": {
+                "source": "literal",
+                "value": "bread"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "key": "pantry_results",
+            "name": "bread_in_pantry",
+            "operator": "contains",
+            "type": "condition",
+            "value": "bread"
+          },
+          {
+            "action": "pick",
+            "name": "pick_bread_pantry",
+            "params": {
+              "object": {
+                "source": "literal",
+                "value": "bread"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "navigate",
+            "name": "go_to_desk",
+            "params": {
+              "target_location": {
+                "source": "literal",
+                "value": "desk_desktop"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "place",
+            "name": "place_bread_desk",
+            "params": {},
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_desk_search",
+            "params": {
+              "target_location": {
+                "source": "literal",
+                "value": "desk_desktop"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "search_desk",
+            "outputs": {
+              "detected_objects": "desk_results"
+            },
+            "params": {
+              "object": {
+                "source": "literal",
+                "value": "bread"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "key": "desk_results",
+            "name": "bread_on_desk",
+            "operator": "contains",
+            "type": "condition",
+            "value": "bread"
+          },
+          {
+            "action": "pick",
+            "name": "pick_bread_desk",
+            "params": {
+              "object": {
+                "source": "literal",
+                "value": "bread"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "place",
+            "name": "place_bread_desk_redundant",
+            "params": {},
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

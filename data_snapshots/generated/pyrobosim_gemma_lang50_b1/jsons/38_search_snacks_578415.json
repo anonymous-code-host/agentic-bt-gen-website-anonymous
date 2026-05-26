@@ -1,0 +1,128 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "go_to_pantry",
+                "params": {
+                  "target_location": {
+                    "literal": "pantry"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_pantry",
+                "params": {
+                  "target_location": {
+                    "literal": "pantry"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "find_snacks_pantry",
+                "params": {
+                  "object": {
+                    "literal": "snacks"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "grab_snacks_pantry",
+                "params": {
+                  "object": {
+                    "literal": "snacks"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "go_to_fridge",
+                "params": {
+                  "target_location": {
+                    "literal": "fridge"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_fridge",
+                "params": {
+                  "target_location": {
+                    "literal": "fridge"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "find_snacks_fridge",
+                "params": {
+                  "object": {
+                    "literal": "snacks"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "grab_snacks_fridge",
+                "params": {
+                  "object": {
+                    "literal": "snacks"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_desk",
+            "params": {
+              "target_location": {
+                "literal": "desk"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "place",
+            "name": "put_snacks_on_desk",
+            "params": {},
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

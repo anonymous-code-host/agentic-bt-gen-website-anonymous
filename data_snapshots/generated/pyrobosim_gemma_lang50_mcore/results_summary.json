@@ -1,0 +1,148 @@
+{
+  "batch": "pyrobosim_gemma_lang50_mcore",
+  "suite_names": [
+    "pyrobosim_language50"
+  ],
+  "environments": [
+    "pyrobosim"
+  ],
+  "count": 50,
+  "valid_rate": 1.0,
+  "grounded_rate": 1.0,
+  "params_rate": 1.0,
+  "struct_comp_rate": 0.766,
+  "success_rate": 0.8723,
+  "goal_satisfied_rate": 0.8723,
+  "avg_tick_count": 18.7,
+  "avg_runtime_ms": 2124.5,
+  "exec_status_counts": {
+    "SUCCESS": 41,
+    "FAILURE": 6,
+    "null": 3
+  },
+  "failure_cause_counts": {
+    "runtime_failure": 5,
+    "bt_construction": 1
+  },
+  "archetypes": {
+    "sequential_pick": {
+      "count": 10,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 1.0,
+      "success_rate": 1.0,
+      "goal_satisfied_rate": 1.0,
+      "avg_tick_count": 14.7,
+      "avg_runtime_ms": 1625.9,
+      "failure_breakdown": {}
+    },
+    "selector_search": {
+      "count": 10,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 1.0,
+      "success_rate": 0.8,
+      "goal_satisfied_rate": 0.8,
+      "avg_tick_count": 12.2,
+      "avg_runtime_ms": 1375.0,
+      "failure_breakdown": {
+        "runtime_failure": 1,
+        "bt_construction": 1
+      }
+    },
+    "pick_and_place": {
+      "count": 10,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 0.8,
+      "success_rate": 0.9,
+      "goal_satisfied_rate": 0.9,
+      "avg_tick_count": 19.0,
+      "avg_runtime_ms": 2103.3,
+      "failure_breakdown": {
+        "runtime_failure": 1
+      }
+    },
+    "search_and_place": {
+      "count": 10,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 0.5714,
+      "success_rate": 0.8571,
+      "goal_satisfied_rate": 0.8571,
+      "avg_tick_count": 22.9,
+      "avg_runtime_ms": 2591.0,
+      "failure_breakdown": {
+        "runtime_failure": 1
+      }
+    },
+    "pick_and_return": {
+      "count": 10,
+      "valid_rate": 1.0,
+      "grounded_rate": 1.0,
+      "params_rate": 1.0,
+      "struct_comp_rate": 0.4,
+      "success_rate": 0.8,
+      "goal_satisfied_rate": 0.8,
+      "avg_tick_count": 25.8,
+      "avg_runtime_ms": 3067.4,
+      "failure_breakdown": {
+        "runtime_failure": 2
+      }
+    }
+  },
+  "remaining_failures": [
+    {
+      "id": "lang13_task13_search_snacks_pantry_fridge",
+      "archetype": "selector_search",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "runtime_failure",
+      "failure_notes": "Execution did not finish successfully in the simulator/control server."
+    },
+    {
+      "id": "lang14_task14_search_soda_fridge_pantry",
+      "archetype": "selector_search",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "bt_construction",
+      "failure_notes": "Search-family BT failed in a detect/fallback branch despite passing static validation."
+    },
+    {
+      "id": "lang28_task28_place_butter_pantry",
+      "archetype": "pick_and_place",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "runtime_failure",
+      "failure_notes": "Execution did not finish successfully in the simulator/control server."
+    },
+    {
+      "id": "lang31_task31_search_place_bread_table",
+      "archetype": "search_and_place",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "runtime_failure",
+      "failure_notes": "Execution did not finish successfully in the simulator/control server."
+    },
+    {
+      "id": "lang47_task47_search_return_snacks_table",
+      "archetype": "pick_and_return",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "runtime_failure",
+      "failure_notes": "Execution did not finish successfully in the simulator/control server."
+    },
+    {
+      "id": "lang48_task48_search_return_soda_table",
+      "archetype": "pick_and_return",
+      "exec_status": "FAILURE",
+      "goal_satisfied": false,
+      "failure_cause": "runtime_failure",
+      "failure_notes": "Execution did not finish successfully in the simulator/control server."
+    }
+  ]
+}

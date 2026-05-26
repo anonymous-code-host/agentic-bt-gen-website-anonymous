@@ -1,0 +1,146 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "name": "Task 34 - Search Fridge Then Pantry for Soda",
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to Fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open Fridge",
+        "action": "open"
+      },
+      {
+        "type": "selector",
+        "memory": true,
+        "name": "Search Fridge Then Pantry",
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Found Soda in Fridge",
+            "children": [
+              {
+                "type": "action",
+                "name": "Detect Soda at Fridge",
+                "action": "detect",
+                "params": {
+                  "object": "soda"
+                },
+                "outputs": {
+                  "detected_objects": "fridge_detected"
+                }
+              },
+              {
+                "type": "condition",
+                "name": "Soda Found in Fridge?",
+                "key": "fridge_detected",
+                "operator": "contains",
+                "value": "soda"
+              },
+              {
+                "type": "action",
+                "name": "Pick Soda from Fridge",
+                "action": "pick",
+                "params": {
+                  "object": "soda"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Navigate to Pantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open Pantry",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Place Soda at Pantry",
+                "action": "place"
+              },
+              {
+                "type": "action",
+                "name": "Close Pantry",
+                "action": "close"
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Search Pantry for Soda",
+            "children": [
+              {
+                "type": "action",
+                "name": "Close Fridge",
+                "action": "close"
+              },
+              {
+                "type": "action",
+                "name": "Navigate to Pantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open Pantry",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Detect Soda at Pantry",
+                "action": "detect",
+                "params": {
+                  "object": "soda"
+                },
+                "outputs": {
+                  "detected_objects": "pantry_detected"
+                }
+              },
+              {
+                "type": "condition",
+                "name": "Soda Found in Pantry?",
+                "key": "pantry_detected",
+                "operator": "contains",
+                "value": "soda"
+              },
+              {
+                "type": "action",
+                "name": "Pick Soda from Pantry",
+                "action": "pick",
+                "params": {
+                  "object": "soda"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Place Soda at Pantry",
+                "action": "place"
+              },
+              {
+                "type": "action",
+                "name": "Close Pantry After Placing",
+                "action": "close"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

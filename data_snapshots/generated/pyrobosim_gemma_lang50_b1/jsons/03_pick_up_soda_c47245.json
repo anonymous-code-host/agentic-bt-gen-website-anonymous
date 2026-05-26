@@ -1,0 +1,49 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "go_to_fridge",
+        "params": {
+          "target_location": {
+            "literal": "fridge"
+          }
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "open_fridge",
+        "params": {
+          "target_location": {
+            "literal": "fridge"
+          }
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "detect_soda",
+        "params": {
+          "object": {
+            "literal": "soda"
+          }
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "pick_soda",
+        "params": {
+          "object": {
+            "literal": "soda"
+          }
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "name": "root_sequence",
+    "type": "sequence"
+  }
+}

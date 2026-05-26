@@ -1,0 +1,42 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open fridge",
+        "action": "open"
+      },
+      {
+        "type": "action",
+        "name": "Pick soda",
+        "action": "pick",
+        "params": {
+          "object": "soda"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Place soda at pantry",
+        "action": "place"
+      }
+    ]
+  }
+}

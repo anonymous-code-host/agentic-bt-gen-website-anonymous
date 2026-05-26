@@ -1,0 +1,13 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="vending_then_nrg">
+      <NavigateToLocation name="go_to_vending_machine" location="vending_machine"/>
+      <NavigateToLocation name="go_to_nrg_entrance" location="nrg_entrance"/>
+    </Sequence>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+  </TreeNodesModel>
+</root>

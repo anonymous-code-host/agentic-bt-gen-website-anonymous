@@ -1,0 +1,62 @@
+Batch: sonnet_lang50_mcore
+Suites: pyrobosim_language50
+Environments: pyrobosim
+Tasks: 50
+
+Overall
+  Success rate: 0.96
+  Goal satisfied rate: 0.96
+  Valid rate: 1.0
+  Grounded rate: 1.0
+  Params rate: 1.0
+  Struct comp rate: 0.84
+  Avg tick count: 30.8
+  Avg runtime ms: 3558.1
+
+Execution Status Counts
+  FAILURE: 2
+  SUCCESS: 48
+
+Failure Cause Counts
+  runtime_failure: 2
+
+By Archetype
+  pick_and_place
+    count: 10
+    success_rate: 0.8
+    struct_comp_rate: 0.8
+    avg_tick_count: 36.7
+    avg_runtime_ms: 4306.9
+    failure_runtime_failure: 2
+  pick_and_return
+    count: 10
+    success_rate: 1.0
+    struct_comp_rate: 0.6
+    avg_tick_count: 31.1
+    avg_runtime_ms: 3353.0
+    failure_breakdown: none
+  search_and_place
+    count: 10
+    success_rate: 1.0
+    struct_comp_rate: 0.8
+    avg_tick_count: 35.0
+    avg_runtime_ms: 3977.5
+    failure_breakdown: none
+  selector_search
+    count: 10
+    success_rate: 1.0
+    struct_comp_rate: 1.0
+    avg_tick_count: 25.2
+    avg_runtime_ms: 3043.3
+    failure_breakdown: none
+  sequential_pick
+    count: 10
+    success_rate: 1.0
+    struct_comp_rate: 1.0
+    avg_tick_count: 26.1
+    avg_runtime_ms: 3110.0
+    failure_breakdown: none
+
+Remaining Failures
+  lang23_task23_place_soda_pantry | pick_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang28_task28_place_butter_pantry | pick_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.

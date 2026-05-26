@@ -1,0 +1,103 @@
+{
+  "blackboard": {
+    "initial": {}
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "Go to bin disposal",
+                "params": {
+                  "target_location": "bin_disposal"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "Detect waste at bin disposal",
+                "outputs": {
+                  "detected_objects": "detected_items"
+                },
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              },
+              {
+                "key": "detected_items",
+                "name": "Waste found at bin?",
+                "operator": "contains",
+                "type": "condition",
+                "value": "waste"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "Go to desk desktop",
+                "params": {
+                  "target_location": "desk_desktop"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "Detect waste at desk desktop",
+                "outputs": {
+                  "detected_objects": "detected_items"
+                },
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              },
+              {
+                "key": "detected_items",
+                "name": "Waste found at desk?",
+                "operator": "contains",
+                "type": "condition",
+                "value": "waste"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "pick",
+        "name": "Pick up waste",
+        "params": {
+          "object": "waste"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "Go to dumpster disposal",
+        "params": {
+          "target_location": "dumpster_disposal"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "Place waste in dumpster",
+        "params": {},
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

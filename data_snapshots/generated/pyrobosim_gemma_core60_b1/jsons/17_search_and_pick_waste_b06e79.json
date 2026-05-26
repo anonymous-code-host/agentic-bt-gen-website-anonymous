@@ -1,0 +1,128 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "nav_to_bin",
+            "params": {
+              "target_location": "bin_disposal"
+            },
+            "type": "action"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "action": "detect",
+                    "name": "detect_waste_bin",
+                    "outputs": {
+                      "detected_objects": "found_objects_bin"
+                    },
+                    "params": {
+                      "object": "waste"
+                    },
+                    "type": "action"
+                  },
+                  {
+                    "key": "found_objects_bin",
+                    "name": "has_waste_bin",
+                    "operator": "contains",
+                    "type": "condition",
+                    "value": "waste"
+                  },
+                  {
+                    "action": "pick",
+                    "name": "pick_waste_bin",
+                    "params": {
+                      "object": "waste"
+                    },
+                    "type": "action"
+                  }
+                ],
+                "memory": true,
+                "type": "sequence"
+              },
+              {
+                "action": "detect",
+                "name": "fallback_bin",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "selector"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "nav_to_desk",
+            "params": {
+              "target_location": "desk_desktop"
+            },
+            "type": "action"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "action": "detect",
+                    "name": "detect_waste_desk",
+                    "outputs": {
+                      "detected_objects": "found_objects_desk"
+                    },
+                    "params": {
+                      "object": "waste"
+                    },
+                    "type": "action"
+                  },
+                  {
+                    "key": "found_objects_desk",
+                    "name": "has_waste_desk",
+                    "operator": "contains",
+                    "type": "condition",
+                    "value": "waste"
+                  },
+                  {
+                    "action": "pick",
+                    "name": "pick_waste_desk",
+                    "params": {
+                      "object": "waste"
+                    },
+                    "type": "action"
+                  }
+                ],
+                "memory": true,
+                "type": "sequence"
+              },
+              {
+                "action": "detect",
+                "name": "fallback_desk",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "selector"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

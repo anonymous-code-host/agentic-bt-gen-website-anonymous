@@ -1,0 +1,142 @@
+{
+  "blackboard": {
+    "initial": {}
+  },
+  "root": {
+    "type": "selector",
+    "memory": false,
+    "children": [
+      {
+        "name": "Search desk_desktop and place waste at dumpster",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "name": "Navigate to desk_desktop",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            },
+            "outputs": {
+              "status": "nav_status",
+              "last_nav_result": "last_nav_result"
+            }
+          },
+          {
+            "name": "Detect waste at desk_desktop",
+            "type": "action",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "detected_objects": "detected_desk",
+              "status": "detect_desk_status"
+            }
+          },
+          {
+            "name": "Check waste found at desk",
+            "type": "condition",
+            "key": "detected_desk",
+            "operator": "truthy",
+            "value": true
+          },
+          {
+            "name": "Pick waste from desk",
+            "type": "action",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "status": "pick_status"
+            }
+          },
+          {
+            "name": "Navigate to dumpster_disposal",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "dumpster_disposal"
+            },
+            "outputs": {
+              "status": "nav_status",
+              "last_nav_result": "last_nav_result"
+            }
+          },
+          {
+            "name": "Place waste at dumpster_disposal",
+            "type": "action",
+            "action": "place",
+            "outputs": {
+              "status": "place_status"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Fallback: search bin_disposal and place waste at dumpster",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "name": "Navigate to bin_disposal",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "bin_disposal"
+            },
+            "outputs": {
+              "status": "nav_status",
+              "last_nav_result": "last_nav_result"
+            }
+          },
+          {
+            "name": "Detect waste at bin_disposal",
+            "type": "action",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "detected_objects": "detected_bin",
+              "status": "detect_bin_status"
+            }
+          },
+          {
+            "name": "Pick waste from bin",
+            "type": "action",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "status": "pick_status"
+            }
+          },
+          {
+            "name": "Navigate to dumpster_disposal",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "dumpster_disposal"
+            },
+            "outputs": {
+              "status": "nav_status",
+              "last_nav_result": "last_nav_result"
+            }
+          },
+          {
+            "name": "Place waste at dumpster_disposal",
+            "type": "action",
+            "action": "place",
+            "outputs": {
+              "status": "place_status"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

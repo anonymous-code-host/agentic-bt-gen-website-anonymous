@@ -1,0 +1,90 @@
+Batch: pyrobosim_gemma_lang50_b1
+Suites: pyrobosim_language50
+Environments: pyrobosim
+Tasks: 50
+
+Overall
+  Success rate: 0.5
+  Goal satisfied rate: 0.5
+  Valid rate: 1.0
+  Grounded rate: 0.98
+  Params rate: 1.0
+  Struct comp rate: 0.52
+  Avg tick count: 15.4
+  Avg runtime ms: 4034.3
+
+Execution Status Counts
+  ERROR: 1
+  FAILURE: 22
+  SUCCESS: 25
+  TIMEOUT: 2
+
+Failure Cause Counts
+  bt_construction: 10
+  runtime_failure: 15
+
+By Archetype
+  pick_and_place
+    count: 10
+    success_rate: 0.8
+    struct_comp_rate: 0.0
+    avg_tick_count: 17.6
+    avg_runtime_ms: 1891.6
+    failure_runtime_failure: 2
+  pick_and_return
+    count: 10
+    success_rate: 0.5
+    struct_comp_rate: 0.4
+    avg_tick_count: 14.3
+    avg_runtime_ms: 1551.8
+    failure_runtime_failure: 5
+  search_and_place
+    count: 10
+    success_rate: 0.2
+    struct_comp_rate: 0.4
+    avg_tick_count: 16.0
+    avg_runtime_ms: 1738.9
+    failure_bt_construction: 5
+    failure_runtime_failure: 3
+  selector_search
+    count: 10
+    success_rate: 0.0
+    struct_comp_rate: 0.8
+    avg_tick_count: 15.0
+    avg_runtime_ms: 13463.6
+    failure_bt_construction: 5
+    failure_runtime_failure: 5
+  sequential_pick
+    count: 10
+    success_rate: 1.0
+    struct_comp_rate: 1.0
+    avg_tick_count: 14.1
+    avg_runtime_ms: 1525.8
+    failure_breakdown: none
+
+Remaining Failures
+  lang11_task11_search_bread_pantry_fridge | selector_search | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang12_task12_search_bread_fridge_pantry | selector_search | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang13_task13_search_snacks_pantry_fridge | selector_search | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang14_task14_search_soda_fridge_pantry | selector_search | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang15_task15_search_butter_fridge_pantry | selector_search | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang16_task16_search_waste_desk_bin | selector_search | TIMEOUT | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang17_task17_search_waste_bin_desk | selector_search | TIMEOUT | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang18_task18_search_snacks_pantry_desk | selector_search | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang19_task19_search_soda_fridge_desk | selector_search | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang20_task20_search_bread_pantry_table | selector_search | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang25_task25_place_bread_fridge | pick_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang28_task28_place_butter_pantry | pick_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang31_task31_search_place_bread_table | search_and_place | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang32_task32_search_place_bread_table_rev | search_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang33_task33_search_place_snacks_table | search_and_place | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang34_task34_search_place_soda_pantry | search_and_place | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang35_task35_search_place_butter_desk | search_and_place | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang37_task37_search_place_bread_desk | search_and_place | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang39_task39_search_place_waste_dumpster | search_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang40_task40_search_place_waste_dumpster_rev | search_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang42_task42_search_return_snacks | pick_and_return | ERROR | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang46_task46_search_return_bread_table | pick_and_return | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang47_task47_search_return_snacks_table | pick_and_return | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang48_task48_search_return_soda_table | pick_and_return | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang49_task49_search_return_butter_table | pick_and_return | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.

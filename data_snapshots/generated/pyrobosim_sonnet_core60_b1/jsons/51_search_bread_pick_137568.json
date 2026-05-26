@@ -1,0 +1,166 @@
+{
+  "root": {
+    "type": "selector",
+    "name": "SearchForBread",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "name": "SearchTableTabletop",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "NavigateToTable",
+            "action": "navigate",
+            "params": {
+              "target_location": "table_tabletop"
+            },
+            "outputs": {
+              "status": "nav_table_status"
+            }
+          },
+          {
+            "type": "action",
+            "name": "DetectBreadAtTable",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "detected_objects": "table_detected_objects"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "BreadFoundAtTable",
+            "key": "table_detected_objects",
+            "operator": "truthy",
+            "value": true
+          },
+          {
+            "type": "action",
+            "name": "PickBreadFromTable",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "status": "pick_table_status"
+            }
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "name": "SearchPantry",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "NavigateToPantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            },
+            "outputs": {
+              "status": "nav_pantry_status"
+            }
+          },
+          {
+            "type": "action",
+            "name": "OpenPantry",
+            "action": "open",
+            "outputs": {
+              "status": "open_pantry_status"
+            }
+          },
+          {
+            "type": "action",
+            "name": "DetectBreadAtPantry",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "detected_objects": "pantry_detected_objects"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "BreadFoundAtPantry",
+            "key": "pantry_detected_objects",
+            "operator": "truthy",
+            "value": true
+          },
+          {
+            "type": "action",
+            "name": "PickBreadFromPantry",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "status": "pick_pantry_status"
+            }
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "name": "SearchFridge",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "NavigateToFridge",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            },
+            "outputs": {
+              "status": "nav_fridge_status"
+            }
+          },
+          {
+            "type": "action",
+            "name": "OpenFridge",
+            "action": "open",
+            "outputs": {
+              "status": "open_fridge_status"
+            }
+          },
+          {
+            "type": "action",
+            "name": "DetectBreadAtFridge",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "detected_objects": "fridge_detected_objects"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "BreadFoundAtFridge",
+            "key": "fridge_detected_objects",
+            "operator": "truthy",
+            "value": true
+          },
+          {
+            "type": "action",
+            "name": "PickBreadFromFridge",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "status": "pick_fridge_status"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

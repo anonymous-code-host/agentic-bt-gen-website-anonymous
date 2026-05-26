@@ -1,0 +1,89 @@
+{
+  "blackboard": {
+    "initial": {}
+  },
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "name": "Search and pick from pantry",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to pantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open pantry",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect bread in pantry",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "detected_objects": "pantry_detected_objects"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick bread from pantry",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Search and pick from fridge",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to fridge",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open fridge",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect bread in fridge",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "detected_objects": "fridge_detected_objects"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick bread from fridge",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <ReactiveFallback name="spin_until_person">
+      <CheckDetection name="watch_for_person" class_name="person" min_confidence="0.5"/>
+      <KeepRunningUntilFailure name="keep_spinning">
+        <Spin name="slow_spin" target_yaw="6.28" time_allowance="30.0"/>
+      </KeepRunningUntilFailure>
+    </ReactiveFallback>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+    <Action ID="Spin">
+      <input_port name="target_yaw"/>
+      <input_port name="time_allowance"/>
+    </Action>
+  </TreeNodesModel>
+</root>

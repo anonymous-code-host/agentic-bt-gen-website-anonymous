@@ -1,0 +1,97 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "name": "Return to dining with bread",
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "name": "Find and pick bread",
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Check table_tabletop for bread",
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to table_tabletop",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table_tabletop"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Detect bread at table",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_at_table"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick bread from table",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Check pantry for bread",
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to pantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open pantry",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Detect bread at pantry",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_at_pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Pick bread from pantry",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "Navigate to dining",
+        "action": "navigate",
+        "params": {
+          "target_location": "dining"
+        }
+      }
+    ]
+  }
+}

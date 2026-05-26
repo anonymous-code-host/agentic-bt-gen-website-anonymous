@@ -1,0 +1,89 @@
+{
+  "root": {
+    "type": "sequence",
+    "name": "task_46_search_and_retrieve_bread",
+    "memory": true,
+    "children": [
+      {
+        "type": "selector",
+        "name": "find_bread",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "name": "search_table_tabletop",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "navigate_to_table_tabletop",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table_tabletop"
+                }
+              },
+              {
+                "type": "action",
+                "name": "detect_bread_at_table",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_objects"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "name": "search_pantry",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "navigate_to_pantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "open_pantry",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "detect_bread_at_pantry",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_objects"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "pick_bread",
+        "action": "pick",
+        "params": {
+          "object": "bread"
+        }
+      },
+      {
+        "type": "action",
+        "name": "navigate_to_dining",
+        "action": "navigate",
+        "params": {
+          "target_location": "dining"
+        }
+      }
+    ]
+  }
+}

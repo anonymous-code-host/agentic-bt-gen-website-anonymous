@@ -1,0 +1,112 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "go_to_fridge",
+                "params": {
+                  "target_location": {
+                    "literal": "fridge"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_fridge",
+                "params": {
+                  "target_location": {
+                    "literal": "fridge"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "find_soda_fridge",
+                "params": {
+                  "object": {
+                    "literal": "soda"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "go_to_pantry",
+                "params": {
+                  "target_location": {
+                    "literal": "pantry"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "open_pantry",
+                "params": {
+                  "target_location": {
+                    "literal": "pantry"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "find_soda_pantry",
+                "params": {
+                  "object": {
+                    "literal": "soda"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "pick",
+        "name": "pick_soda",
+        "params": {
+          "object": {
+            "literal": "soda"
+          }
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "go_to_table",
+        "params": {
+          "target_location": {
+            "literal": "table"
+          }
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "place_soda",
+        "params": {},
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

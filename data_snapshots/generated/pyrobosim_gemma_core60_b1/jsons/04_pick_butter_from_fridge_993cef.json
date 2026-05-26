@@ -1,0 +1,40 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "go_to_fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "open_fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "detect_butter",
+        "params": {
+          "object": "butter"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "pick_butter",
+        "params": {
+          "object": "butter"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

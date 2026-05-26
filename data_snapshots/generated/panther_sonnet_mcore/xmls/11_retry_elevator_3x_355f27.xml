@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="main">
+      <ForceSuccess name="elevator_attempts">
+        <Fallback name="try_3_times">
+          <NavigateToLocation name="attempt_1" location="elevator"/>
+          <Sequence name="recover_and_attempt_2">
+            <ForceSuccess>
+              <BackUp name="backup_1" backup_dist="0.5" backup_speed="0.1"/>
+            </ForceSuccess>
+            <Wait name="wait_1" wait_duration="3.0"/>
+            <NavigateToLocation name="attempt_2" location="elevator"/>
+          </Sequence>
+          <Sequence name="recover_and_attempt_3">
+            <ForceSuccess>
+              <BackUp name="backup_2" backup_dist="0.5" backup_speed="0.1"/>
+            </ForceSuccess>
+            <Wait name="wait_2" wait_duration="3.0"/>
+            <NavigateToLocation name="attempt_3" location="elevator"/>
+          </Sequence>
+        </Fallback>
+      </ForceSuccess>
+      <NavigateToLocation name="return_home" location="nrg_entrance"/>
+    </Sequence>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+    <Action ID="BackUp">
+      <input_port name="backup_dist"/>
+      <input_port name="backup_speed"/>
+      <input_port name="time_allowance"/>
+    </Action>
+    <Action ID="Wait">
+      <input_port name="wait_duration"/>
+    </Action>
+  </TreeNodesModel>
+</root>

@@ -1,0 +1,40 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "navigate_to_source",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "open_source",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "detect_target",
+        "params": {
+          "object": "snacks"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "pick_target",
+        "params": {
+          "object": "snacks"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

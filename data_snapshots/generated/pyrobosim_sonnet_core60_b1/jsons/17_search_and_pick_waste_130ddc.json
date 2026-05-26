@@ -1,0 +1,74 @@
+{
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to bin_disposal",
+            "action": "navigate",
+            "params": {
+              "target_location": "bin_disposal"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Detect waste at bin_disposal",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "detected_objects": "bin_detected_objects"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick waste from bin_disposal",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            }
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to desk_desktop",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Detect waste at desk_desktop",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "detected_objects": "desk_detected_objects"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick waste from desk_desktop",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "root": {
+    "type": "selector",
+    "memory": false,
+    "children": [
+      {
+        "type": "sequence",
+        "memory": true,
+        "name": "SearchFridgeAndPlace",
+        "children": [
+          {
+            "type": "action",
+            "name": "NavigateToFridge",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "OpenFridge",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "DetectBreadInFridge",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "PickBread",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "NavigateToTable",
+            "action": "navigate",
+            "params": {
+              "target_location": "table"
+            }
+          },
+          {
+            "type": "action",
+            "name": "PlaceBreadOnTable",
+            "action": "place"
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "memory": true,
+        "name": "SearchPantryAndPlace",
+        "children": [
+          {
+            "type": "action",
+            "name": "CloseFridge",
+            "action": "close",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "NavigateToPantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "OpenPantry",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "DetectBreadInPantry",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "PickBreadFromPantry",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "NavigateToTableFromPantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "table"
+            }
+          },
+          {
+            "type": "action",
+            "name": "PlaceBreadOnTable",
+            "action": "place"
+          }
+        ]
+      }
+    ]
+  }
+}

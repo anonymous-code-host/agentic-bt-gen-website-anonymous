@@ -1,0 +1,94 @@
+{
+  "blackboard": {
+    "initial": {
+      "found_snacks": null
+    }
+  },
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "name": "Search and retrieve snacks",
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "name": "Find snacks at pantry or desk_desktop",
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Search pantry for snacks",
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to pantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open pantry",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Detect snacks at pantry",
+                "action": "detect",
+                "params": {
+                  "object": "snacks"
+                },
+                "outputs": {
+                  "detected_objects": "found_snacks"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Search desk_desktop for snacks",
+            "children": [
+              {
+                "type": "action",
+                "name": "Navigate to desk_desktop",
+                "action": "navigate",
+                "params": {
+                  "target_location": "desk_desktop"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Detect snacks at desk_desktop",
+                "action": "detect",
+                "params": {
+                  "object": "snacks"
+                },
+                "outputs": {
+                  "detected_objects": "found_snacks"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "Pick up snacks",
+        "action": "pick",
+        "params": {
+          "object": "snacks"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to dining",
+        "action": "navigate",
+        "params": {
+          "target_location": "dining"
+        }
+      }
+    ]
+  }
+}

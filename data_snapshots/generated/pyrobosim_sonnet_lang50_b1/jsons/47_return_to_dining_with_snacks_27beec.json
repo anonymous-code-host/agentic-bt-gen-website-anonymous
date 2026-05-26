@@ -1,0 +1,73 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        },
+        "outputs": {
+          "status": "nav_to_pantry_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open pantry",
+        "action": "open",
+        "outputs": {
+          "status": "open_pantry_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Detect snacks",
+        "action": "detect",
+        "params": {
+          "object": "snacks"
+        },
+        "outputs": {
+          "detected_objects": "detected_snacks",
+          "status": "detect_status"
+        }
+      },
+      {
+        "type": "condition",
+        "name": "Snacks found?",
+        "key": "detected_snacks",
+        "operator": "truthy",
+        "value": true
+      },
+      {
+        "type": "action",
+        "name": "Pick snacks",
+        "action": "pick",
+        "params": {
+          "object": "snacks"
+        },
+        "outputs": {
+          "status": "pick_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Return to dining table",
+        "action": "navigate",
+        "params": {
+          "target_location": "table"
+        },
+        "outputs": {
+          "status": "nav_to_dining_status"
+        }
+      }
+    ]
+  },
+  "blackboard": {
+    "initial": {
+      "detected_snacks": null
+    }
+  }
+}

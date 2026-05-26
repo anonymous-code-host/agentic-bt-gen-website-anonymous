@@ -1,0 +1,113 @@
+{
+  "root": {
+    "name": "Check pantry then desk for snacks",
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "name": "Check pantry for snacks and pick",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "name": "Navigate to pantry",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            },
+            "outputs": {
+              "status": "nav_pantry_status"
+            }
+          },
+          {
+            "name": "Open pantry",
+            "type": "action",
+            "action": "open",
+            "outputs": {
+              "status": "open_pantry_status"
+            }
+          },
+          {
+            "name": "Detect snacks at pantry",
+            "type": "action",
+            "action": "detect",
+            "params": {
+              "object": "snacks"
+            },
+            "outputs": {
+              "detected_objects": "pantry_detected",
+              "status": "detect_pantry_status"
+            }
+          },
+          {
+            "name": "Snacks found at pantry?",
+            "type": "condition",
+            "key": "pantry_detected",
+            "operator": "truthy",
+            "value": true
+          },
+          {
+            "name": "Pick snacks from pantry",
+            "type": "action",
+            "action": "pick",
+            "params": {
+              "object": "snacks"
+            },
+            "outputs": {
+              "status": "pick_pantry_status"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Check desk for snacks and pick",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "name": "Navigate to desk",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk"
+            },
+            "outputs": {
+              "status": "nav_desk_status"
+            }
+          },
+          {
+            "name": "Detect snacks at desk",
+            "type": "action",
+            "action": "detect",
+            "params": {
+              "object": "snacks"
+            },
+            "outputs": {
+              "detected_objects": "desk_detected",
+              "status": "detect_desk_status"
+            }
+          },
+          {
+            "name": "Snacks found at desk?",
+            "type": "condition",
+            "key": "desk_detected",
+            "operator": "truthy",
+            "value": true
+          },
+          {
+            "name": "Pick snacks from desk",
+            "type": "action",
+            "action": "pick",
+            "params": {
+              "object": "snacks"
+            },
+            "outputs": {
+              "status": "pick_desk_status"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

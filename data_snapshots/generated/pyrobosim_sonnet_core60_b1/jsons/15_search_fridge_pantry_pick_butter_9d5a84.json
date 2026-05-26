@@ -1,0 +1,115 @@
+{
+  "blackboard": {
+    "initial": {
+      "fridge_found": [],
+      "pantry_found": []
+    }
+  },
+  "root": {
+    "type": "selector",
+    "name": "Find and pick butter from fridge or pantry",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "name": "Search fridge for butter",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to fridge",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open fridge",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect butter in fridge",
+            "action": "detect",
+            "params": {
+              "object": "butter"
+            },
+            "outputs": {
+              "detected_objects": "fridge_found"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "Butter found in fridge?",
+            "key": "fridge_found",
+            "operator": "contains",
+            "value": "butter0"
+          },
+          {
+            "type": "action",
+            "name": "Pick butter from fridge",
+            "action": "pick",
+            "params": {
+              "object": "butter"
+            }
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "name": "Close fridge and search pantry for butter",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Close fridge",
+            "action": "close",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to pantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open pantry",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect butter in pantry",
+            "action": "detect",
+            "params": {
+              "object": "butter"
+            },
+            "outputs": {
+              "detected_objects": "pantry_found"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "Butter found in pantry?",
+            "key": "pantry_found",
+            "operator": "contains",
+            "value": "butter0"
+          },
+          {
+            "type": "action",
+            "name": "Pick butter from pantry",
+            "action": "pick",
+            "params": {
+              "object": "butter"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

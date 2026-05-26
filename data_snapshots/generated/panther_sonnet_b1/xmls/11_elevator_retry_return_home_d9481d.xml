@@ -1,0 +1,56 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="main">
+
+      <!-- Up to 3 elevator attempts; ForceSuccess ensures we always proceed home -->
+      <ForceSuccess name="attempt_block">
+        <Fallback name="try_3_times">
+
+          <!-- Attempt 1 -->
+          <NavigateToLocation name="nav_elevator_1" location="elevator"/>
+
+          <!-- Attempt 1 failed: recover, then make attempts 2 and 3 -->
+          <Sequence name="recover_and_retry_from_1">
+            <BackUp name="backup_1" backup_dist="0.5" backup_speed="0.1"/>
+            <Wait name="wait_1" wait_duration="5.0"/>
+
+            <Fallback name="try_2_and_3">
+
+              <!-- Attempt 2 -->
+              <NavigateToLocation name="nav_elevator_2" location="elevator"/>
+
+              <!-- Attempt 2 failed: recover, then make final attempt 3 -->
+              <Sequence name="recover_and_retry_from_2">
+                <BackUp name="backup_2" backup_dist="0.5" backup_speed="0.1"/>
+                <Wait name="wait_2" wait_duration="5.0"/>
+
+                <!-- Attempt 3 (last); success or failure both caught by ForceSuccess above -->
+                <NavigateToLocation name="nav_elevator_3" location="elevator"/>
+              </Sequence>
+
+            </Fallback>
+          </Sequence>
+
+        </Fallback>
+      </ForceSuccess>
+
+      <!-- Always return to NRG entrance after all attempts -->
+      <NavigateToLocation name="return_home" location="nrg_entrance"/>
+
+    </Sequence>
+  </BehaviorTree>
+
+  <TreeNodesModel>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+    <Action ID="BackUp">
+      <input_port name="backup_dist"/>
+      <input_port name="backup_speed"/>
+      <input_port name="time_allowance"/>
+    </Action>
+    <Action ID="Wait">
+      <input_port name="wait_duration"/>
+    </Action>
+  </TreeNodesModel>
+</root>

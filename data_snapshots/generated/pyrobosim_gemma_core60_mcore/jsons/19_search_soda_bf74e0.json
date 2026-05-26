@@ -1,0 +1,101 @@
+{
+  "blackboard": {
+    "initial": {
+      "found_items": []
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "Go to Fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "Open Fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "Search for Soda in Fridge",
+            "outputs": {
+              "detected_objects": "found_items"
+            },
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_items",
+            "name": "Soda found in Fridge?",
+            "operator": "contains",
+            "type": "condition",
+            "value": "soda"
+          },
+          {
+            "action": "pick",
+            "name": "Pick Soda from Fridge",
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "Go to Desk",
+            "params": {
+              "target_location": "desk"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "Search for Soda on Desk",
+            "outputs": {
+              "detected_objects": "found_items"
+            },
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_items",
+            "name": "Soda found on Desk?",
+            "operator": "contains",
+            "type": "condition",
+            "value": "soda"
+          },
+          {
+            "action": "pick",
+            "name": "Pick Soda from Desk",
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

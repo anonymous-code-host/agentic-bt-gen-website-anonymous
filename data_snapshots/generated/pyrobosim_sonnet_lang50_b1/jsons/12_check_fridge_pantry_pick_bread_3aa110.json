@@ -1,0 +1,143 @@
+{
+  "blackboard": {
+    "fridge_detected": [],
+    "pantry_detected": []
+  },
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "name": "Check fridge then pantry for bread and pick if found",
+    "children": [
+      {
+        "type": "sequence",
+        "memory": true,
+        "name": "Inspect fridge for bread",
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to fridge",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open fridge",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect bread at fridge",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "detected_objects": "fridge_detected"
+            }
+          }
+        ]
+      },
+      {
+        "type": "selector",
+        "memory": true,
+        "name": "Pick from fridge or fall back to pantry",
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Pick bread from fridge if found",
+            "children": [
+              {
+                "type": "condition",
+                "name": "Bread detected in fridge?",
+                "key": "fridge_detected",
+                "operator": "contains",
+                "value": "bread"
+              },
+              {
+                "type": "action",
+                "name": "Pick bread from fridge",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "name": "Close fridge and check pantry",
+            "children": [
+              {
+                "type": "action",
+                "name": "Close fridge",
+                "action": "close"
+              },
+              {
+                "type": "action",
+                "name": "Navigate to pantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open pantry",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Detect bread at pantry",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "pantry_detected"
+                }
+              },
+              {
+                "type": "selector",
+                "memory": true,
+                "name": "Pick bread from pantry if found or close",
+                "children": [
+                  {
+                    "type": "sequence",
+                    "memory": true,
+                    "name": "Pick bread from pantry if found",
+                    "children": [
+                      {
+                        "type": "condition",
+                        "name": "Bread detected in pantry?",
+                        "key": "pantry_detected",
+                        "operator": "contains",
+                        "value": "bread"
+                      },
+                      {
+                        "type": "action",
+                        "name": "Pick bread from pantry",
+                        "action": "pick",
+                        "params": {
+                          "object": "bread"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "action",
+                    "name": "Close pantry (bread not found anywhere)",
+                    "action": "close"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "blackboard": {
+    "initial": {
+      "detected_objects": []
+    }
+  },
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "name": "Find bread at any location",
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "name": "Search table_tabletop for bread",
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "name": "Navigate to table_tabletop",
+                "type": "action",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table_tabletop"
+                },
+                "outputs": {}
+              },
+              {
+                "name": "Detect bread at table",
+                "type": "action",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_objects"
+                }
+              },
+              {
+                "name": "Bread found at table?",
+                "type": "condition",
+                "key": "detected_objects",
+                "operator": "truthy",
+                "value": true
+              },
+              {
+                "name": "Pick bread at table",
+                "type": "action",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {}
+              }
+            ]
+          },
+          {
+            "name": "Search pantry for bread",
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "name": "Navigate to pantry",
+                "type": "action",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "outputs": {}
+              },
+              {
+                "name": "Open pantry",
+                "type": "action",
+                "action": "open",
+                "params": {},
+                "outputs": {}
+              },
+              {
+                "name": "Detect bread at pantry",
+                "type": "action",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_objects"
+                }
+              },
+              {
+                "name": "Bread found at pantry?",
+                "type": "condition",
+                "key": "detected_objects",
+                "operator": "truthy",
+                "value": true
+              },
+              {
+                "name": "Pick bread at pantry",
+                "type": "action",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {}
+              }
+            ]
+          },
+          {
+            "name": "Search fridge for bread",
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "name": "Navigate to fridge",
+                "type": "action",
+                "action": "navigate",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "outputs": {}
+              },
+              {
+                "name": "Open fridge",
+                "type": "action",
+                "action": "open",
+                "params": {},
+                "outputs": {}
+              },
+              {
+                "name": "Detect bread at fridge",
+                "type": "action",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_objects"
+                }
+              },
+              {
+                "name": "Bread found at fridge?",
+                "type": "condition",
+                "key": "detected_objects",
+                "operator": "truthy",
+                "value": true
+              },
+              {
+                "name": "Pick bread at fridge",
+                "type": "action",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {}
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Return to office",
+        "type": "action",
+        "action": "navigate",
+        "params": {
+          "target_location": "office"
+        },
+        "outputs": {}
+      }
+    ]
+  }
+}

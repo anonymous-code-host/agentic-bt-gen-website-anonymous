@@ -1,0 +1,69 @@
+Batch: pyrobosim_gemma_lang50_mcore
+Suites: pyrobosim_language50
+Environments: pyrobosim
+Tasks: 50
+
+Overall
+  Success rate: 0.8723
+  Goal satisfied rate: 0.8723
+  Valid rate: 1.0
+  Grounded rate: 1.0
+  Params rate: 1.0
+  Struct comp rate: 0.766
+  Avg tick count: 18.7
+  Avg runtime ms: 2124.5
+
+Execution Status Counts
+  FAILURE: 6
+  SUCCESS: 41
+  null: 3
+
+Failure Cause Counts
+  bt_construction: 1
+  runtime_failure: 5
+
+By Archetype
+  pick_and_place
+    count: 10
+    success_rate: 0.9
+    struct_comp_rate: 0.8
+    avg_tick_count: 19.0
+    avg_runtime_ms: 2103.3
+    failure_runtime_failure: 1
+  pick_and_return
+    count: 10
+    success_rate: 0.8
+    struct_comp_rate: 0.4
+    avg_tick_count: 25.8
+    avg_runtime_ms: 3067.4
+    failure_runtime_failure: 2
+  search_and_place
+    count: 10
+    success_rate: 0.8571
+    struct_comp_rate: 0.5714
+    avg_tick_count: 22.9
+    avg_runtime_ms: 2591.0
+    failure_runtime_failure: 1
+  selector_search
+    count: 10
+    success_rate: 0.8
+    struct_comp_rate: 1.0
+    avg_tick_count: 12.2
+    avg_runtime_ms: 1375.0
+    failure_bt_construction: 1
+    failure_runtime_failure: 1
+  sequential_pick
+    count: 10
+    success_rate: 1.0
+    struct_comp_rate: 1.0
+    avg_tick_count: 14.7
+    avg_runtime_ms: 1625.9
+    failure_breakdown: none
+
+Remaining Failures
+  lang13_task13_search_snacks_pantry_fridge | selector_search | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang14_task14_search_soda_fridge_pantry | selector_search | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  lang28_task28_place_butter_pantry | pick_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang31_task31_search_place_bread_table | search_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang47_task47_search_return_snacks_table | pick_and_return | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  lang48_task48_search_return_soda_table | pick_and_return | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.

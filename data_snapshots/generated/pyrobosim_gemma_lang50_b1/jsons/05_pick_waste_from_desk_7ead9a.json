@@ -1,0 +1,32 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "Navigate to Desk",
+        "params": {
+          "target_location": "desk_desktop"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "Detect Waste",
+        "params": {
+          "object": "waste"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "Pick Waste",
+        "params": {
+          "object": "waste"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

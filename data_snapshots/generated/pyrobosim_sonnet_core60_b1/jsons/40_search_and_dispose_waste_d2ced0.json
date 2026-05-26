@@ -1,0 +1,176 @@
+{
+  "blackboard": {
+    "initial": {
+      "detected_bin": [],
+      "detected_desk": []
+    }
+  },
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to bin_disposal",
+        "action": "navigate",
+        "params": {
+          "target_location": "bin_disposal"
+        },
+        "outputs": {
+          "status": "nav_bin_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Detect waste at bin_disposal",
+        "action": "detect",
+        "params": {
+          "object": "waste"
+        },
+        "outputs": {
+          "detected_objects": "detected_bin",
+          "status": "detect_bin_status"
+        }
+      },
+      {
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "condition",
+                "name": "Waste found at bin_disposal?",
+                "key": "detected_bin",
+                "operator": "truthy"
+              },
+              {
+                "type": "action",
+                "name": "Pick waste at bin_disposal",
+                "action": "pick",
+                "params": {
+                  "object": "waste"
+                },
+                "outputs": {
+                  "status": "pick_bin_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Navigate to dumpster_disposal (from bin)",
+                "action": "navigate",
+                "params": {
+                  "target_location": "dumpster_disposal"
+                },
+                "outputs": {
+                  "status": "nav_dumpster1_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Place waste at dumpster_disposal",
+                "action": "place",
+                "outputs": {
+                  "status": "place_bin_status"
+                }
+              }
+            ]
+          },
+          {
+            "type": "decorator",
+            "decorator": "inverter",
+            "child": {
+              "type": "condition",
+              "name": "No waste at bin_disposal (skip)",
+              "key": "detected_bin",
+              "operator": "truthy"
+            }
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "Navigate to desk_desktop",
+        "action": "navigate",
+        "params": {
+          "target_location": "desk_desktop"
+        },
+        "outputs": {
+          "status": "nav_desk_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Detect waste at desk_desktop",
+        "action": "detect",
+        "params": {
+          "object": "waste"
+        },
+        "outputs": {
+          "detected_objects": "detected_desk",
+          "status": "detect_desk_status"
+        }
+      },
+      {
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "condition",
+                "name": "Waste found at desk_desktop?",
+                "key": "detected_desk",
+                "operator": "truthy"
+              },
+              {
+                "type": "action",
+                "name": "Pick waste at desk_desktop",
+                "action": "pick",
+                "params": {
+                  "object": "waste"
+                },
+                "outputs": {
+                  "status": "pick_desk_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Navigate to dumpster_disposal (from desk)",
+                "action": "navigate",
+                "params": {
+                  "target_location": "dumpster_disposal"
+                },
+                "outputs": {
+                  "status": "nav_dumpster2_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Place waste at dumpster_disposal",
+                "action": "place",
+                "outputs": {
+                  "status": "place_desk_status"
+                }
+              }
+            ]
+          },
+          {
+            "type": "decorator",
+            "decorator": "inverter",
+            "child": {
+              "type": "condition",
+              "name": "No waste at desk_desktop (skip)",
+              "key": "detected_desk",
+              "operator": "truthy"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

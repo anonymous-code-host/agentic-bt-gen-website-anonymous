@@ -1,0 +1,94 @@
+{
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "name": "Check desk_desktop and pick waste",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "name": "Navigate to desk",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk"
+            },
+            "outputs": {
+              "status": "nav_desk_status",
+              "message": "nav_desk_message"
+            }
+          },
+          {
+            "name": "Detect waste at desk_desktop",
+            "type": "action",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "status": "detect_desk_status",
+              "detected_objects": "detected_at_desk"
+            }
+          },
+          {
+            "name": "Pick waste at desk",
+            "type": "action",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "status": "pick_desk_status",
+              "message": "pick_desk_message"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Check bin_disposal and pick waste",
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "name": "Navigate to bin",
+            "type": "action",
+            "action": "navigate",
+            "params": {
+              "target_location": "bin"
+            },
+            "outputs": {
+              "status": "nav_bin_status",
+              "message": "nav_bin_message"
+            }
+          },
+          {
+            "name": "Detect waste at bin_disposal",
+            "type": "action",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "status": "detect_bin_status",
+              "detected_objects": "detected_at_bin"
+            }
+          },
+          {
+            "name": "Pick waste at bin",
+            "type": "action",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "status": "pick_bin_status",
+              "message": "pick_bin_message"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

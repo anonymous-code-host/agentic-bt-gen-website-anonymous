@@ -1,0 +1,82 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "nav_desk",
+                "params": {
+                  "target_location": "desk_desktop"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "det_desk",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "pick_desk",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "nav_bin",
+                "params": {
+                  "target_location": "bin_disposal"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "det_bin",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "pick_bin",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "navigate",
+        "name": "nav_dining",
+        "params": {
+          "target_location": "dining"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

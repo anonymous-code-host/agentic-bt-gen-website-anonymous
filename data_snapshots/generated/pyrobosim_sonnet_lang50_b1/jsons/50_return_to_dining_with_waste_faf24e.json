@@ -1,0 +1,142 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "NavigateToTable",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table"
+                }
+              },
+              {
+                "type": "action",
+                "name": "DetectWasteAtTable",
+                "action": "detect",
+                "params": {
+                  "object": "waste"
+                }
+              },
+              {
+                "type": "action",
+                "name": "PickWasteAtTable",
+                "action": "pick",
+                "params": {
+                  "object": "waste"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "NavigateToDesk",
+                "action": "navigate",
+                "params": {
+                  "target_location": "desk"
+                }
+              },
+              {
+                "type": "action",
+                "name": "DetectWasteAtDesk",
+                "action": "detect",
+                "params": {
+                  "object": "waste"
+                }
+              },
+              {
+                "type": "action",
+                "name": "PickWasteAtDesk",
+                "action": "pick",
+                "params": {
+                  "object": "waste"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "NavigateToBin",
+                "action": "navigate",
+                "params": {
+                  "target_location": "bin"
+                }
+              },
+              {
+                "type": "action",
+                "name": "DetectWasteAtBin",
+                "action": "detect",
+                "params": {
+                  "object": "waste"
+                }
+              },
+              {
+                "type": "action",
+                "name": "PickWasteAtBin",
+                "action": "pick",
+                "params": {
+                  "object": "waste"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "NavigateToDumpster",
+                "action": "navigate",
+                "params": {
+                  "target_location": "dumpster"
+                }
+              },
+              {
+                "type": "action",
+                "name": "DetectWasteAtDumpster",
+                "action": "detect",
+                "params": {
+                  "object": "waste"
+                }
+              },
+              {
+                "type": "action",
+                "name": "PickWasteAtDumpster",
+                "action": "pick",
+                "params": {
+                  "object": "waste"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "ReturnToDining",
+        "action": "navigate",
+        "params": {
+          "target_location": "dining"
+        }
+      }
+    ]
+  }
+}

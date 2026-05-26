@@ -1,0 +1,18 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="wait_then_navigate">
+      <WaitForDetection name="wait_for_person" class_name="person" min_confidence="0.5" timeout="0.0"/>
+      <NavigateToLocation name="go_to_bottom_of_staircase" location="bottom_of_staircase"/>
+    </Sequence>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="WaitForDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="timeout"/>
+    </Action>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+  </TreeNodesModel>
+</root>

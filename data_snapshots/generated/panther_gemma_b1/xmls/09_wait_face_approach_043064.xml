@@ -1,0 +1,20 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="wait_face_approach">
+      <WaitForDetection class_name="person"/>
+      <HeadingController class_name="person"/>
+      <MoveForward forward_dist="1.0"/>
+    </Sequence>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="WaitForDetection">
+      <input_port name="class_name"/>
+    </Action>
+    <Action ID="HeadingController">
+      <input_port name="class_name"/>
+    </Action>
+    <Action ID="MoveForward">
+      <input_port name="forward_dist"/>
+    </Action>
+  </TreeNodesModel>
+</root>

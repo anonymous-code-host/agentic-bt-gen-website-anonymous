@@ -1,0 +1,50 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open pantry",
+        "action": "open"
+      },
+      {
+        "type": "action",
+        "name": "Detect snacks",
+        "action": "detect",
+        "params": {
+          "object": "snacks"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Pick snacks",
+        "action": "pick",
+        "params": {
+          "object": "snacks"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to desk",
+        "action": "navigate",
+        "params": {
+          "target_location": "desk"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Place snacks on desk_desktop",
+        "action": "place"
+      }
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to bin",
+        "action": "navigate",
+        "params": {
+          "target_location": "bin"
+        },
+        "outputs": {
+          "status": "nav_bin_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Pick waste from bin_disposal",
+        "action": "pick",
+        "params": {
+          "object": "waste"
+        },
+        "outputs": {
+          "status": "pick_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to dumpster",
+        "action": "navigate",
+        "params": {
+          "target_location": "dumpster"
+        },
+        "outputs": {
+          "status": "nav_dumpster_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Place waste at dumpster_disposal",
+        "action": "place",
+        "params": {},
+        "outputs": {
+          "status": "place_status"
+        }
+      }
+    ]
+  }
+}

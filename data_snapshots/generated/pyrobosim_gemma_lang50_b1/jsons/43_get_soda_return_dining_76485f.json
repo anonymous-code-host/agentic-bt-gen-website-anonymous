@@ -1,0 +1,110 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "Go to table",
+                "params": {
+                  "target_location": "table"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "Detect soda on table",
+                "outputs": {
+                  "detected_objects": "found_objects"
+                },
+                "params": {
+                  "object": "soda"
+                },
+                "type": "action"
+              },
+              {
+                "key": "found_objects",
+                "name": "Soda found on table",
+                "operator": "contains",
+                "type": "condition",
+                "value": "soda"
+              },
+              {
+                "action": "pick",
+                "name": "Pick soda from table",
+                "params": {
+                  "object": "soda"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "Go to fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "Open fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "Detect soda in fridge",
+                "outputs": {
+                  "detected_objects": "found_objects"
+                },
+                "params": {
+                  "object": "soda"
+                },
+                "type": "action"
+              },
+              {
+                "key": "found_objects",
+                "name": "Soda found in fridge",
+                "operator": "contains",
+                "type": "condition",
+                "value": "soda"
+              },
+              {
+                "action": "pick",
+                "name": "Pick soda from fridge",
+                "params": {
+                  "object": "soda"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "navigate",
+        "name": "Return to dining",
+        "params": {
+          "target_location": "dining"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

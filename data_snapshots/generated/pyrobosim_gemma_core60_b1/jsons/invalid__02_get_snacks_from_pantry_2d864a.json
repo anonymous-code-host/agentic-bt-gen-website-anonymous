@@ -1,0 +1,36 @@
+{
+  "root": {
+    "children": [
+      {
+        "name": "navigate",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "name": "open",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "name": "detect",
+        "params": {
+          "object": "snacks"
+        },
+        "type": "action"
+      },
+      {
+        "name": "pick",
+        "params": {
+          "object": "snacks"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

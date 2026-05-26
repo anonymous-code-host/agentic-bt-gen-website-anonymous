@@ -1,0 +1,54 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <KeepRunningUntilFailure>
+      <Sequence>
+        <NavigateToLocation location="nrg_entrance"/>
+        <Fallback>
+          <WaitForDetection class_name="person" timeout="60.0"/>
+          <ReactiveFallback>
+            <CheckDetection class_name="person"/>
+            <KeepRunningUntilFailure>
+              <Sequence>
+                <Spin target_yaw="1.57"/>
+                <Spin target_yaw="-1.57"/>
+              </Sequence>
+            </KeepRunningUntilFailure>
+          </ReactiveFallback>
+        </Fallback>
+        <Sequence>
+          <HeadingController class_name="person" timeout="0.0"/>
+          <MoveForward forward_dist="1.0"/>
+          <Wait wait_duration="5.0"/>
+        </Sequence>
+        <NavigateToLocation location="vending_machine"/>
+        <NavigateToLocation location="kitchen_entrance"/>
+        <NavigateToLocation location="nrg_entrance"/>
+      </Sequence>
+    </KeepRunningUntilFailure>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+    <Action ID="WaitForDetection">
+      <input_port name="class_name"/>
+      <input_port name="timeout"/>
+    </Action>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+    </Condition>
+    <Action ID="Spin">
+      <input_port name="target_yaw"/>
+    </Action>
+    <Action ID="HeadingController">
+      <input_port name="class_name"/>
+      <input_port name="timeout"/>
+    </Action>
+    <Action ID="MoveForward">
+      <input_port name="forward_dist"/>
+    </Action>
+    <Action ID="Wait">
+      <input_port name="wait_duration"/>
+    </Action>
+  </TreeNodesModel>
+</root>

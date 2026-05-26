@@ -1,0 +1,97 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "navigate_primary",
+                "action": "navigate",
+                "params": {
+                  "target_location": "fridge"
+                }
+              },
+              {
+                "type": "action",
+                "name": "open_primary",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "detect_primary",
+                "action": "detect",
+                "params": {
+                  "object": "butter"
+                }
+              },
+              {
+                "type": "action",
+                "name": "pick_primary",
+                "action": "pick",
+                "params": {
+                  "object": "butter"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "navigate_fallback",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "open_fallback",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "detect_fallback",
+                "action": "detect",
+                "params": {
+                  "object": "butter"
+                }
+              },
+              {
+                "type": "action",
+                "name": "pick_fallback",
+                "action": "pick",
+                "params": {
+                  "object": "butter"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "navigate_destination",
+        "action": "navigate",
+        "params": {
+          "target_location": "desk_desktop"
+        }
+      },
+      {
+        "type": "action",
+        "name": "place_at_destination",
+        "action": "place"
+      }
+    ]
+  }
+}

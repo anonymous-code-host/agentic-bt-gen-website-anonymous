@@ -1,0 +1,112 @@
+{
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to table_tabletop",
+            "action": "navigate",
+            "params": {
+              "target_location": "table_tabletop"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Detect snacks at table",
+            "action": "detect",
+            "params": {
+              "object": "snacks"
+            },
+            "outputs": {
+              "detected_objects": "table_detected_objects"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "Snacks found at table?",
+            "key": "table_detected_objects",
+            "operator": "truthy",
+            "value": null
+          },
+          {
+            "type": "action",
+            "name": "Pick snacks from table",
+            "action": "pick",
+            "params": {
+              "object": "snacks"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to dining",
+            "action": "navigate",
+            "params": {
+              "target_location": "dining"
+            }
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to pantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open pantry",
+            "action": "open",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Detect snacks at pantry",
+            "action": "detect",
+            "params": {
+              "object": "snacks"
+            },
+            "outputs": {
+              "detected_objects": "pantry_detected_objects"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "Snacks found at pantry?",
+            "key": "pantry_detected_objects",
+            "operator": "truthy",
+            "value": null
+          },
+          {
+            "type": "action",
+            "name": "Pick snacks from pantry",
+            "action": "pick",
+            "params": {
+              "object": "snacks"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to dining",
+            "action": "navigate",
+            "params": {
+              "target_location": "dining"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

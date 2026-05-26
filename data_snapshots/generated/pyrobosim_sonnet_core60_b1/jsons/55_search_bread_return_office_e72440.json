@@ -1,0 +1,235 @@
+{
+  "root": {
+    "type": "sequence",
+    "name": "Task55_SearchBreadAndReturnToOffice",
+    "memory": true,
+    "children": [
+      {
+        "type": "selector",
+        "name": "FindAndPickBread",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "name": "SearchTableTabletop",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "NavigateToTableTabletop",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table_tabletop"
+                },
+                "outputs": {
+                  "status": "nav_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "DetectBreadAtTable",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_objects"
+                }
+              },
+              {
+                "type": "condition",
+                "name": "BreadFoundAtTable",
+                "key": "detected_objects",
+                "operator": "truthy"
+              },
+              {
+                "type": "action",
+                "name": "PickBreadFromTable",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "status": "pick_status"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "name": "SearchPantry",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "NavigateToPantry",
+                "action": "navigate",
+                "params": {
+                  "target_location": "pantry_storage"
+                },
+                "outputs": {
+                  "status": "nav_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "OpenPantry",
+                "action": "open",
+                "outputs": {
+                  "status": "open_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "DetectBreadAtPantry",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_objects"
+                }
+              },
+              {
+                "type": "selector",
+                "name": "PickOrClosePantry",
+                "memory": false,
+                "children": [
+                  {
+                    "type": "sequence",
+                    "name": "TryPickFromPantry",
+                    "memory": true,
+                    "children": [
+                      {
+                        "type": "condition",
+                        "name": "BreadFoundAtPantry",
+                        "key": "detected_objects",
+                        "operator": "truthy"
+                      },
+                      {
+                        "type": "action",
+                        "name": "PickBreadFromPantry",
+                        "action": "pick",
+                        "params": {
+                          "object": "bread"
+                        },
+                        "outputs": {
+                          "status": "pick_status"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "decorator",
+                    "name": "ClosePantryAndFail",
+                    "decorator": "inverter",
+                    "child": {
+                      "type": "action",
+                      "name": "ClosePantry",
+                      "action": "close",
+                      "outputs": {
+                        "status": "close_status"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "name": "SearchFridge",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "NavigateToFridge",
+                "action": "navigate",
+                "params": {
+                  "target_location": "fridge_storage"
+                },
+                "outputs": {
+                  "status": "nav_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "OpenFridge",
+                "action": "open",
+                "outputs": {
+                  "status": "open_status"
+                }
+              },
+              {
+                "type": "action",
+                "name": "DetectBreadAtFridge",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_objects"
+                }
+              },
+              {
+                "type": "selector",
+                "name": "PickOrCloseFridge",
+                "memory": false,
+                "children": [
+                  {
+                    "type": "sequence",
+                    "name": "TryPickFromFridge",
+                    "memory": true,
+                    "children": [
+                      {
+                        "type": "condition",
+                        "name": "BreadFoundAtFridge",
+                        "key": "detected_objects",
+                        "operator": "truthy"
+                      },
+                      {
+                        "type": "action",
+                        "name": "PickBreadFromFridge",
+                        "action": "pick",
+                        "params": {
+                          "object": "bread"
+                        },
+                        "outputs": {
+                          "status": "pick_status"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "decorator",
+                    "name": "CloseFridgeAndFail",
+                    "decorator": "inverter",
+                    "child": {
+                      "type": "action",
+                      "name": "CloseFridge",
+                      "action": "close",
+                      "outputs": {
+                        "status": "close_status"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "action",
+        "name": "NavigateToOffice",
+        "action": "navigate",
+        "params": {
+          "target_location": "office"
+        },
+        "outputs": {
+          "status": "nav_status"
+        }
+      }
+    ]
+  }
+}

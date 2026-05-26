@@ -1,0 +1,107 @@
+{
+  "blackboard": {
+    "initial": {}
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_pantry",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_pantry",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "search_pantry",
+            "outputs": {
+              "detected_objects": "pantry_snacks"
+            },
+            "params": {
+              "object": "snacks"
+            },
+            "type": "action"
+          },
+          {
+            "key": "pantry_snacks",
+            "name": "snacks_in_pantry",
+            "operator": "contains",
+            "type": "condition",
+            "value": "snacks"
+          },
+          {
+            "action": "pick",
+            "name": "pick_pantry_snacks",
+            "params": {
+              "object": "snacks"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "search_fridge",
+            "outputs": {
+              "detected_objects": "fridge_snacks"
+            },
+            "params": {
+              "object": "snacks"
+            },
+            "type": "action"
+          },
+          {
+            "key": "fridge_snacks",
+            "name": "snacks_in_fridge",
+            "operator": "contains",
+            "type": "condition",
+            "value": "snacks"
+          },
+          {
+            "action": "pick",
+            "name": "pick_fridge_snacks",
+            "params": {
+              "object": "snacks"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

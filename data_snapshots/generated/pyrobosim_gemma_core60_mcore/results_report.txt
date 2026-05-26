@@ -1,0 +1,67 @@
+Batch: pyrobosim_gemma_core60_mcore
+Suites: pyrobosim_core60
+Environments: pyrobosim
+Tasks: 60
+
+Overall
+  Success rate: 0.9259
+  Goal satisfied rate: 0.9259
+  Valid rate: 1.0
+  Grounded rate: 1.0
+  Params rate: 1.0
+  Struct comp rate: 0.8148
+  Avg tick count: 24.2
+  Avg runtime ms: 2887.5
+
+Execution Status Counts
+  FAILURE: 4
+  SUCCESS: 50
+  null: 6
+
+Failure Cause Counts
+  bt_construction: 1
+  runtime_failure: 3
+
+By Archetype
+  pick_and_place
+    count: 12
+    success_rate: 0.9167
+    struct_comp_rate: 0.75
+    avg_tick_count: 26.7
+    avg_runtime_ms: 3145.8
+    failure_runtime_failure: 1
+  pick_and_return
+    count: 12
+    success_rate: 1.0
+    struct_comp_rate: 0.8
+    avg_tick_count: 29.5
+    avg_runtime_ms: 3565.7
+    failure_breakdown: none
+  search_and_place
+    count: 12
+    success_rate: 0.875
+    struct_comp_rate: 0.625
+    avg_tick_count: 30.8
+    avg_runtime_ms: 3640.1
+    failure_runtime_failure: 1
+  selector_search
+    count: 12
+    success_rate: 0.8333
+    struct_comp_rate: 0.8333
+    avg_tick_count: 20.2
+    avg_runtime_ms: 2513.8
+    failure_bt_construction: 1
+    failure_runtime_failure: 1
+  sequential_pick
+    count: 12
+    success_rate: 1.0
+    struct_comp_rate: 1.0
+    avg_tick_count: 17.2
+    avg_runtime_ms: 1936.0
+    failure_breakdown: none
+
+Remaining Failures
+  task13_search_snacks_pantry_fridge | selector_search | FAILURE | bt_construction | Search-family BT failed in a detect/fallback branch despite passing static validation.
+  task19_search_soda_fridge_desk | selector_search | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  task28_place_butter_pantry | pick_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.
+  task33_search_place_snacks_table | search_and_place | FAILURE | runtime_failure | Execution did not finish successfully in the simulator/control server.

@@ -1,0 +1,35 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <!-- Outer KRUF: keeps the reactive loop running indefinitely -->
+    <KeepRunningUntilFailure name="run_forever">
+      <ReactiveFallback name="face_or_idle">
+
+        <!-- Branch 1: Person visible → face them continuously -->
+        <ReactiveSequence name="face_if_person">
+          <!-- Condition: is a person currently in view? -->
+          <CheckDetection class_name="person" min_confidence="0.5" max_age="2.0"/>
+          <!-- Keep re-aligning: SUCCESS→RUNNING so tracking never stops mid-person -->
+          <KeepRunningUntilFailure name="keep_facing">
+            <HeadingController class_name="person" timeout="0.0" detection_loss_timeout="1.0"/>
+          </KeepRunningUntilFailure>
+        </ReactiveSequence>
+
+        <!-- Branch 2: No person → idle (continue behavior) -->
+        <AlwaysSuccess name="idle"/>
+
+      </ReactiveFallback>
+    </KeepRunningUntilFailure>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+    <Action ID="HeadingController">
+      <input_port name="class_name"/>
+      <input_port name="timeout"/>
+      <input_port name="detection_loss_timeout"/>
+    </Action>
+  </TreeNodesModel>
+</root>

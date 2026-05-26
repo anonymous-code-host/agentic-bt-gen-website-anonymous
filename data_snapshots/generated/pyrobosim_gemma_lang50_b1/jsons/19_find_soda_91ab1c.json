@@ -1,0 +1,101 @@
+{
+  "blackboard": {
+    "initial": {
+      "found_objs": []
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_soda_fridge",
+            "outputs": {
+              "detected_objects": "found_objs"
+            },
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_objs",
+            "name": "soda_in_fridge",
+            "operator": "contains",
+            "type": "condition",
+            "value": "soda"
+          },
+          {
+            "action": "pick",
+            "name": "pick_soda_fridge",
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_desk",
+            "params": {
+              "target_location": "desk"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_soda_desk",
+            "outputs": {
+              "detected_objects": "found_objs"
+            },
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_objs",
+            "name": "soda_at_desk",
+            "operator": "contains",
+            "type": "condition",
+            "value": "soda"
+          },
+          {
+            "action": "pick",
+            "name": "pick_soda_desk",
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

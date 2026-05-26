@@ -1,0 +1,51 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <!-- Outer KRUF: absorbs all FAILUREs so the mission never terminates -->
+    <KeepRunningUntilFailure name="run_forever">
+      <ReactiveFallback name="patrol_or_face">
+
+        <!-- Branch 1 (high priority): person detected → face them continuously -->
+        <!-- ReactiveSequence: CheckDetection guards HeadingController every tick.
+             When person leaves, CheckDetection → FAILURE halts the tracker.
+             ReactiveSequence → FAILURE falls through to patrol branch. -->
+        <ReactiveSequence name="face_if_person">
+          <CheckDetection class_name="person" min_confidence="0.5" max_age="2.0"/>
+          <!-- KRUF converts each HeadingController SUCCESS (aligned) back to RUNNING so
+               tracking keeps looping. Detection-loss FAILURE exits naturally. -->
+          <KeepRunningUntilFailure name="keep_facing">
+            <HeadingController class_name="person" timeout="0.0" detection_loss_timeout="1.0"/>
+          </KeepRunningUntilFailure>
+        </ReactiveSequence>
+
+        <!-- Branch 2 (default): patrol indefinitely through all 4 waypoints.
+             SequenceWithMemory preserves the current waypoint index across interruptions,
+             so patrol resumes from the halted leg — not from nrg_entrance every time. -->
+        <KeepRunningUntilFailure name="keep_patrolling">
+          <SequenceWithMemory name="patrol_loop">
+            <NavigateToLocation name="go_nrg_entrance"    location="nrg_entrance"/>
+            <NavigateToLocation name="go_mid_hallway"     location="mid_hallway"/>
+            <NavigateToLocation name="go_between_hallways" location="between_hallways"/>
+            <NavigateToLocation name="go_kitchen_entrance" location="kitchen_entrance"/>
+          </SequenceWithMemory>
+        </KeepRunningUntilFailure>
+
+      </ReactiveFallback>
+    </KeepRunningUntilFailure>
+  </BehaviorTree>
+
+  <TreeNodesModel>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+    <Action ID="HeadingController">
+      <input_port name="class_name"/>
+      <input_port name="timeout"/>
+      <input_port name="detection_loss_timeout"/>
+    </Action>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+  </TreeNodesModel>
+</root>

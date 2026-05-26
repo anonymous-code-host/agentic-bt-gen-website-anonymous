@@ -1,0 +1,107 @@
+{
+  "blackboard": {
+    "initial": {}
+  },
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "memory": true,
+        "name": "search_desk_and_deliver",
+        "children": [
+          {
+            "type": "action",
+            "name": "navigate_to_desk",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            }
+          },
+          {
+            "type": "action",
+            "name": "detect_waste_at_desk",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "detected_objects": "detected_at_desk"
+            }
+          },
+          {
+            "type": "action",
+            "name": "pick_waste_at_desk",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            }
+          },
+          {
+            "type": "action",
+            "name": "navigate_to_dumpster_from_desk",
+            "action": "navigate",
+            "params": {
+              "target_location": "dumpster_disposal"
+            }
+          },
+          {
+            "type": "action",
+            "name": "place_waste_at_dumpster",
+            "action": "place",
+            "params": {}
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "memory": true,
+        "name": "search_bin_and_deliver",
+        "children": [
+          {
+            "type": "action",
+            "name": "navigate_to_bin",
+            "action": "navigate",
+            "params": {
+              "target_location": "bin_disposal"
+            }
+          },
+          {
+            "type": "action",
+            "name": "detect_waste_at_bin",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "detected_objects": "detected_at_bin"
+            }
+          },
+          {
+            "type": "action",
+            "name": "pick_waste_at_bin",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            }
+          },
+          {
+            "type": "action",
+            "name": "navigate_to_dumpster_from_bin",
+            "action": "navigate",
+            "params": {
+              "target_location": "dumpster_disposal"
+            }
+          },
+          {
+            "type": "action",
+            "name": "place_waste_at_dumpster_2",
+            "action": "place",
+            "params": {}
+          }
+        ]
+      }
+    ]
+  }
+}

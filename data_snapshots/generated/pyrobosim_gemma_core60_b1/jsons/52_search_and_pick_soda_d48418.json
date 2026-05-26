@@ -1,0 +1,149 @@
+{
+  "blackboard": {
+    "initial": {
+      "found_soda": []
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_desk",
+            "params": {
+              "target_location": "desk"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "search_desk",
+            "outputs": {
+              "detected_objects": "found_soda"
+            },
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_soda",
+            "name": "check_soda_desk",
+            "operator": "contains",
+            "type": "condition",
+            "value": "soda"
+          },
+          {
+            "action": "pick",
+            "name": "pick_soda_desk",
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_fridge",
+            "params": {
+              "target_location": "fridge"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "search_fridge",
+            "outputs": {
+              "detected_objects": "found_soda"
+            },
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_soda",
+            "name": "check_soda_fridge",
+            "operator": "contains",
+            "type": "condition",
+            "value": "soda"
+          },
+          {
+            "action": "pick",
+            "name": "pick_soda_fridge",
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_pantry",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open_pantry",
+            "params": {
+              "target_location": "pantry"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "search_pantry",
+            "outputs": {
+              "detected_objects": "found_soda"
+            },
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          },
+          {
+            "key": "found_soda",
+            "name": "check_soda_pantry",
+            "operator": "contains",
+            "type": "condition",
+            "value": "soda"
+          },
+          {
+            "action": "pick",
+            "name": "pick_soda_pantry",
+            "params": {
+              "object": "soda"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

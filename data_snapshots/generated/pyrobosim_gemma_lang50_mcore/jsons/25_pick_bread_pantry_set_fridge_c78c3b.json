@@ -1,0 +1,70 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "prep_fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "open_fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "go_to_pantry",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "open_pantry",
+        "params": {
+          "target_location": "pantry"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "detect_bread",
+        "params": {
+          "object": "bread"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "pick_bread",
+        "params": {
+          "object": "bread"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "return_to_fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "place_bread",
+        "params": {},
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

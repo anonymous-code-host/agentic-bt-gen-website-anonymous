@@ -1,0 +1,152 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "fields": {
+                  "action": "navigate",
+                  "name": "Navigate to Pantry",
+                  "params": {
+                    "target_location": "pantry"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "fields": {
+                  "action": "open",
+                  "name": "Open Pantry",
+                  "params": {
+                    "target_location": "pantry"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "fields": {
+                  "action": "detect",
+                  "name": "Detect Snacks in Pantry",
+                  "params": {
+                    "object": "snacks"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "fields": {
+                  "action": "pick",
+                  "name": "Pick Snacks from Pantry",
+                  "params": {
+                    "object": "snacks"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "fields": {
+                  "action": "navigate",
+                  "name": "Navigate to Fridge",
+                  "params": {
+                    "target_location": "fridge"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "fields": {
+                  "action": "open",
+                  "name": "Open Fridge",
+                  "params": {
+                    "target_location": "fridge"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "fields": {
+                  "action": "detect",
+                  "name": "Detect Snacks in Fridge",
+                  "params": {
+                    "object": "snacks"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "fields": {
+                  "action": "pick",
+                  "name": "Pick Snacks from Fridge",
+                  "params": {
+                    "object": "snacks"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "fields": {
+                  "action": "navigate",
+                  "name": "Navigate to Table",
+                  "params": {
+                    "target_location": "table"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "fields": {
+                  "action": "detect",
+                  "name": "Detect Snacks on Table",
+                  "params": {
+                    "object": "snacks"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "fields": {
+                  "action": "pick",
+                  "name": "Pick Snacks from Table",
+                  "params": {
+                    "object": "snacks"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "fields": {
+          "action": "navigate",
+          "name": "Return to Dining",
+          "params": {
+            "target_location": "dining"
+          }
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

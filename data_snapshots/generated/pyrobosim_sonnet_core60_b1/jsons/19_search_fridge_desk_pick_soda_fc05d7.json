@@ -1,0 +1,124 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open fridge",
+        "action": "open"
+      },
+      {
+        "type": "action",
+        "name": "Detect soda at fridge",
+        "action": "detect",
+        "params": {
+          "object": "soda"
+        },
+        "outputs": {
+          "detected_objects": "fridge_objects"
+        }
+      },
+      {
+        "type": "selector",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "condition",
+                "name": "Soda found at fridge?",
+                "key": "fridge_objects",
+                "operator": "truthy"
+              },
+              {
+                "type": "action",
+                "name": "Pick soda from fridge",
+                "action": "pick",
+                "params": {
+                  "object": "soda"
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "Close fridge",
+                "action": "close"
+              },
+              {
+                "type": "action",
+                "name": "Navigate to desk_desktop",
+                "action": "navigate",
+                "params": {
+                  "target_location": "desk_desktop"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Detect soda at desk",
+                "action": "detect",
+                "params": {
+                  "object": "soda"
+                },
+                "outputs": {
+                  "detected_objects": "desk_objects"
+                }
+              },
+              {
+                "type": "selector",
+                "memory": true,
+                "children": [
+                  {
+                    "type": "sequence",
+                    "memory": true,
+                    "children": [
+                      {
+                        "type": "condition",
+                        "name": "Soda found at desk?",
+                        "key": "desk_objects",
+                        "operator": "truthy"
+                      },
+                      {
+                        "type": "action",
+                        "name": "Pick soda from desk",
+                        "action": "pick",
+                        "params": {
+                          "object": "soda"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "decorator",
+                    "decorator": "inverter",
+                    "child": {
+                      "type": "condition",
+                      "name": "Soda not at desk (graceful succeed)",
+                      "key": "desk_objects",
+                      "operator": "truthy"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

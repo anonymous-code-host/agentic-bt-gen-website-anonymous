@@ -1,0 +1,98 @@
+{
+  "root": {
+    "type": "selector",
+    "name": "Find and deliver bread to desk_desktop",
+    "memory": false,
+    "children": [
+      {
+        "type": "sequence",
+        "name": "Get bread from pantry and place on desk",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to pantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry_storage"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open pantry",
+            "action": "open",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Detect bread in pantry",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "detected_objects": "pantry_detected"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick bread from pantry",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to desk_desktop",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Place bread on desk",
+            "action": "place"
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "name": "No bread in pantry - close it and check desk_desktop",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Close pantry",
+            "action": "close",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to desk_desktop",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Detect bread at desk_desktop",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "detected_objects": "desk_detected"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

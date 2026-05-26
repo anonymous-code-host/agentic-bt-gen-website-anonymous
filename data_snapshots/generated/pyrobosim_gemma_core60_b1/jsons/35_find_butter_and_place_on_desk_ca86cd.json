@@ -1,0 +1,106 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "Navigate to Fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "Open Fridge",
+                "params": {
+                  "target_location": "fridge"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "Detect Butter in Fridge",
+                "params": {
+                  "object": "butter"
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "Pick Butter from Fridge",
+                "params": {
+                  "object": "butter"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "Navigate to Pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "open",
+                "name": "Open Pantry",
+                "params": {
+                  "target_location": "pantry"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "Detect Butter in Pantry",
+                "params": {
+                  "object": "butter"
+                },
+                "type": "action"
+              },
+              {
+                "action": "pick",
+                "name": "Pick Butter from Pantry",
+                "params": {
+                  "object": "butter"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "navigate",
+        "name": "Navigate to Desk",
+        "params": {
+          "target_location": "desk"
+        },
+        "type": "action"
+      },
+      {
+        "action": "place",
+        "name": "Place Butter on Desk",
+        "params": {
+          "pose": "desk_desktop"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

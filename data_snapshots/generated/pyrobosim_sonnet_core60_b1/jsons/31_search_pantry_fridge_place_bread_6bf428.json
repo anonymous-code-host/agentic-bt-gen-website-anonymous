@@ -1,0 +1,124 @@
+{
+  "root": {
+    "type": "selector",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to pantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open pantry",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect bread in pantry",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "status": "pantry_detect_status"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "Bread found in pantry?",
+            "key": "pantry_detect_status",
+            "operator": "==",
+            "value": "success"
+          },
+          {
+            "type": "action",
+            "name": "Pick bread from pantry",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to table",
+            "action": "navigate",
+            "params": {
+              "target_location": "table"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Place bread on table_tabletop",
+            "action": "place"
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to fridge",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open fridge",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect bread in fridge",
+            "action": "detect",
+            "params": {
+              "object": "bread"
+            },
+            "outputs": {
+              "status": "fridge_detect_status"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "Bread found in fridge?",
+            "key": "fridge_detect_status",
+            "operator": "==",
+            "value": "success"
+          },
+          {
+            "type": "action",
+            "name": "Pick bread from fridge",
+            "action": "pick",
+            "params": {
+              "object": "bread"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to table",
+            "action": "navigate",
+            "params": {
+              "target_location": "table"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Place bread on table_tabletop",
+            "action": "place"
+          }
+        ]
+      }
+    ]
+  }
+}

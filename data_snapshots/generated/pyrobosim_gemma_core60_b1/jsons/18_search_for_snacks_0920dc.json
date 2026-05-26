@@ -1,0 +1,110 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "navigate",
+            "params": {
+              "target_location": {
+                "literal": "pantry"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "open",
+            "name": "open",
+            "params": {
+              "target_location": {
+                "literal": "pantry"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect",
+            "outputs": {
+              "detected_objects": "snacks_found"
+            },
+            "params": {
+              "object": {
+                "literal": "snacks"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "key": "snacks_found",
+            "name": "check_snacks",
+            "operator": "contains",
+            "type": "condition",
+            "value": "snacks"
+          },
+          {
+            "action": "pick",
+            "name": "pick",
+            "params": {
+              "object": {
+                "literal": "snacks"
+              }
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "navigate",
+            "params": {
+              "target_location": {
+                "literal": "desk_desktop"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect",
+            "outputs": {
+              "detected_objects": "snacks_found"
+            },
+            "params": {
+              "object": {
+                "literal": "snacks"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "key": "snacks_found",
+            "name": "check_snacks",
+            "operator": "contains",
+            "type": "condition",
+            "value": "snacks"
+          },
+          {
+            "action": "pick",
+            "name": "pick",
+            "params": {
+              "object": {
+                "literal": "snacks"
+              }
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "selector"
+  }
+}

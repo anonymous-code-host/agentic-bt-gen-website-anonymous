@@ -1,0 +1,59 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="mission">
+
+      <!-- Navigate to vending_machine with reactive person-detection interrupt -->
+      <!-- On detection: stop nav, wait for person to leave, wait 10s, resume -->
+      <RetryUntilSuccessful num_attempts="100" name="nav_to_vending_machine">
+        <Sequence name="nav_attempt">
+
+          <!-- Pre-check: if a person is currently detected, wait for them to leave then wait 10s -->
+          <ForceSuccess name="handle_person_if_present">
+            <Sequence name="person_handling">
+              <!-- Only enters if person is currently seen -->
+              <CheckDetection class_name="person" min_confidence="0.5" name="check_person_present"/>
+              <!-- Wait until person leaves (CheckDetection drops to FAILURE) -->
+              <ReactiveFallback name="wait_until_person_gone">
+                <Inverter>
+                  <CheckDetection class_name="person" min_confidence="0.5" name="check_person_gone"/>
+                </Inverter>
+                <KeepRunningUntilFailure>
+                  <Wait wait_duration="1.0" name="polling_wait"/>
+                </KeepRunningUntilFailure>
+              </ReactiveFallback>
+              <!-- Wait an additional 10 seconds after person has left -->
+              <Wait wait_duration="10.0" name="wait_10_seconds"/>
+            </Sequence>
+          </ForceSuccess>
+
+          <!-- Navigate to vending_machine; halt immediately if person detected -->
+          <ReactiveSequence name="guarded_nav">
+            <!-- Guard: succeeds only when NO person is detected -->
+            <Inverter>
+              <CheckDetection class_name="person" min_confidence="0.5" name="check_no_person"/>
+            </Inverter>
+            <NavigateToLocation location="vending_machine" name="go_to_vending_machine"/>
+          </ReactiveSequence>
+
+        </Sequence>
+      </RetryUntilSuccessful>
+
+      <!-- Return to NRG entrance after reaching vending machine -->
+      <NavigateToLocation location="nrg_entrance" name="return_to_nrg"/>
+
+    </Sequence>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+    <Action ID="Wait">
+      <input_port name="wait_duration"/>
+    </Action>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+  </TreeNodesModel>
+</root>

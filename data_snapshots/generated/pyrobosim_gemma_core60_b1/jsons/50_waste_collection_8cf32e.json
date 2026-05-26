@@ -1,0 +1,102 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "go_to_bin",
+                "params": {
+                  "target_location": "bin_disposal"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_bin_waste",
+                "outputs": {
+                  "detected_objects": "bin_waste"
+                },
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              },
+              {
+                "key": "bin_waste",
+                "name": "waste_in_bin",
+                "operator": "contains",
+                "type": "condition",
+                "value": "waste"
+              },
+              {
+                "action": "pick",
+                "name": "pick_bin_waste",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "go_to_desk",
+                "params": {
+                  "target_location": "desk_desktop"
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_desk_waste",
+                "outputs": {
+                  "detected_objects": "desk_waste"
+                },
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              },
+              {
+                "key": "desk_waste",
+                "name": "waste_on_desk",
+                "operator": "contains",
+                "type": "condition",
+                "value": "waste"
+              },
+              {
+                "action": "pick",
+                "name": "pick_desk_waste",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "navigate",
+        "name": "return_to_dining",
+        "params": {
+          "target_location": "dining"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

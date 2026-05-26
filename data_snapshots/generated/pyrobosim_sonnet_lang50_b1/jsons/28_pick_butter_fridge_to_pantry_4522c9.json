@@ -1,0 +1,42 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open fridge",
+        "action": "open"
+      },
+      {
+        "type": "action",
+        "name": "Pick butter from fridge",
+        "action": "pick",
+        "params": {
+          "object": "butter0"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Place butter at pantry",
+        "action": "place"
+      }
+    ]
+  }
+}

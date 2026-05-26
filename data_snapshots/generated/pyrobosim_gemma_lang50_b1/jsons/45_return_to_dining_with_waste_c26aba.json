@@ -1,0 +1,116 @@
+{
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "go_to_bin",
+                "params": {
+                  "target_location": {
+                    "literal": "bin_disposal"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_waste_bin",
+                "outputs": {
+                  "detected_objects": "found_waste"
+                },
+                "params": {
+                  "object": {
+                    "literal": "waste"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "key": "found_waste",
+                "name": "waste_at_bin",
+                "operator": "truthy",
+                "type": "condition",
+                "value": true
+              },
+              {
+                "action": "pick",
+                "name": "pick_waste_bin",
+                "params": {
+                  "object": {
+                    "literal": "waste"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "children": [
+              {
+                "action": "navigate",
+                "name": "go_to_desk",
+                "params": {
+                  "target_location": {
+                    "literal": "desk_desktop"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "action": "detect",
+                "name": "detect_waste_desk",
+                "outputs": {
+                  "detected_objects": "found_waste"
+                },
+                "params": {
+                  "object": {
+                    "literal": "waste"
+                  }
+                },
+                "type": "action"
+              },
+              {
+                "key": "found_waste",
+                "name": "waste_at_desk",
+                "operator": "truthy",
+                "type": "condition",
+                "value": true
+              },
+              {
+                "action": "pick",
+                "name": "pick_waste_desk",
+                "params": {
+                  "object": {
+                    "literal": "waste"
+                  }
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "navigate",
+        "name": "go_to_dining",
+        "params": {
+          "target_location": {
+            "literal": "dining"
+          }
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

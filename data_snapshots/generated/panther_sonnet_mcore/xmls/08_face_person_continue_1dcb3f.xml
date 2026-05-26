@@ -1,0 +1,42 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <!-- Outer loop: run forever -->
+    <KeepRunningUntilFailure name="mission_loop">
+      <ReactiveFallback name="watch_and_face">
+
+        <!-- Branch 1: face person while detected -->
+        <ReactiveSequence name="face_if_person">
+          <!-- Gate: only enter if a person is currently seen -->
+          <CheckDetection class_name="person" min_confidence="0.5" max_age="2.0"/>
+          <!-- Track continuously; each alignment SUCCESS → RUNNING via decorator -->
+          <KeepRunningUntilFailure name="track_loop">
+            <HeadingController class_name="person" timeout="0.0" detection_loss_timeout="1.0"/>
+          </KeepRunningUntilFailure>
+        </ReactiveSequence>
+
+        <!-- Branch 2 (default): slow 360° scan in place -->
+        <KeepRunningUntilFailure name="scan_loop">
+          <Spin target_yaw="6.28" time_allowance="20.0"/>
+        </KeepRunningUntilFailure>
+
+      </ReactiveFallback>
+    </KeepRunningUntilFailure>
+  </BehaviorTree>
+
+  <TreeNodesModel>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+    <Action ID="HeadingController">
+      <input_port name="class_name"/>
+      <input_port name="timeout"/>
+      <input_port name="detection_loss_timeout"/>
+    </Action>
+    <Action ID="Spin">
+      <input_port name="target_yaw"/>
+      <input_port name="time_allowance"/>
+    </Action>
+  </TreeNodesModel>
+</root>

@@ -1,0 +1,60 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open fridge",
+        "action": "open"
+      },
+      {
+        "type": "action",
+        "name": "Navigate to pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open pantry",
+        "action": "open"
+      },
+      {
+        "type": "action",
+        "name": "Pick bread from pantry",
+        "action": "pick",
+        "params": {
+          "object": "bread"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Navigate to fridge",
+        "action": "navigate",
+        "params": {
+          "target_location": "fridge"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Place bread at fridge",
+        "action": "place"
+      },
+      {
+        "type": "action",
+        "name": "Close fridge",
+        "action": "close"
+      }
+    ]
+  }
+}

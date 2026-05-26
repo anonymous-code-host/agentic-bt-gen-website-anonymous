@@ -1,0 +1,42 @@
+{
+  "root": {
+    "type": "sequence",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to desk_desktop",
+        "action": "navigate",
+        "params": {
+          "target_location": "desk_desktop"
+        },
+        "outputs": {
+          "status": "nav_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Detect waste at desk",
+        "action": "detect",
+        "params": {
+          "object": "waste"
+        },
+        "outputs": {
+          "detected_objects": "detected_objects",
+          "status": "detect_status"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Pick waste",
+        "action": "pick",
+        "params": {
+          "object": "waste"
+        },
+        "outputs": {
+          "status": "pick_status"
+        }
+      }
+    ]
+  }
+}

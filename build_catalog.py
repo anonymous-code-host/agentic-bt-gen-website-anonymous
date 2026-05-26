@@ -13,6 +13,8 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - optional dependency
     yaml = None
 
+import xml.etree.ElementTree as ET
+
 APP_ROOT = Path(__file__).resolve().parent
 DATA_ROOT = APP_ROOT / "data_snapshots"
 GENERATED_ROOT = DATA_ROOT / "generated"
@@ -23,6 +25,17 @@ PAPER_TABLE_ROOT = PAPER_ROOT / "tables"
 ROOTSTOCKS_PATH = APP_ROOT.parent / "pyrobosim" / "pyrobosim" / "pyrobosim" / "mcp" / "data" / "rootstocks.yaml"
 
 METHOD_ORDER = {"M-Core": 0, "B1": 1, "B0": 2, "Other": 3}
+
+# BT.CPP control-flow node tags
+_BTCPP_CONTROL_TAGS = {
+    "Sequence", "ReactiveSequence", "SequenceStar",
+    "Fallback", "ReactiveFallback", "FallbackStar",
+    "Parallel", "ParallelAll",
+    "KeepRunningUntilFailure", "ForceSuccess", "ForceFailure",
+    "Inverter", "RetryUntilSuccessful", "RepeatNode",
+}
+_BTCPP_CONDITION_TAGS = {"Condition"}
+# anything else is treated as an action leaf
 SUITE_LABELS = {
     "core60": "Core 60",
     "language50": "Language 50",
@@ -292,6 +305,162 @@ def parse_simple_yaml(text: str) -> dict[str, Any]:
         return {}
     parsed, _ = parse_block(0, lines[0][0])
     return parsed if isinstance(parsed, dict) else {}
+
+
+def xml_elem_to_bt_json(elem: ET.Element) -> dict[str, Any]:
+    """Recursively convert a BT.CPP XML element to the internal JSON node format."""
+    tag = elem.tag
+    name = elem.get("name", tag)
+    children = [xml_elem_to_bt_json(child) for child in elem if isinstance(child.tag, str)]
+
+    lowered = tag.lower()
+    if tag in _BTCPP_CONTROL_TAGS:
+        if "sequence" in lowered:
+            node_type = "sequence"
+        elif "fallback" in lowered or "selector" in lowered:
+            node_type = "selector"
+        elif tag in ("KeepRunningUntilFailure", "ForceSuccess", "ForceFailure", "Inverter"):
+            node_type = "decorator"
+        else:
+            node_type = "control"
+        params = {k: v for k, v in elem.attrib.items() if k != "name"}
+        return {"type": node_type, "name": name, "tag": tag, "params": params or None, "children": children}
+
+    # leaf nodes: check if it's a condition by name convention or explicit tag
+    is_condition = tag in _BTCPP_CONDITION_TAGS or lowered.startswith("check") or lowered.startswith("is_")
+    params = {k: v for k, v in elem.attrib.items() if k != "name"}
+    if is_condition:
+        return {"type": "condition", "condition": name, "name": name, "tag": tag, "params": params or None, "children": []}
+    return {"type": "action", "action": name, "name": name, "tag": tag, "params": params or None, "children": []}
+
+
+def parse_xml_bt(xml_text: str) -> dict[str, Any] | None:
+    """Parse BT.CPP XML and return a bt_json dict compatible with render_bt_svg."""
+    try:
+        root_elem = ET.fromstring(xml_text)
+    except ET.ParseError:
+        return None
+    # Find the first BehaviorTree child
+    bt_elem = root_elem.find("BehaviorTree")
+    if bt_elem is None:
+        return None
+    children = [child for child in bt_elem if isinstance(child.tag, str)]
+    if not children:
+        return None
+    root_node = xml_elem_to_bt_json(children[0])
+    return {"root": root_node}
+
+
+def detect_model(name: str) -> str:
+    lowered = name.lower()
+    if "sonnet" in lowered:
+        return "Sonnet 4.6"
+    if "gemma" in lowered:
+        return "Gemma4:31b"
+    return "Unknown"
+
+
+def detect_environment(name: str) -> str:
+    lowered = name.lower()
+    if "panther" in lowered:
+        return "panther"
+    return "pyrobosim"
+
+
+PANTHER_CATEGORY_MAP = {
+    1: ("navigation", "Navigation"), 2: ("navigation", "Navigation"), 3: ("navigation", "Navigation"),
+    4: ("reactive_detection", "Reactive Detection"), 5: ("reactive_detection", "Reactive Detection"),
+    6: ("reactive_detection", "Reactive Detection"), 7: ("reactive_detection", "Reactive Detection"),
+    8: ("track_engage", "Track & Engage"), 9: ("track_engage", "Track & Engage"), 10: ("track_engage", "Track & Engage"),
+    11: ("multi_phase", "Multi-phase Mission"), 12: ("multi_phase", "Multi-phase Mission"),
+    13: ("multi_phase", "Multi-phase Mission"), 14: ("multi_phase", "Multi-phase Mission"),
+}
+
+
+def build_panther_batch(batch_dir: Path) -> tuple[dict[str, Any], list[dict[str, Any]]] | None:
+    submissions_path = batch_dir / "submissions.jsonl"
+    xmls_dir = batch_dir / "xmls"
+    if not submissions_path.exists() or not xmls_dir.exists():
+        return None
+
+    submissions = []
+    for line in submissions_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line:
+            try:
+                submissions.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+
+    xml_files = sorted(f for f in xmls_dir.iterdir() if f.suffix == ".xml")
+
+    method = detect_method(batch_dir.name)
+    model = detect_model(batch_dir.name)
+    task_items: list[dict[str, Any]] = []
+
+    # Group submissions by task prompt to find first-attempt validity per task.
+    # The valid XML files are numbered 01..N; invalid ones are prefixed "invalid__".
+    # A task's Valid@1 = True only if attempt_number==1 was valid.
+    from collections import defaultdict
+    tasks_by_prompt: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for sub in submissions:
+        tasks_by_prompt[sub.get("task_prompt", "")].append(sub)
+
+    # Sort each task's attempts by attempt_number
+    for attempts in tasks_by_prompt.values():
+        attempts.sort(key=lambda s: s.get("attempt_number", 1))
+
+    # Valid XML files (non-invalid) in order represent the final accepted BT per task
+    valid_xml_files = [f for f in xml_files if not f.name.startswith("invalid")]
+
+    task_num = 0
+    for prompt, attempts in tasks_by_prompt.items():
+        task_num += 1
+        first_attempt = attempts[0]
+        first_attempt_valid = first_attempt.get("valid", False)
+        # The accepted XML is the last valid submission for this task
+        final_sub = next((s for s in reversed(attempts) if s.get("valid")), None)
+        xml_text = None
+        if task_num - 1 < len(valid_xml_files):
+            xml_text = valid_xml_files[task_num - 1].read_text(encoding="utf-8")
+        bt_json = parse_xml_bt(xml_text) if xml_text else None
+        archetype, archetype_label = PANTHER_CATEGORY_MAP.get(task_num, ("other", "Other"))
+
+        task_items.append({
+            "id": f"task{task_num:02d}_{archetype}",
+            "prompt": prompt,
+            "archetype": archetype,
+            "archetype_label": archetype_label,
+            "success": None,
+            "exec_status": None,
+            "failure_cause": None,
+            "valid": first_attempt_valid,  # Valid@1: first attempt only
+            "issues": first_attempt.get("issues", []),
+            "attempt_number": len(attempts),
+            "task_spec": None,
+            "task_spec_view": None,
+            "result": None,
+            "bt_json": bt_json,
+            "bt_xml": xml_text,
+            "bt_svg": render_bt_svg(bt_json) if bt_json else None,
+        })
+
+    total_tasks = len(task_items)
+    valid_rate = sum(1 for t in task_items if t.get("valid")) / total_tasks if total_tasks else 0.0
+
+    batch_record = {
+        "name": batch_dir.name,
+        "method": method,
+        "model": model,
+        "suite_id": "panther14",
+        "suite_label": "Panther 14",
+        "suite_name": "panther_hardware",
+        "environment": "panther",
+        "count": total_tasks,
+        "summary": {"count": total_tasks, "valid_rate": valid_rate},
+        "task_ids": [t["id"] for t in task_items],
+    }
+    return batch_record, task_items
 
 
 def normalize_suite(value: str | None) -> str | None:
@@ -627,12 +796,14 @@ def build_batch(batch_dir: Path, suites: dict[str, dict[str, Any]]) -> tuple[dic
         task_spec = suite_meta["tasks"].get(task_id)
         if not task_id or not task_spec:
             continue
+        # bt_path in results.json points to the eval harness (stale); use local jsons/ dir instead
         bt_json = None
-        bt_path_value = row.get("bt_path")
-        if isinstance(bt_path_value, str) and bt_path_value:
-            bt_path = Path(bt_path_value)
-            if bt_path.exists():
-                bt_json = load_json(bt_path, None)
+        jsons_dir = batch_dir / "jsons"
+        if jsons_dir.exists():
+            json_files = sorted(jsons_dir.glob("*.json"))
+            task_index = len(task_items)  # current position (0-based)
+            if task_index < len(json_files):
+                bt_json = load_json(json_files[task_index], None)
         archetype = str(task_spec.get("archetype") or row.get("archetype") or "unknown")
         archetype_counts[archetype] = archetype_counts.get(archetype, 0) + 1
         task_items.append(
@@ -676,7 +847,14 @@ def build_catalog() -> dict[str, Any]:
     tasks_by_batch: dict[str, list[dict[str, Any]]] = {}
 
     for batch_dir in sorted((path for path in GENERATED_ROOT.iterdir() if path.is_dir()), key=lambda path: sort_key(path.name)):
-        built = build_batch(batch_dir, suites)
+        env = detect_environment(batch_dir.name)
+        if env == "panther":
+            built = build_panther_batch(batch_dir)
+        else:
+            built = build_batch(batch_dir, suites)
+            if built:
+                # Inject model field into pyrobosim batch records
+                built[0]["model"] = detect_model(batch_dir.name)
         if not built:
             continue
         batch_record, task_items = built
@@ -695,19 +873,31 @@ def build_catalog() -> dict[str, Any]:
             "runtime": suite_meta["runtime"],
             "task_count": len(suite_meta["tasks"]),
         }
+    suite_index["panther14"] = {
+        "suite_id": "panther14",
+        "label": "Panther 14",
+        "suite_name": "panther_hardware",
+        "environment": "panther",
+        "world_file": None,
+        "robot_name": "panther",
+        "runtime": {},
+        "task_count": 14,
+    }
 
     methods_present = sorted(
         {batch["method"] for batch in batches},
         key=lambda method: METHOD_ORDER.get(method, 99),
     )
+    models_present = sorted({batch.get("model", "Unknown") for batch in batches})
 
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "project": {
-            "title": "Agentic BT Generation",
-            "subtitle": "Inspect PyRoboSim evaluation results and run selected behavior trees live.",
+            "title": "Behavior Tree Synthesis via Coding Agents",
+            "subtitle": "Grounding, Grafting, and Physical Deployment",
         },
         "methods": methods_present,
+        "models": models_present,
         "suites": suite_index,
         "paper_tables": paper_tables,
         "rootstocks": rootstocks,

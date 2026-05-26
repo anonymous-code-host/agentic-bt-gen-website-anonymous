@@ -1,0 +1,26 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="wait_face_approach">
+      <WaitForDetection name="wait_for_person" class_name="person" min_confidence="0.5" timeout="0.0"/>
+      <HeadingController name="face_person" class_name="person" timeout="10.0" detection_loss_timeout="2.0"/>
+      <MoveForward name="drive_forward" forward_dist="1.0" forward_speed="0.1" time_allowance="15.0"/>
+    </Sequence>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="WaitForDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="timeout"/>
+    </Action>
+    <Action ID="HeadingController">
+      <input_port name="class_name"/>
+      <input_port name="timeout"/>
+      <input_port name="detection_loss_timeout"/>
+    </Action>
+    <Action ID="MoveForward">
+      <input_port name="forward_dist"/>
+      <input_port name="forward_speed"/>
+      <input_port name="time_allowance"/>
+    </Action>
+  </TreeNodesModel>
+</root>

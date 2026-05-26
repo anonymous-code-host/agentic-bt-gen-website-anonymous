@@ -1,0 +1,17 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence>
+      <WaitForDetection class_name="person" timeout="0.0"/>
+      <NavigateToLocation location="bottom_of_staircase"/>
+    </Sequence>
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="WaitForDetection">
+      <input_port name="class_name"/>
+      <input_port name="timeout"/>
+    </Action>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+  </TreeNodesModel>
+</root>

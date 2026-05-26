@@ -1,0 +1,143 @@
+{
+  "blackboard": {
+    "initial": {
+      "always_true": "always_true"
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "navigate_to_bin",
+            "params": {
+              "target_location": {
+                "literal": "bin_disposal"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_waste_bin",
+            "outputs": {
+              "detected_objects": "waste_list"
+            },
+            "params": {
+              "object": {
+                "literal": "waste"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "key": "waste_list",
+                    "name": "is_waste_present_bin",
+                    "operator": "contains",
+                    "type": "condition",
+                    "value": "waste"
+                  },
+                  {
+                    "action": "pick",
+                    "name": "pick_waste_bin",
+                    "params": {
+                      "object": {
+                        "literal": "waste"
+                      }
+                    },
+                    "type": "action"
+                  }
+                ],
+                "memory": true,
+                "type": "sequence"
+              },
+              {
+                "key": "always_true",
+                "name": "always_success_bin",
+                "operator": "==",
+                "type": "condition",
+                "value": "always_true"
+              }
+            ],
+            "memory": true,
+            "type": "selector"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "navigate_to_desk",
+            "params": {
+              "target_location": {
+                "literal": "desk_desktop"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "detect_waste_desk",
+            "outputs": {
+              "detected_objects": "waste_list"
+            },
+            "params": {
+              "object": {
+                "literal": "waste"
+              }
+            },
+            "type": "action"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "key": "waste_list",
+                    "name": "is_waste_present_desk",
+                    "operator": "contains",
+                    "type": "condition",
+                    "value": "waste"
+                  },
+                  {
+                    "action": "pick",
+                    "name": "pick_waste_desk",
+                    "params": {
+                      "object": {
+                        "literal": "waste"
+                      }
+                    },
+                    "type": "action"
+                  }
+                ],
+                "memory": true,
+                "type": "sequence"
+              },
+              {
+                "key": "always_true",
+                "name": "always_success_desk",
+                "operator": "==",
+                "type": "condition",
+                "value": "always_true"
+              }
+            ],
+            "memory": true,
+            "type": "selector"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "name": "Go to fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "open",
+        "name": "Open fridge",
+        "params": {
+          "target_location": "fridge"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "name": "Detect butter",
+        "params": {
+          "object": "butter"
+        },
+        "type": "action"
+      },
+      {
+        "action": "pick",
+        "name": "Pick butter",
+        "params": {
+          "object": "butter"
+        },
+        "type": "action"
+      },
+      {
+        "action": "navigate",
+        "name": "Go to closet",
+        "params": {
+          "target_location": "closet"
+        },
+        "type": "action"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

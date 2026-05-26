@@ -1,0 +1,71 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <KeepRunningUntilFailure name="infinite_greeter_loop">
+      <Sequence name="greeter_cycle">
+
+        <!-- Step 1: Go to NRG entrance to begin/restart the greeting cycle -->
+        <NavigateToLocation name="go_to_nrg" location="nrg_entrance"/>
+
+        <!-- Step 2: Wait up to 60 s for a person.
+             If timeout fires (FAILURE), fall through to panning loop. -->
+        <Fallback name="detect_person">
+          <WaitForDetection name="wait_60s" class_name="person" min_confidence="0.5" timeout="60.0"/>
+          <!-- Pan back and forth slowly until a person is spotted -->
+          <ReactiveFallback name="pan_until_person">
+            <CheckDetection name="check_person_during_pan" class_name="person" min_confidence="0.5" max_age="2.0"/>
+            <KeepRunningUntilFailure name="keep_panning">
+              <Spin name="pan_sweep" target_yaw="3.14" time_allowance="15.0"/>
+            </KeepRunningUntilFailure>
+          </ReactiveFallback>
+        </Fallback>
+
+        <!-- Step 3: Face person, drive 1 m forward, wait 5 s.
+             Wrapped in Fallback so a lost detection lets the cycle continue. -->
+        <Fallback name="greet_or_continue">
+          <Sequence name="greeting">
+            <HeadingController name="face_person" class_name="person" detection_loss_timeout="2.0"/>
+            <MoveForward name="approach_1m" forward_dist="1.0"/>
+            <Wait name="greet_pause" wait_duration="5.0"/>
+          </Sequence>
+          <AlwaysSuccess/>
+        </Fallback>
+
+        <!-- Steps 4–5: Route to vending machine, then kitchen entrance -->
+        <NavigateToLocation name="go_to_vending" location="vending_machine"/>
+        <NavigateToLocation name="go_to_kitchen" location="kitchen_entrance"/>
+
+        <!-- Sequence SUCCESS → KRUF converts to RUNNING → restarts from nrg_entrance -->
+      </Sequence>
+    </KeepRunningUntilFailure>
+  </BehaviorTree>
+
+  <TreeNodesModel>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+    <Action ID="WaitForDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="timeout"/>
+    </Action>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+    <Action ID="Spin">
+      <input_port name="target_yaw"/>
+      <input_port name="time_allowance"/>
+    </Action>
+    <Action ID="HeadingController">
+      <input_port name="class_name"/>
+      <input_port name="detection_loss_timeout"/>
+    </Action>
+    <Action ID="MoveForward">
+      <input_port name="forward_dist"/>
+    </Action>
+    <Action ID="Wait">
+      <input_port name="wait_duration"/>
+    </Action>
+  </TreeNodesModel>
+</root>

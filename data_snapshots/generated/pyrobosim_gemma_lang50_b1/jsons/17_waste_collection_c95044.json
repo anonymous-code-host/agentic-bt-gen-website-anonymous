@@ -1,0 +1,120 @@
+{
+  "root": {
+    "children": [
+      {
+        "action": "navigate",
+        "memory": true,
+        "name": "Navigate to Bin",
+        "params": {
+          "target_location": "bin_disposal"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "memory": true,
+        "name": "Detect Waste at Bin",
+        "outputs": {
+          "detected_objects": "waste_bin"
+        },
+        "params": {
+          "object": "waste"
+        },
+        "type": "action"
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "key": "waste_bin",
+                "name": "Waste found at bin?",
+                "operator": "contains",
+                "type": "condition",
+                "value": "waste"
+              },
+              {
+                "action": "pick",
+                "name": "Pick Waste at Bin",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "action": "detect",
+            "name": "Fallback Detect Bin",
+            "params": {
+              "object": "waste"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      },
+      {
+        "action": "navigate",
+        "memory": true,
+        "name": "Navigate to Desk",
+        "params": {
+          "target_location": "desk_desktop"
+        },
+        "type": "action"
+      },
+      {
+        "action": "detect",
+        "memory": true,
+        "name": "Detect Waste at Desk",
+        "outputs": {
+          "detected_objects": "waste_desk"
+        },
+        "params": {
+          "object": "waste"
+        },
+        "type": "action"
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "key": "waste_desk",
+                "name": "Waste found at desk?",
+                "operator": "contains",
+                "type": "condition",
+                "value": "waste"
+              },
+              {
+                "action": "pick",
+                "name": "Pick Waste at Desk",
+                "params": {
+                  "object": "waste"
+                },
+                "type": "action"
+              }
+            ],
+            "memory": true,
+            "type": "sequence"
+          },
+          {
+            "action": "detect",
+            "name": "Fallback Detect Desk",
+            "params": {
+              "object": "waste"
+            },
+            "type": "action"
+          }
+        ],
+        "memory": true,
+        "type": "selector"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

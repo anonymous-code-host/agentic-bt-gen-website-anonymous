@@ -1,0 +1,129 @@
+{
+  "blackboard": {
+    "always_true": true
+  },
+  "root": {
+    "children": [
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_desk",
+            "params": {
+              "target_location": "desk_desktop"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "search_desk",
+            "outputs": {
+              "detected_objects": "waste_at_desk"
+            },
+            "params": {
+              "object": "waste"
+            },
+            "type": "action"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "key": "waste_at_desk",
+                    "name": "waste_found_desk",
+                    "operator": "contains",
+                    "type": "condition",
+                    "value": "waste"
+                  },
+                  {
+                    "action": "pick",
+                    "name": "pick_desk",
+                    "params": {
+                      "object": "waste"
+                    },
+                    "type": "action"
+                  }
+                ],
+                "memory": true,
+                "type": "sequence"
+              },
+              {
+                "key": "always_true",
+                "name": "ignore_desk",
+                "operator": "==",
+                "type": "condition",
+                "value": true
+              }
+            ],
+            "memory": true,
+            "type": "selector"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      },
+      {
+        "children": [
+          {
+            "action": "navigate",
+            "name": "go_to_bin",
+            "params": {
+              "target_location": "bin_disposal"
+            },
+            "type": "action"
+          },
+          {
+            "action": "detect",
+            "name": "search_bin",
+            "outputs": {
+              "detected_objects": "waste_at_bin"
+            },
+            "params": {
+              "object": "waste"
+            },
+            "type": "action"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "key": "waste_at_bin",
+                    "name": "waste_found_bin",
+                    "operator": "contains",
+                    "type": "condition",
+                    "value": "waste"
+                  },
+                  {
+                    "action": "pick",
+                    "name": "pick_bin",
+                    "params": {
+                      "object": "waste"
+                    },
+                    "type": "action"
+                  }
+                ],
+                "memory": true,
+                "type": "sequence"
+              },
+              {
+                "key": "always_true",
+                "name": "ignore_bin",
+                "operator": "==",
+                "type": "condition",
+                "value": true
+              }
+            ],
+            "memory": true,
+            "type": "selector"
+          }
+        ],
+        "memory": true,
+        "type": "sequence"
+      }
+    ],
+    "memory": true,
+    "type": "sequence"
+  }
+}

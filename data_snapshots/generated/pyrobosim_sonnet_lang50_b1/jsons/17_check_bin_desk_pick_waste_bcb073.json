@@ -1,0 +1,103 @@
+{
+  "root": {
+    "type": "selector",
+    "name": "Check locations for waste and pick up if found",
+    "memory": false,
+    "children": [
+      {
+        "type": "sequence",
+        "name": "Check bin_disposal for waste",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to bin_disposal",
+            "action": "navigate",
+            "params": {
+              "target_location": "bin_disposal"
+            },
+            "outputs": {
+              "status": "nav_bin_status"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Detect waste at bin_disposal",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "detected_objects": "detected_at_bin"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "Waste found at bin_disposal?",
+            "key": "detected_at_bin",
+            "operator": "truthy",
+            "value": true
+          },
+          {
+            "type": "action",
+            "name": "Pick waste at bin_disposal",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "status": "pick_bin_status"
+            }
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "name": "Check desk_desktop for waste",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to desk_desktop",
+            "action": "navigate",
+            "params": {
+              "target_location": "desk_desktop"
+            },
+            "outputs": {
+              "status": "nav_desk_status"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Detect waste at desk_desktop",
+            "action": "detect",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "detected_objects": "detected_at_desk"
+            }
+          },
+          {
+            "type": "condition",
+            "name": "Waste found at desk_desktop?",
+            "key": "detected_at_desk",
+            "operator": "truthy",
+            "value": true
+          },
+          {
+            "type": "action",
+            "name": "Pick waste at desk_desktop",
+            "action": "pick",
+            "params": {
+              "object": "waste"
+            },
+            "outputs": {
+              "status": "pick_desk_status"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

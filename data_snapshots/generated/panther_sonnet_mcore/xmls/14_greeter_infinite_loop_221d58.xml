@@ -1,0 +1,77 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+
+    <!-- Infinite greeter loop: NRG → wait/sweep for person → greet → tour → repeat -->
+    <KeepRunningUntilFailure name="infinite_greeter_loop">
+      <Sequence name="greeter_cycle">
+
+        <!-- 1. Navigate to NRG entrance -->
+        <NavigateToLocation name="go_to_nrg_entrance" location="nrg_entrance"/>
+
+        <!-- 2. Wait up to 60 s for a person; if none, sweep slowly until one appears -->
+        <Fallback name="detect_person">
+
+          <!-- 2a. Stationary wait — up to 60 seconds -->
+          <WaitForDetection name="wait_for_person_60s" class_name="person" min_confidence="0.5" timeout="60.0"/>
+
+          <!-- 2b. Timeout hit — slowly pan until person detected -->
+          <ReactiveFallback name="sweep_until_person">
+            <CheckDetection name="check_person_during_sweep" class_name="person" min_confidence="0.5"/>
+            <KeepRunningUntilFailure name="continuous_pan">
+              <Spin name="slow_pan" target_yaw="6.28" time_allowance="30.0"/>
+            </KeepRunningUntilFailure>
+          </ReactiveFallback>
+
+        </Fallback>
+
+        <!-- 3. Greet: face person → drive 1 m → wait 5 s
+             ForceSuccess ensures the cycle continues even if person leaves mid-greeting -->
+        <ForceSuccess>
+          <Sequence name="greet_sequence">
+            <HeadingController name="face_person" class_name="person" timeout="5.0" detection_loss_timeout="2.0"/>
+            <MoveForward name="approach_1m" forward_dist="1.0"/>
+            <Wait name="greet_pause_5s" wait_duration="5.0"/>
+          </Sequence>
+        </ForceSuccess>
+
+        <!-- 4. Tour: vending machine → kitchen entrance -->
+        <NavigateToLocation name="go_to_vending_machine" location="vending_machine"/>
+        <NavigateToLocation name="go_to_kitchen_entrance" location="kitchen_entrance"/>
+
+        <!-- Sequence SUCCESS → KRUF converts to RUNNING → restarts from nrg_entrance -->
+
+      </Sequence>
+    </KeepRunningUntilFailure>
+
+  </BehaviorTree>
+  <TreeNodesModel>
+    <Action ID="NavigateToLocation">
+      <input_port name="location"/>
+    </Action>
+    <Action ID="WaitForDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="timeout"/>
+    </Action>
+    <Condition ID="CheckDetection">
+      <input_port name="class_name"/>
+      <input_port name="min_confidence"/>
+      <input_port name="max_age"/>
+    </Condition>
+    <Action ID="Spin">
+      <input_port name="target_yaw"/>
+      <input_port name="time_allowance"/>
+    </Action>
+    <Action ID="HeadingController">
+      <input_port name="class_name"/>
+      <input_port name="timeout"/>
+      <input_port name="detection_loss_timeout"/>
+    </Action>
+    <Action ID="MoveForward">
+      <input_port name="forward_dist"/>
+    </Action>
+    <Action ID="Wait">
+      <input_port name="wait_duration"/>
+    </Action>
+  </TreeNodesModel>
+</root>

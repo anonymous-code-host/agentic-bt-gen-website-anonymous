@@ -1,0 +1,95 @@
+{
+  "root": {
+    "type": "selector",
+    "name": "Check Fridge Then Pantry for Soda",
+    "memory": true,
+    "children": [
+      {
+        "type": "sequence",
+        "name": "Find and Pick Soda from Fridge",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Navigate to Fridge",
+            "action": "navigate",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open Fridge",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect Soda in Fridge",
+            "action": "detect",
+            "params": {
+              "object": "soda"
+            },
+            "outputs": {
+              "detected_objects": "fridge_detected"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick Soda from Fridge",
+            "action": "pick",
+            "params": {
+              "object": "soda"
+            }
+          }
+        ]
+      },
+      {
+        "type": "sequence",
+        "name": "Close Fridge and Find Soda in Pantry",
+        "memory": true,
+        "children": [
+          {
+            "type": "action",
+            "name": "Close Fridge",
+            "action": "close",
+            "params": {
+              "target_location": "fridge"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Navigate to Pantry",
+            "action": "navigate",
+            "params": {
+              "target_location": "pantry"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Open Pantry",
+            "action": "open"
+          },
+          {
+            "type": "action",
+            "name": "Detect Soda in Pantry",
+            "action": "detect",
+            "params": {
+              "object": "soda"
+            },
+            "outputs": {
+              "detected_objects": "pantry_detected"
+            }
+          },
+          {
+            "type": "action",
+            "name": "Pick Soda from Pantry",
+            "action": "pick",
+            "params": {
+              "object": "soda"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

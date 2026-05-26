@@ -1,0 +1,142 @@
+{
+  "root": {
+    "type": "sequence",
+    "name": "Task 31: Search Pantry Then Fridge For Bread",
+    "memory": true,
+    "children": [
+      {
+        "type": "action",
+        "name": "Navigate to Pantry",
+        "action": "navigate",
+        "params": {
+          "target_location": "pantry"
+        }
+      },
+      {
+        "type": "action",
+        "name": "Open Pantry",
+        "action": "open"
+      },
+      {
+        "type": "action",
+        "name": "Detect Bread in Pantry",
+        "action": "detect",
+        "params": {
+          "object": "bread"
+        },
+        "outputs": {
+          "detected_objects": "detected_pantry"
+        }
+      },
+      {
+        "type": "selector",
+        "name": "Bread Found or Search Fridge",
+        "memory": true,
+        "children": [
+          {
+            "type": "sequence",
+            "name": "Pick Bread from Pantry and Place",
+            "memory": true,
+            "children": [
+              {
+                "type": "condition",
+                "name": "Bread Detected in Pantry?",
+                "key": "detected_pantry",
+                "operator": "truthy",
+                "value": true
+              },
+              {
+                "type": "action",
+                "name": "Pick Bread from Pantry",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Navigate to Table",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Place Bread on Table",
+                "action": "place"
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "name": "Search Fridge for Bread",
+            "memory": true,
+            "children": [
+              {
+                "type": "action",
+                "name": "Close Pantry",
+                "action": "close",
+                "params": {
+                  "target_location": "pantry"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Navigate to Fridge",
+                "action": "navigate",
+                "params": {
+                  "target_location": "fridge"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Open Fridge",
+                "action": "open"
+              },
+              {
+                "type": "action",
+                "name": "Detect Bread in Fridge",
+                "action": "detect",
+                "params": {
+                  "object": "bread"
+                },
+                "outputs": {
+                  "detected_objects": "detected_fridge"
+                }
+              },
+              {
+                "type": "condition",
+                "name": "Bread Detected in Fridge?",
+                "key": "detected_fridge",
+                "operator": "truthy",
+                "value": true
+              },
+              {
+                "type": "action",
+                "name": "Pick Bread from Fridge",
+                "action": "pick",
+                "params": {
+                  "object": "bread"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Navigate to Table",
+                "action": "navigate",
+                "params": {
+                  "target_location": "table"
+                }
+              },
+              {
+                "type": "action",
+                "name": "Place Bread on Table",
+                "action": "place"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
