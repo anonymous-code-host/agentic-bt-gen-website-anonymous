@@ -21,6 +21,7 @@
       <nav class="hero-section__links">
         <a class="pill-link" href="#" aria-disabled="true">Paper (coming soon)</a>
         <a class="pill-link" href="#gallery">Sim Gallery</a>
+        <a class="pill-link" href="#mcp-interface">MCP Interface</a>
         <a class="pill-link" href="#contract">Contract</a>
         <a class="pill-link" href="#explorer">BT Explorer</a>
         <a class="pill-link" href="#results">Results</a>
@@ -68,6 +69,74 @@
           the runtime instantiates and executes it.
         </figcaption>
       </figure>
+    </section>
+
+    <!-- ─── MCP INTERFACE ───────────────────────────────────────────────────── -->
+    <section class="content-section" id="mcp-interface">
+      <h2 class="section-title">MCP Interface</h2>
+      <p class="section-lede">
+        The coding agent interacts with the robot exclusively through four MCP tools.
+        It has no access to backend source code, low-level robot APIs, ROS nodes, or
+        execution internals — only the typed interface below.
+      </p>
+
+      <div class="mcp-tool-list">
+
+        <div class="mcp-tool-card">
+          <div class="mcp-tool-card__head">
+            <code class="mcp-tool-card__name">list_skills()</code>
+            <span class="mcp-tool-card__arrow">&rarr;</span>
+            <code class="mcp-tool-card__return">list[Skill]</code>
+          </div>
+          <p class="mcp-tool-card__desc">
+            Returns every available robot action with its typed parameter schema.
+            The agent uses this to discover what the robot can do and how to
+            parameterize each leaf node.
+          </p>
+        </div>
+
+        <div class="mcp-tool-card">
+          <div class="mcp-tool-card__head">
+            <code class="mcp-tool-card__name">get_bt_format()</code>
+            <span class="mcp-tool-card__arrow">&rarr;</span>
+            <code class="mcp-tool-card__return">BTSchema</code>
+          </div>
+          <p class="mcp-tool-card__desc">
+            Returns the permitted set of BT composition nodes (control, decorator,
+            leaf) with their semantics and any structural constraints. Defines the
+            grammar the agent must write to.
+          </p>
+        </div>
+
+        <div class="mcp-tool-card">
+          <div class="mcp-tool-card__head">
+            <code class="mcp-tool-card__name">list_world_entities()</code>
+            <span class="mcp-tool-card__arrow">&rarr;</span>
+            <code class="mcp-tool-card__return">WorldVocab</code>
+          </div>
+          <p class="mcp-tool-card__desc">
+            Returns the current world vocabulary — named locations, objects, and
+            object categories that may appear as skill parameters. Grounds the
+            agent's BT to the actual environment.
+          </p>
+        </div>
+
+        <div class="mcp-tool-card">
+          <div class="mcp-tool-card__head">
+            <code class="mcp-tool-card__name">send_to_robot(bt)</code>
+            <span class="mcp-tool-card__arrow">&rarr;</span>
+            <code class="mcp-tool-card__return">SubmissionResult</code>
+          </div>
+          <p class="mcp-tool-card__desc">
+            Submits a composed BT for validation and execution. The server validates
+            the tree against the contract (skill names, parameter types, structural
+            rules) before the robot runtime instantiates it. Returns validation
+            status and attempt count.
+          </p>
+        </div>
+
+      </div>
+
     </section>
 
     <!-- ─── ROBOT CONTRACT ──────────────────────────────────────────────────── -->
@@ -314,6 +383,24 @@
           </tbody>
         </table>
       </div>
+
+      <h3 class="subsection-title">Out-of-Contract Tasks (OOC10)</h3>
+      <p class="table-note">
+        Ten tasks that require skills outside the robot's contract. A correct agent should
+        recognize it cannot fulfill these and decline rather than produce an invalid BT.
+      </p>
+      <ol class="ooc-list">
+        <li>Call the elevator and wait for it to arrive.</li>
+        <li>Count how many objects are in the room and report back.</li>
+        <li>Turn on the lights in the kitchen.</li>
+        <li>Follow the person as they walk through the hallway.</li>
+        <li>Take a photo of the object and save it.</li>
+        <li>Ask the person their name and remember it.</li>
+        <li>Weigh the object before picking it up.</li>
+        <li>Charge the robot at the charging station.</li>
+        <li>Pick up the TV near the entrance and bring it to the lab.</li>
+        <li>Open the door and hold it for the person.</li>
+      </ol>
     </section>
 
     <!-- ─── SIMULATION GALLERY ─────────────────────────────────────────────────── -->
@@ -666,12 +753,12 @@
     <!-- ─── BIBTEX ────────────────────────────────────────────────────────────── -->
     <section class="content-section" id="bibtex">
       <h2 class="section-title">BibTeX</h2>
-      <pre class="bibtex-block">@article{salfity2025btsynthesis,
+      <pre class="bibtex-block">@article{anonymous2026btsynthesis,
   title   = {Behavior Tree Synthesis via Coding Agents:
              Grounding, Grafting, and Physical Deployment},
   author  = {Anonymous},
   journal = {IEEE Robotics and Automation Letters},
-  year    = {2025},
+  year    = {2026},
   note    = {Under review}
 }</pre>
     </section>

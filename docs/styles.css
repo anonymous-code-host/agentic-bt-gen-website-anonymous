@@ -257,6 +257,16 @@ a { color: var(--accent); }
 .results-table .row-sep td { border-top: 2px solid var(--line); }
 .results-table--hardware td { padding: 8px 10px; font-size: 0.83rem; }
 
+/* ─── OOC list ──────────────────────────────────────────────────────────────── */
+.ooc-list {
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  line-height: 1.7;
+  padding-left: 24px;
+  margin-bottom: 8px;
+}
+.ooc-list li { padding-left: 4px; }
+
 /* ─── Simulation gallery ────────────────────────────────────────────────────── */
 .gallery-group {
   border: 1px solid var(--line);
@@ -403,6 +413,56 @@ a { color: var(--accent); }
 .gallery-card__media--stacked .gallery-card__svg {
   border-left: none;
   border-top: 1px solid var(--line);
+}
+
+/* ─── MCP Interface ─────────────────────────────────────────────────────────── */
+.mcp-tool-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.mcp-tool-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  background: #f8f8f8;
+}
+.mcp-tool-card__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.mcp-tool-card__name {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: #e8f0ea;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.mcp-tool-card__arrow {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.mcp-tool-card__return {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+.mcp-tool-card__desc {
+  font-size: 0.85rem;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.mcp-note {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.55;
+  font-style: italic;
 }
 
 /* ─── Robot Contract ─────────────────────────────────────────────────────────── */
