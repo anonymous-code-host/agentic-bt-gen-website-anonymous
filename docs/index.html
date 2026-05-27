@@ -30,28 +30,6 @@
       </nav>
     </section>
 
-    <!-- ─── ABSTRACT ─────────────────────────────────────────────────────────── -->
-    <section class="content-section" id="abstract">
-      <h2 class="section-title">Abstract</h2>
-      <p class="abstract-body">
-        Robots are increasingly expected to execute tasks specified by non-expert users using
-        high-level natural language commands. Behavior Trees (BTs) provide interpretable,
-        reactive control policies, but authoring them requires knowledge of the robot's skill
-        library and composition rules that operators typically lack. This paper proposes a
-        coding-agent architecture that synthesizes BT control policies from natural language
-        under an explicit robot-side contract. A machine-readable contract — consisting of a
-        skill library, typed parameter schemas, a permitted BT operator set, and optional
-        rootstock templates — is exposed to the agent through an MCP-based tool layer. A
-        validation gate enforces contract compliance before execution, keeping skill
-        implementation and execution authority inside the robot runtime. We evaluate the
-        approach in PyRoboSim over 110 structured and language-varied tasks, and validate it
-        on a physical Husarion Panther mobile robot running a precompiled ROS2 Nav2 stack.
-        Contract-grounded synthesis produces near-perfect Valid@1 with Sonnet 4.6 and
-        demonstrates that rootstock templates substantially close the performance gap for a
-        weaker open-source model (Gemma4:31b) on reactive task archetypes.
-      </p>
-    </section>
-
     <!-- ─── METHOD FIGURE ────────────────────────────────────────────────────── -->
     <section class="content-section" id="method">
       <h2 class="section-title">Method</h2>
