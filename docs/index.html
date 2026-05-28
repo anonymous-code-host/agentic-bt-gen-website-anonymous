@@ -21,6 +21,7 @@
       <nav class="hero-section__links">
         <a class="pill-link" href="#" aria-disabled="true">Paper (coming soon)</a>
         <a class="pill-link" href="#gallery">Sim Gallery</a>
+        <a class="pill-link" href="#ooc">OOC10</a>
         <a class="pill-link" href="#mcp-interface">MCP Interface</a>
         <a class="pill-link" href="#contract">Contract</a>
         <a class="pill-link" href="#explorer">BT Explorer</a>
@@ -624,6 +625,147 @@
             <figcaption><span class="gallery-meta">Gemma4:31b · M-Core · Core60 · Task 13</span><span class="gallery-tag gallery-tag--warn">BT construction failure (rare)</span>"Search pantry, then fridge for snacks. If found, pick it up."</figcaption>
           </figure>
         </div>
+      </details>
+    </section>
+
+    <!-- ─── OUT-OF-CONTRACT (OOC10) ──────────────────────────────────────────── -->
+    <section class="content-section content-section--wide" id="ooc">
+      <h2 class="section-title">Out-of-Contract (OOC10)</h2>
+      <p class="section-lede">
+        Ten prompts designed to fall outside the exposed skill contract — speech, environment actuation, continuous following, photography, counting, weighing, manipulation of non-existent objects. A correct response is to <em>not</em> produce a validated BT. Below, each cell reports the outcome per model–platform pair.
+      </p>
+
+      <div class="ooc-legend">
+        <span class="ooc-key ooc-key--good">✓ refused</span>
+        <span class="ooc-key ooc-key--warn">~ approximated</span>
+        <span class="ooc-key ooc-key--bad">× hallucinated</span>
+        <span class="ooc-key ooc-key--chat">c agent responded to chat, rather than send a BT</span>
+      </div>
+
+      <div class="ooc-table-wrap">
+        <table class="ooc-table">
+          <thead>
+            <tr>
+              <th class="ooc-num">#</th>
+              <th class="ooc-prompt">Task prompt</th>
+              <th colspan="2" class="ooc-group">PyRoboSim</th>
+              <th colspan="2" class="ooc-group">Panther</th>
+            </tr>
+            <tr>
+              <th></th><th></th>
+              <th>Sonnet</th><th>Gemma</th>
+              <th>Sonnet</th><th>Gemma</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="ooc-num">1</td>
+              <td class="ooc-prompt"><em>"Call the elevator and wait for it to arrive."</em></td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--warn">~</td>
+              <td class="ooc-cell ooc-cell--warn">~</td>
+            </tr>
+            <tr>
+              <td class="ooc-num">2</td>
+              <td class="ooc-prompt"><em>"Count how many objects are in the room and report back."</em></td>
+              <td class="ooc-cell ooc-cell--warn">~</td>
+              <td class="ooc-cell ooc-cell--warn">~</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+            </tr>
+            <tr>
+              <td class="ooc-num">3</td>
+              <td class="ooc-prompt"><em>"Turn on the lights in the kitchen."</em></td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+            </tr>
+            <tr>
+              <td class="ooc-num">4</td>
+              <td class="ooc-prompt"><em>"Follow the person as they walk through the hallway."</em></td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--warn">~</td>
+              <td class="ooc-cell ooc-cell--warn">~</td>
+            </tr>
+            <tr>
+              <td class="ooc-num">5</td>
+              <td class="ooc-prompt"><em>"Take a photo of the object and save it."</em></td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+            </tr>
+            <tr>
+              <td class="ooc-num">6</td>
+              <td class="ooc-prompt"><em>"Ask the person their name and remember it."</em></td>
+              <td class="ooc-cell ooc-cell--chat">c</td>
+              <td class="ooc-cell ooc-cell--chat">c</td>
+              <td class="ooc-cell ooc-cell--chat">c</td>
+              <td class="ooc-cell ooc-cell--chat">c</td>
+            </tr>
+            <tr>
+              <td class="ooc-num">7</td>
+              <td class="ooc-prompt"><em>"Weigh the object before picking it up."</em></td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+            </tr>
+            <tr>
+              <td class="ooc-num">8</td>
+              <td class="ooc-prompt"><em>"Charge the robot at the charging station."</em><span class="ooc-foot">*</span></td>
+              <td class="ooc-cell ooc-cell--warn">~</td>
+              <td class="ooc-cell ooc-cell--warn">~</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+            </tr>
+            <tr>
+              <td class="ooc-num">9</td>
+              <td class="ooc-prompt"><em>"Pick up the TV near the entrance and bring it to the lab."</em></td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--bad">×</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+            </tr>
+            <tr>
+              <td class="ooc-num">10</td>
+              <td class="ooc-prompt"><em>"Open the door and hold it for the person."</em></td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--warn">~</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+              <td class="ooc-cell ooc-cell--good">✓</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2" class="ooc-total-label">Refusal rate (✓)</td>
+              <td class="ooc-total">6/10</td>
+              <td class="ooc-total">5/10</td>
+              <td class="ooc-total">7/10</td>
+              <td class="ooc-total">7/10</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <p class="ooc-footnote">
+        <span class="ooc-foot">*</span> <code>charger</code> is a valid PyRoboSim location with a <code>charger_dock</code> spawn, so navigating to it is a reasonable mapping — not a hard contract violation.
+      </p>
+
+      <details class="ooc-details">
+        <summary>Failure mode taxonomy</summary>
+        <ul class="ooc-modes">
+          <li><strong>✓ Refused.</strong> The agent identified missing skills/entities and declined to submit a BT (correct behavior).</li>
+          <li><strong>~ Approximated.</strong> The agent acknowledged the gap but submitted a degraded BT using the closest available skills — e.g.\ <code>Navigate</code>+<code>Wait</code> as a stand-in for "call elevator," or <code>Detect</code> as a survey-and-count proxy. Validation passes; semantics drift.</li>
+          <li><strong>× Hallucinated.</strong> The agent submitted a BT referencing entities absent from the world vocabulary (<code>TV</code>, <code>entrance</code>, <code>lab</code>). Caught downstream by the validation gate, not by the agent.</li>
+          <li><strong>c Agent responded to chat, rather than send a BT.</strong> The agent broke role and replied conversationally — "What is your name?" — without reasoning about the robot's skill set. The user sees a friendly response but no BT, no refusal, no diagnostic. The most silent failure mode.</li>
+        </ul>
+        <p>
+          Approximate submissions and chat-only replies are the most interesting failures: the validation gate catches structural errors and unknown vocabulary, but it cannot tell that "navigate to office and wait" is not actually "call the elevator." Boundary enforcement at the agent layer remains an open problem.
+        </p>
       </details>
     </section>
 
