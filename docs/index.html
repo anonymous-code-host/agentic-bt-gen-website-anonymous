@@ -34,7 +34,14 @@
     <!-- ─── ABSTRACT ─────────────────────────────────────────────────────────── -->
     <section class="content-section" id="abstract">
       <h2 class="section-title">Abstract</h2>
-      <p class="abstract-body">TODO</p>
+      <p class="abstract-body">
+      Synthesizing deployable robot behavior trees (BTs) from natural language (NL) requires <em>grounding</em>: ensuring every generated BT references only skills the robot can actually execute, with correct parameters and control structure.
+      Existing LLM-based BT synthesis approaches place this responsibility on the prompt author, which fails when the robot stack is precompiled or opaque.
+      This paper proposes a contract-grounded BT synthesis architecture in which a coding agent queries a robot-side MCP server to retrieve an explicit contract consisting of a skill library, permitted BT operators, and optional rootstock templates, before synthesizing a BT for validation and execution.
+      In our framework, non-expert operators issue NL commands without knowledge of robot implementation details, while a runtime validation gate enforces correctness before execution.
+      We evaluate the architecture in PyRoboSim across structured and language-varied task suites, and on a physical Husarion Panther robot running a precompiled Nav2 stack opaque to the agent.
+      In our evaluated domains, results show that contract grounding enables Sonnet 4.6 to achieve near-perfect validity and high task success, that rootstock templates substantially recover success on reactive control-flow tasks for an open-source model (Gemma4:31b), and that the architecture transfers to opaque physical infrastructure.
+      Generated BTs, contract snapshots, and per-task execution reports are available below.</p>
     </section>
 
     <!-- ─── METHOD FIGURE ────────────────────────────────────────────────────── -->
@@ -725,7 +732,7 @@
           <tfoot>
             <tr>
               <td colspan="2" class="ooc-total-label">Refusal rate (✓)</td>
-              <td class="ooc-total">6/10</td>
+              <td class="ooc-total">7/10</td>
               <td class="ooc-total">5/10</td>
               <td class="ooc-total">7/10</td>
               <td class="ooc-total">7/10</td>
