@@ -304,21 +304,8 @@ function renderSpecView(task) {
     return;
   }
   els.taskSpecSection.hidden = false;
-  const sections = [
-    {title: 'Required actions',          items: view.required_actions   ?? []},
-    {title: 'Required locations',        items: view.required_locations ?? []},
-    {title: 'Control flow expectations', items: view.control_flow       ?? []},
-    {title: 'Success conditions',        items: view.success_conditions ?? []},
-  ];
   els.taskSpecView.innerHTML = `
     <div class="spec-card spec-card--arch">${badge(view.archetype_label ?? 'Unknown')}</div>
-    ${sections.map(s => `
-      <div class="spec-card">
-        <div class="spec-card__title">${escapeHtml(s.title)}</div>
-        ${s.items.length
-          ? `<ul>${s.items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul>`
-          : '<span class="muted-note">None listed.</span>'}
-      </div>`).join('')}
   `;
   els.taskSpecRawView.textContent = pretty(task.task_spec);
 }

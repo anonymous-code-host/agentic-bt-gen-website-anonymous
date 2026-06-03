@@ -465,6 +465,49 @@ a { color: var(--accent); }
   font-style: italic;
 }
 
+/* ─── Methods ───────────────────────────────────────────────────────────────── */
+.method-defs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) {
+  .method-defs { grid-template-columns: 1fr; }
+}
+.method-def {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  background: #f8f8f8;
+}
+.method-def__head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.method-def__name {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: #e8f0ea;
+  padding: 2px 9px;
+  border-radius: 4px;
+}
+.method-def__sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+.method-def__desc {
+  font-size: 0.85rem;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
 /* ─── Robot Contract ─────────────────────────────────────────────────────────── */
 .contract-tabs {
   display: flex;

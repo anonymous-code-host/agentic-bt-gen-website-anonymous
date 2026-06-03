@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Behavior Tree Synthesis via Coding Agents</title>
+  <title>Contract-Grounded Behavior Tree Synthesis</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -13,8 +13,7 @@
 
     <section class="hero-section">
       <h1 class="hero-section__title">
-        Behavior Tree Synthesis via Coding Agents:<br>
-        Grounding, Grafting, and Physical Deployment
+        Contract-Grounded Behavior Tree Synthesis
       </h1>
       <p class="hero-section__authors" id="authorLine">Anonymous Authors</p>
       <p class="hero-section__affil"   id="affilLine">Anonymous Institution</p>
@@ -55,19 +54,50 @@
       <figure class="method-figure">
         <img src="./bt-mcp-server-v2.svg" alt="System architecture: coding agent ↔ MCP server ↔ robot runtime" class="method-figure__img">
         <figcaption class="method-figure__caption">
-          <strong>Fig. 1.</strong> Client–server architecture for contract-grounded BT synthesis.
-          The agent retrieves the skill schema, BT schema, and rootstocks through MCP tools,
-          constructs a BT specification, and submits it. A validation gate checks the BT before
-          the runtime instantiates and executes it.
+          <strong>Fig. 1.</strong> System overview: A coding agent queries the robot-side
+          contract, <em>C = (K, O, R)</em> through MCP, synthesizes a BT, and submits it
+          for validation and execution.
         </figcaption>
       </figure>
+
+      <h3 class="subsection-title">Configurations</h3>
+      <p class="section-lede">
+        We compare two contract-grounded configurations to isolate the contribution of
+        reusable BT composition priors (rootstocks). Both use the same MCP-mediated
+        synthesis pipeline and the same validation gate.
+      </p>
+      <div class="method-defs">
+        <div class="method-def">
+          <div class="method-def__head">
+            <span class="method-def__name">M-Core</span>
+            <span class="method-def__sub">Main method</span>
+          </div>
+          <p class="method-def__desc">
+            The agent queries the full robot-side contract
+            <em>C = (K, O, R)</em> — skill library, allowed BT operators,
+            <em>and</em> rootstock templates — before synthesizing a BT.
+          </p>
+        </div>
+
+        <div class="method-def">
+          <div class="method-def__head">
+            <span class="method-def__name">B1</span>
+            <span class="method-def__sub">Ablation</span>
+          </div>
+          <p class="method-def__desc">
+            The agent queries only <em>(K, O)</em> — skill library and allowed BT
+            operators — with no rootstocks exposed. Isolates the contribution of
+            reusable composition priors.
+          </p>
+        </div>
+      </div>
     </section>
 
     <!-- ─── MCP INTERFACE ───────────────────────────────────────────────────── -->
     <section class="content-section" id="mcp-interface">
       <h2 class="section-title">MCP Interface</h2>
       <p class="section-lede">
-        The coding agent interacts with the robot exclusively through four MCP tools.
+        The coding agent interacts with the robot exclusively through five MCP tools.
         It has no access to backend source code, low-level robot APIs, ROS nodes, or
         execution internals — only the typed interface below.
       </p>
@@ -76,9 +106,9 @@
 
         <div class="mcp-tool-card">
           <div class="mcp-tool-card__head">
-            <code class="mcp-tool-card__name">list_skills()</code>
+            <code class="mcp-tool-card__name">get_skill_library()</code>
             <span class="mcp-tool-card__arrow">&rarr;</span>
-            <code class="mcp-tool-card__return">list[Skill]</code>
+            <code class="mcp-tool-card__return">SkillLibrary</code>
           </div>
           <p class="mcp-tool-card__desc">
             Returns every available robot action with its typed parameter schema.
@@ -89,12 +119,12 @@
 
         <div class="mcp-tool-card">
           <div class="mcp-tool-card__head">
-            <code class="mcp-tool-card__name">get_bt_format()</code>
+            <code class="mcp-tool-card__name">get_bt_operators()</code>
             <span class="mcp-tool-card__arrow">&rarr;</span>
-            <code class="mcp-tool-card__return">BTSchema</code>
+            <code class="mcp-tool-card__return">BTOperatorSet</code>
           </div>
           <p class="mcp-tool-card__desc">
-            Returns the permitted set of BT composition nodes (control, decorator,
+            Returns the permitted set of BT composition operators (control, decorator,
             leaf) with their semantics and any structural constraints. Defines the
             grammar the agent must write to.
           </p>
@@ -102,7 +132,20 @@
 
         <div class="mcp-tool-card">
           <div class="mcp-tool-card__head">
-            <code class="mcp-tool-card__name">list_world_entities()</code>
+            <code class="mcp-tool-card__name">get_rootstocks()</code>
+            <span class="mcp-tool-card__arrow">&rarr;</span>
+            <code class="mcp-tool-card__return">list[Rootstock]</code>
+          </div>
+          <p class="mcp-tool-card__desc">
+            Returns the optional rootstock templates — reusable BT composition patterns
+            authored by the robot-side developer that the agent can instantiate and
+            parameterize for a given task.
+          </p>
+        </div>
+
+        <div class="mcp-tool-card">
+          <div class="mcp-tool-card__head">
+            <code class="mcp-tool-card__name">get_world_vocabulary()</code>
             <span class="mcp-tool-card__arrow">&rarr;</span>
             <code class="mcp-tool-card__return">WorldVocab</code>
           </div>
@@ -300,23 +343,22 @@
 
       <h3 class="subsection-title">PyRoboSim — Primary Comparison</h3>
       <p class="table-note">
-        <sup>†</sup> Success over executed tasks only; missing BTs (max retries exceeded) reduce
-        the denominator (Gemma B1 Core60: 55/60, M-Core Core60: 54/60, M-Core Lang50: 47/50).
+        Valid@1 and Success counts are over all <em>N</em> tasks in the suite (missing BTs count as failures).
       </p>
       <div class="table-scroll">
         <table class="results-table">
           <thead>
-            <tr><th>Model</th><th>Method</th><th>Suite</th><th>Valid@1</th><th>Success</th></tr>
+            <tr><th>Model</th><th>Method</th><th>Suite</th><th>N</th><th>Valid@1</th><th>Success</th></tr>
           </thead>
           <tbody>
-            <tr><td>Sonnet 4.6</td><td>B1</td>     <td>Core 60</td>  <td>98.3%</td>  <td>93.3%</td></tr>
-            <tr><td>Sonnet 4.6</td><td>B1</td>     <td>Lang 50</td>  <td>98.0%</td>  <td>90.0%</td></tr>
-            <tr><td>Sonnet 4.6</td><td>M-Core</td> <td>Core 60</td>  <td class="hi">100%</td> <td class="hi">96.7%</td></tr>
-            <tr><td>Sonnet 4.6</td><td>M-Core</td> <td>Lang 50</td>  <td class="hi">100%</td> <td class="hi">96.0%</td></tr>
-            <tr class="row-sep"><td>Gemma4:31b</td><td>B1</td>     <td>Core 60</td>  <td>85.0%</td>  <td>54.5%<sup>†</sup></td></tr>
-            <tr><td>Gemma4:31b</td><td>B1</td>     <td>Lang 50</td>  <td>90.0%</td>  <td>50.0%</td></tr>
-            <tr><td>Gemma4:31b</td><td>M-Core</td> <td>Core 60</td>  <td>90.0%</td>  <td>92.6%<sup>†</sup></td></tr>
-            <tr><td>Gemma4:31b</td><td>M-Core</td> <td>Lang 50</td>  <td>86.0%</td>  <td>87.2%<sup>†</sup></td></tr>
+            <tr><td>Sonnet 4.6</td><td>B1</td>     <td>Core 60</td> <td>60</td> <td>59 (98%)</td>  <td>56 (93%)</td></tr>
+            <tr><td>Sonnet 4.6</td><td>B1</td>     <td>Lang 50</td> <td>50</td> <td>49 (98%)</td>  <td>45 (90%)</td></tr>
+            <tr><td>Sonnet 4.6</td><td>M-Core</td> <td>Core 60</td> <td>60</td> <td class="hi">60 (100%)</td> <td class="hi">58 (97%)</td></tr>
+            <tr><td>Sonnet 4.6</td><td>M-Core</td> <td>Lang 50</td> <td>50</td> <td class="hi">50 (100%)</td> <td class="hi">48 (96%)</td></tr>
+            <tr class="row-sep"><td>Gemma4:31b</td><td>B1</td>     <td>Core 60</td> <td>60</td> <td>51 (85%)</td>  <td>30 (50%)</td></tr>
+            <tr><td>Gemma4:31b</td><td>B1</td>     <td>Lang 50</td> <td>50</td> <td>46 (92%)</td>  <td>25 (50%)</td></tr>
+            <tr><td>Gemma4:31b</td><td>M-Core</td> <td>Core 60</td> <td>60</td> <td>54 (90%)</td>  <td>50 (83%)</td></tr>
+            <tr><td>Gemma4:31b</td><td>M-Core</td> <td>Lang 50</td> <td>50</td> <td>45 (90%)</td>  <td>41 (82%)</td></tr>
           </tbody>
         </table>
       </div>
@@ -870,8 +912,7 @@
     <section class="content-section" id="bibtex">
       <h2 class="section-title">BibTeX</h2>
       <pre class="bibtex-block">@article{anonymous2026btsynthesis,
-  title   = {Behavior Tree Synthesis via Coding Agents:
-             Grounding, Grafting, and Physical Deployment},
+  title   = {Contract-Grounded Behavior Tree Synthesis},
   author  = {Anonymous},
   journal = {IEEE Robotics and Automation Letters},
   year    = {2026},
@@ -883,7 +924,6 @@
 
   <footer class="site-footer">
     <div class="site-footer__inner">
-      <img src="./nrg_logo_gs.png" alt="NRG" class="site-footer__logo">
       <span>Nuclear and Applied Robotics Group · The University of Texas at Austin</span>
     </div>
   </footer>
