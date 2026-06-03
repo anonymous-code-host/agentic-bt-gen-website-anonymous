@@ -1,7 +1,7 @@
 const ANONYMOUS_MODE = true;
 
-const AUTHORS = 'Jonathan Salfity, Robert Blake Anderson, and Mitch Pryor';
-const AFFIL   = 'Nuclear and Applied Robotics Group · The University of Texas at Austin';
+const AUTHORS = 'Anonymous Authors';
+const AFFIL   = 'Anonymous Institution';
 
 const DATA_URL = 'data/catalog.json';
 
