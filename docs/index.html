@@ -34,12 +34,13 @@
     <section class="content-section" id="abstract">
       <h2 class="section-title">Abstract</h2>
       <p class="abstract-body">
-      Synthesizing deployable robot behavior trees (BTs) from natural language (NL) requires <em>grounding</em>: ensuring every generated BT references only skills the robot can actually execute, with correct parameters and control structure.
-      Existing LLM-based BT synthesis approaches place this responsibility on the prompt author, which fails when the robot stack is precompiled or opaque.
-      This paper proposes a contract-grounded BT synthesis architecture in which a coding agent queries a robot-side MCP server to retrieve an explicit contract consisting of a skill library, permitted BT operators, and optional rootstock templates, before synthesizing a BT for validation and execution.
-      In our framework, non-expert operators issue NL commands without knowledge of robot implementation details, while a runtime validation gate enforces correctness before execution.
-      We evaluate the architecture in PyRoboSim across structured and language-varied task suites, and on a physical Husarion Panther robot running a precompiled Nav2 stack opaque to the agent.
-      In our evaluated domains, results show that contract grounding enables Sonnet 4.6 to achieve near-perfect validity and high task success, that rootstock templates substantially recover success on reactive control-flow tasks for an open-source model (Gemma4:31b), and that the architecture transfers to opaque physical infrastructure.
+      Synthesizing deployable robot behavior trees (BTs) from natural language (NL) requires <em>grounding</em> to ensure every generated BT references only skills a robot can actually execute.
+      Existing LLM-based BT synthesis approaches often place this grounding responsibility on the prompt author.
+      This makes deployment brittle when the author does not know which skills the robot can execute, how those skills are parameterized, or how the robot runtime software constrains valid BT structure.
+      This paper proposes a contract-grounded BT synthesis architecture in which a coding agent queries a robot-side Model Context Protocol (MCP) server to retrieve an explicit contract consisting of a skill library, permitted BT operators, and optional BT composition templates, before synthesizing a BT for validation and execution.
+      In our framework, non-expert operators issue NL commands without knowledge of robot implementation details, while a robot runtime validation gate enforces correctness before execution.
+      We evaluate two LLMs, a closed model (Sonnet 4.6) and a smaller open-source model (Gemma4:31b), across 110 simulated tasks in PyRoboSim and 14 tasks on a physical Husarion Panther robot.
+      Results show that contract grounding enables near-perfect BT validation and high task success, that BT composition templates substantially recover success on reactive control-flow tasks for the smaller model, and that the architecture transfers to physical hardware running a Nav2 stack opaque to both operator and agent.
       Generated BTs, contract snapshots, and per-task execution reports are available below.</p>
     </section>
 
