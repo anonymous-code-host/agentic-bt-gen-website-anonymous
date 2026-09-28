@@ -1,59 +1,62 @@
-# Agentic BT Gen Webviewer
+# Contract-Grounded Behavior Tree Synthesis: project page
 
-A local-first project webpage for browsing PyRoboSim experiment results, inspecting generated behavior trees, and optionally running a selected BT against a live `pyrobosim.sim_app` server.
+Supplementary material for the paper, served with GitHub Pages from `docs/`. It is a static
+page with no server-side code.
 
-## Design
+## Contents
 
-| Layer | Purpose |
+| Path | Contents |
 |---|---|
-| Static catalog | Stores batch summaries, task prompts, normalized task specs, generated BTs, and result rows in `public/data/catalog.json`. This is the part that can later be deployed to GitHub Pages. |
-| Frontend | Renders the project page, task browser, batch metrics, BT viewer, and runtime panel from the static catalog. |
-| Local runtime adapter | Proxies BT execution, status polling, world-state polling, reset, and live frame image requests to a running `pyrobosim.sim_app` instance. This is only needed for local interactive runs. |
-| Data snapshots | Keeps a local copy of the currently selected experiment artifacts under `data_snapshots/` so the webviewer does not depend on `bt-eval-harness` to browse data. |
+| `docs/index.html`, `docs/app.js`, `docs/styles.css` | The page. |
+| `docs/data/catalog.json` | Everything the page needs on load: the contracts as served to the agent, the MCP tools, the paper's tables, the replay index and the OOC10 prompts. |
+| `docs/data/batches/<cell>.json` | One file per cell (suite × model × method), loaded when the explorer opens it. Each holds run 1's trees, task specifications and evaluation rows, and each task's success count over all ten runs. |
+| `docs/data/live/<key>.{mp4,json,jpg}` | Live replays: the simulator video, the per-tick status of every tree node, and a poster frame. |
+| `docs/data/robot_demo.mp4` | The hardware demonstration. |
+| `docs/data/experimental_data.zip` | The complete experimental data: every submitted tree and every execution result for all ten runs of every cell, with a README. Internal run bookkeeping is removed and the lab name is redacted as `[lab]` in the Panther folders. |
+| `build_catalog.py` | Builds `docs/data/` from the released results, the task suites and the served contracts. |
+| `tools/highlights.json` | The trees replayed for the Live Execution section. |
 
-## Files
+## Cells
 
-| Path | Role |
-|---|---|
-| `build_catalog.py` | Builds the static catalog from the local `data_snapshots/` copies of generated batches and task specs. |
-| `server.py` | Serves the frontend and exposes `/api/runtime/*` endpoints for local sim interaction. |
-| `data_snapshots/generated/` | Local copies of the batch result directories used by the viewer. |
-| `data_snapshots/task_specs/` | Local copies of the PyRoboSim task-spec YAML files used for readable task rendering. |
-| `public/index.html` | Project webpage shell. |
-| `public/styles.css` | Site styling. |
-| `public/app.js` | Frontend data loading, filtering, rendering, and runtime polling. |
-| `public/data/catalog.json` | Generated static dataset for the site. |
+A cell is one suite × model × method.
 
-## Local Run
+- **Suites:** `core60`, `lang50`, `hard15`, `prior30`, `panther`.
+- **Models:** `sonnet` (Sonnet 5) and `gemma` (Gemma4:31b).
+- **Methods:**
+  - `mcore`: Full contract, 𝒞.
+  - `b1`: Contract without rootstocks, 𝒞∖ℛ.
+  - `obtea` / `obtea_full`: the LLM-OBTEA baseline.
 
-1. Rebuild the catalog from the local snapshots:
+Each simulation cell was run ten times. The explorer shows run 1's trees and, for each task,
+how many of the ten runs succeeded.
+
+## How the live replays are made
+
+Each replay executes a released tree in PyRoboSim through the same code path the scoring used:
+
+- the same in-process simulator control and GUI code path;
+- 100 ms ticks at realtime factor 5;
+- the suite's time budget;
+- policy mode for LLM-OBTEA trees;
+- the same deterministic reset layout.
+
+The replay is then scored with the evaluation harness's own functions. It is kept only if its
+execution status, goal result, success, failure category and failing node all match the
+recorded run.
+
+The trace records every node's status after every tick, in pre-order of the tree JSON. Node
+`i` in a trace is `data-i="i"` in the drawn tree.
+
+## Rebuilding
+
+`build_catalog.py` expects the evaluation harness, the simulator, the MCP servers and the paper
+sources as sibling folders. It must run in a Python environment with PyRoboSim installed, since
+the world vocabulary is produced by the simulator's own code.
 
 ```bash
-cd /Users/jonathansalfity/Documents/dev/bt-workspace-claude/agentic-bt-gen-webviewer
-python3 build_catalog.py
+python build_catalog.py
+python -m http.server 8000 --directory docs
 ```
 
-2. Start the PyRoboSim sim app in a separate terminal:
-
-```bash
-cd /Users/jonathansalfity/Documents/dev/bt-workspace-claude/pyrobosim/pyrobosim
-python3 -m pyrobosim.sim_app.server --world-file roscon_2024_workshop_world.yaml --port 8080
-```
-
-3. Start the local webviewer server:
-
-```bash
-cd /Users/jonathansalfity/Documents/dev/bt-workspace-claude/agentic-bt-gen-webviewer
-python3 server.py --port 8123
-```
-
-4. Open [http://127.0.0.1:8123](http://127.0.0.1:8123).
-
-## Notes
-
-| Topic | Detail |
-|---|---|
-| Current scope | Focused on the copied PyRoboSim `core60` and `language50` M-Core snapshots currently stored under `data_snapshots/generated`. |
-| Runtime dependency | The page remains browseable without a running sim app; only the live execution controls are disabled. |
-| Deployment split | GitHub Pages can host the static frontend and `catalog.json`. Heroku or another app host can run the Python adapter if remote runtime control is needed later. |
-| PyRoboSim packaging | The browser should not be responsible for downloading and running PyRoboSim itself. The correct split is: static site in the browser, Python sim server as a separate backend service or local process. |
+Location names that would identify the hardware site are replaced with `[lab]` throughout the
+published data.

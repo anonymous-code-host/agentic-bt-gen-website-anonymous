@@ -9,3 +9,6 @@ __pycache__/
 venv/
 
 *.log
+
+# identifying terms redacted from the published data
+tools/redact.local

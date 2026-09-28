@@ -4,28 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contract-Grounded Behavior Tree Synthesis</title>
+  <meta name="description" content="Supplementary material: contracts, generated behavior trees, execution reports and live replays for Contract-Grounded Behavior Tree Synthesis.">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
-
   <main class="page">
 
     <section class="hero-section">
-      <h1 class="hero-section__title">
-        Contract-Grounded Behavior Tree Synthesis
-      </h1>
-      <p class="hero-section__authors" id="authorLine">Anonymous Authors</p>
-      <p class="hero-section__affil"   id="affilLine">Anonymous Institution</p>
-      <nav class="hero-section__links">
-        <a class="pill-link" href="#" aria-disabled="true">Paper (coming soon)</a>
-        <a class="pill-link" href="#gallery">Sim Gallery</a>
-        <a class="pill-link" href="#ooc">OOC10</a>
-        <a class="pill-link" href="#mcp-interface">MCP Interface</a>
+      <h1 class="hero-section__title">Contract-Grounded Behavior Tree Synthesis</h1>
+      <p class="hero-section__authors">Anonymous Authors</p>
+      <p class="hero-section__affil">Anonymous Institution</p>
+      <nav class="hero-section__links" aria-label="Sections">
+        <a class="pill-link" href="#" aria-disabled="true">Paper (under review)</a>
+        <a class="pill-link" href="./data/experimental_data.zip" download>Data (zip, 12.9 MB)</a>
+        <a class="pill-link" href="#setup">Setup</a>
         <a class="pill-link" href="#contract">Contract</a>
-        <a class="pill-link" href="#explorer">BT Explorer</a>
+        <a class="pill-link" href="#video">Robot Demo</a>
         <a class="pill-link" href="#results">Results</a>
-        <a class="pill-link" href="#video">Video</a>
+        <a class="pill-link" href="#live">Live Execution</a>
+        <a class="pill-link" href="#explorer">BT Explorer</a>
+        <a class="pill-link" href="#ooc">OOC10</a>
         <a class="pill-link" href="#bibtex">BibTeX</a>
       </nav>
     </section>
@@ -34,783 +33,275 @@
     <section class="content-section" id="abstract">
       <h2 class="section-title">Abstract</h2>
       <p class="abstract-body">
-      Synthesizing deployable robot behavior trees (BTs) from natural language (NL) requires <em>grounding</em> to ensure every generated BT references only skills a robot can actually execute.
-      Existing LLM-based BT synthesis approaches often place this grounding responsibility on the prompt author.
-      This makes deployment brittle when the author does not know which skills the robot can execute, how those skills are parameterized, or how the robot runtime software constrains valid BT structure.
-      This paper proposes a contract-grounded BT synthesis architecture in which a coding agent queries a robot-side Model Context Protocol (MCP) server to retrieve an explicit contract consisting of a skill library, permitted BT operators, and optional BT composition templates, before synthesizing a BT for validation and execution.
-      In our framework, non-expert operators issue NL commands without knowledge of robot implementation details, while a robot runtime validation gate enforces correctness before execution.
-      We evaluate two LLMs, a closed model (Sonnet 4.6) and a smaller open-source model (Gemma4:31b), across 110 simulated tasks in PyRoboSim and 14 tasks on a physical Husarion Panther robot.
-      Results show that contract grounding enables near-perfect BT validation and high task success, that BT composition templates substantially recover success on reactive control-flow tasks for the smaller model, and that the architecture transfers to physical hardware running a Nav2 stack opaque to both operator and agent.
-      Generated BTs, contract snapshots, and per-task execution reports are available below.</p>
+        Synthesizing deployable behavior trees (BTs) to control robots from natural language (NL) requires <em>grounding</em> to ensure every generated BT references only skills a robot can actually execute.
+        Existing LLM-based BT synthesis approaches often place this grounding responsibility on a robot operator.
+        This makes deployment brittle when an operator does not know which skills the robot can execute, how those skills are parameterized, or how the robot runtime software constrains valid BT structure.
+        This paper proposes a contract-grounded BT synthesis architecture in which a coding agent queries a robot-side Model Context Protocol (MCP) server to retrieve an explicit contract consisting of a skill library, permitted BT operators, and optional BT composition templates, before synthesizing a BT for validation and execution.
+        Non-expert operators therefore issue NL commands without knowledge of robot implementation details.
+        We evaluate two LLMs, a closed model (Sonnet 5) and a smaller open-source model (Gemma4:31b), across 155 simulated tasks in PyRoboSim and 14 tasks on a physical Husarion Panther robot, with ten repetitions per task, and we compare against a hybrid symbolic-LLM baseline under correct, stale, and incomplete symbolic world models.
+        Results show that the contract is sufficient to synthesize valid BTs and achieve high task success, that composition templates recover 16 to 26 points of success for both LLMs, and that the hybrid baseline, strong when its world model is correct, solves none of the twenty tasks whose world model is stale or incomplete.
+        The architecture transfers to physical hardware running a Nav2 stack opaque to both operator and agent.
+      </p>
     </section>
 
-    <!-- ─── METHOD FIGURE ────────────────────────────────────────────────────── -->
+    <!-- ─── METHOD ───────────────────────────────────────────────────────────── -->
     <section class="content-section" id="method">
       <h2 class="section-title">Method</h2>
       <p class="section-lede">
         A coding agent queries a robot-side MCP server for a machine-readable contract,
         synthesizes a BT, and submits it for validation before execution. The robot runtime
-        retains authority over skill implementation, BT instantiation, and execution.
+        keeps authority over skill implementation, BT instantiation, and execution.
       </p>
       <figure class="method-figure">
-        <img src="./bt-mcp-server-v2.svg" alt="System architecture: coding agent ↔ MCP server ↔ robot runtime" class="method-figure__img">
+        <img src="./bt-mcp-server-v2.svg" alt="System architecture: a coding agent queries the robot's contract through MCP, synthesizes a BT, and submits it to a validation gate before the BT runtime executes it." class="method-figure__img">
         <figcaption class="method-figure__caption">
-          <strong>Fig. 1.</strong> System overview: A coding agent queries the robot-side
-          contract, <em>C = (K, O, R)</em> through MCP, synthesizes a BT, and submits it
-          for validation and execution.
+          <strong>Fig. 1.</strong> System overview. A coding agent queries the robot-side contract
+          through MCP to synthesize a BT and submits it for validation and execution. The robot keeps
+          authority over what is exposed for synthesis, and rejects skills and behaviors that cannot
+          run on it.
         </figcaption>
       </figure>
 
-      <h3 class="subsection-title">Configurations</h3>
-      <p class="section-lede">
-        We compare two contract-grounded configurations to isolate the contribution of
-        reusable BT composition priors (rootstocks). Both use the same MCP-mediated
-        synthesis pipeline and the same validation gate.
-      </p>
-      <div class="method-defs">
+      <h3 class="subsection-title">Methods compared</h3>
+      <div class="method-defs method-defs--three">
         <div class="method-def">
           <div class="method-def__head">
-            <span class="method-def__name">M-Core</span>
-            <span class="method-def__sub">Main method</span>
+            <span class="method-def__name">𝒞</span>
+            <span class="method-def__sub">Full contract · our method</span>
           </div>
           <p class="method-def__desc">
-            The agent queries the full robot-side contract
-            <em>C = (K, O, R)</em> — skill library, allowed BT operators,
-            <em>and</em> rootstock templates — before synthesizing a BT.
+            The agent queries the whole contract <em>𝒞 = (𝒦, 𝒪, ℛ)</em>: skill library,
+            permitted BT operators, <em>and</em> rootstock templates.
           </p>
         </div>
-
         <div class="method-def">
           <div class="method-def__head">
-            <span class="method-def__name">B1</span>
-            <span class="method-def__sub">Ablation</span>
+            <span class="method-def__name">𝒞∖ℛ</span>
+            <span class="method-def__sub">Contract without rootstocks · ablation</span>
           </div>
           <p class="method-def__desc">
-            The agent queries only <em>(K, O)</em> — skill library and allowed BT
-            operators — with no rootstocks exposed. Isolates the contribution of
-            reusable composition priors.
+            The same interface, exposing only <em>(𝒦, 𝒪)</em>. Isolates what the reusable
+            composition templates contribute.
+          </p>
+        </div>
+        <div class="method-def">
+          <div class="method-def__head">
+            <span class="method-def__name">LLM-OBTEA</span>
+            <span class="method-def__sub">Hybrid symbolic–LLM baseline</span>
+          </div>
+          <p class="method-def__desc">
+            An LLM maps the instruction to a first-order-logic goal, and an optimal
+            backward-chaining expansion compiles the BT. It is given the object locations,
+            which it cannot plan without.
           </p>
         </div>
       </div>
+      <p class="table-note">
+        On Core60, Lang50 and Hard15, 𝒞 and 𝒞∖ℛ receive only the world <em>vocabulary</em>:
+        entity names, with no placements. LLM-OBTEA receives the object–location relationships.
+        Prior30 is built to test that dependence.
+      </p>
     </section>
 
-    <!-- ─── MCP INTERFACE ───────────────────────────────────────────────────── -->
+    <!-- ─── MCP INTERFACE ────────────────────────────────────────────────────── -->
     <section class="content-section" id="mcp-interface">
       <h2 class="section-title">MCP Interface</h2>
       <p class="section-lede">
-        The coding agent interacts with the robot exclusively through five MCP tools.
-        It has no access to backend source code, low-level robot APIs, ROS nodes, or
-        execution internals — only the typed interface below.
+        The agent reaches the robot only through these MCP tools. It has no access to backend
+        source code, low-level robot APIs, ROS nodes or execution internals. Tool names are as
+        served by the robot, with the name used in the paper beneath each.
       </p>
-
-      <div class="mcp-tool-list">
-
-        <div class="mcp-tool-card">
-          <div class="mcp-tool-card__head">
-            <code class="mcp-tool-card__name">get_skill_library()</code>
-            <span class="mcp-tool-card__arrow">&rarr;</span>
-            <code class="mcp-tool-card__return">SkillLibrary</code>
-          </div>
-          <p class="mcp-tool-card__desc">
-            Returns every available robot action with its typed parameter schema.
-            The agent uses this to discover what the robot can do and how to
-            parameterize each leaf node.
-          </p>
-        </div>
-
-        <div class="mcp-tool-card">
-          <div class="mcp-tool-card__head">
-            <code class="mcp-tool-card__name">get_bt_operators()</code>
-            <span class="mcp-tool-card__arrow">&rarr;</span>
-            <code class="mcp-tool-card__return">BTOperatorSet</code>
-          </div>
-          <p class="mcp-tool-card__desc">
-            Returns the permitted set of BT composition operators (control, decorator,
-            leaf) with their semantics and any structural constraints. Defines the
-            grammar the agent must write to.
-          </p>
-        </div>
-
-        <div class="mcp-tool-card">
-          <div class="mcp-tool-card__head">
-            <code class="mcp-tool-card__name">get_rootstocks()</code>
-            <span class="mcp-tool-card__arrow">&rarr;</span>
-            <code class="mcp-tool-card__return">list[Rootstock]</code>
-          </div>
-          <p class="mcp-tool-card__desc">
-            Returns the optional rootstock templates — reusable BT composition patterns
-            authored by the robot-side developer that the agent can instantiate and
-            parameterize for a given task.
-          </p>
-        </div>
-
-        <div class="mcp-tool-card">
-          <div class="mcp-tool-card__head">
-            <code class="mcp-tool-card__name">get_world_vocabulary()</code>
-            <span class="mcp-tool-card__arrow">&rarr;</span>
-            <code class="mcp-tool-card__return">WorldVocab</code>
-          </div>
-          <p class="mcp-tool-card__desc">
-            Returns the current world vocabulary — named locations, objects, and
-            object categories that may appear as skill parameters. Grounds the
-            agent's BT to the actual environment.
-          </p>
-        </div>
-
-        <div class="mcp-tool-card">
-          <div class="mcp-tool-card__head">
-            <code class="mcp-tool-card__name">send_to_robot(bt)</code>
-            <span class="mcp-tool-card__arrow">&rarr;</span>
-            <code class="mcp-tool-card__return">SubmissionResult</code>
-          </div>
-          <p class="mcp-tool-card__desc">
-            Submits a composed BT for validation and execution. The server validates
-            the tree against the contract (skill names, parameter types, structural
-            rules) before the robot runtime instantiates it. Returns validation
-            status and attempt count.
-          </p>
-        </div>
-
-      </div>
-
+      <div class="mcp-tool-list" id="mcpTools"><div class="muted-note">Loading…</div></div>
     </section>
 
-    <!-- ─── ROBOT CONTRACT ──────────────────────────────────────────────────── -->
-    <section class="content-section content-section--wide" id="contract">
-      <h2 class="section-title">Robot Contract</h2>
+    <!-- ─── EXPERIMENTAL SETUP ───────────────────────────────────────────────── -->
+    <section class="content-section" id="setup">
+      <h2 class="section-title">Experimental Setup</h2>
       <p class="section-lede">
-        The agent is grounded by a machine-readable contract exposed through MCP tools:
-        a skill library, a set of permitted BT composition nodes, and optional rootstock
-        templates. Below are the full contracts for both experimental platforms.
+        The evaluation asks and answers four questions:
+      </p>
+      <ol class="question-list">
+        <li><span class="q">Q1:</span><span><strong>Contract grounding.</strong> Does the proposed skill contract expose the grounding information needed for valid BT synthesis?</span></li>
+        <li><span class="q">Q2:</span><span><strong>Composition priors.</strong> How do rootstock templates affect task success across task archetypes and language variations?</span></li>
+        <li><span class="q">Q3:</span><span><strong>Dependence on an authored world model.</strong> How does comparative methods' task success depend on a symbolic world model supplied before execution, and what does each method require the runtime to publish?</span></li>
+        <li><span class="q">Q4:</span><span><strong>Physical deployment.</strong> Does the contract support deployable BT synthesis on a physical robot running an opaque Nav2 stack with complex ROS2 data interactions?</span></li>
+      </ol>
+      <p class="section-lede">
+        Q1–Q3 are evaluated in simulation, with Q3 as the comparison against prior hybrid
+        symbolic–LLM work; Q4 is evaluated on hardware.
       </p>
 
-      <div class="contract-tabs" role="tablist">
-        <button class="contract-tab is-active" role="tab" aria-selected="true"  data-target="contract-sim">Simulation (PyRoboSim)</button>
-        <button class="contract-tab"            role="tab" aria-selected="false" data-target="contract-hw">Hardware (Panther)</button>
+      <figure class="setup-figure">
+        <img src="./pyrobosim_world.png" alt="The PyRoboSim world: five rooms (dining, kitchen, office, trash, closet) joined by hallways, with a table, desk, fridge, pantry, bin, dumpster and charger." loading="lazy">
+        <figcaption>The PyRoboSim world. The agent is given the names of its rooms, locations and
+        objects (see <a href="#contract">World Vocabulary</a>) but never where anything is.</figcaption>
+      </figure>
+
+      <h3 class="subsection-title">Task suites</h3>
+      <div class="suite-grid">
+        <div class="suite-card">
+          <div class="suite-card__head"><span class="suite-card__name">Core60</span><span class="suite-card__n">60 tasks</span></div>
+          <p>Structured composition: 12 tasks of each archetype: sequential pick, selector search, search-and-place, pick-and-return, and pick-and-place.</p>
+        </div>
+        <div class="suite-card">
+          <div class="suite-card__head"><span class="suite-card__name">Lang50</span><span class="suite-card__n">50 tasks</span></div>
+          <p>Core60 tasks rephrased, with the task's meaning unchanged: paraphrase (10), lexical substitution (20), clause reordering (10), constraint wording (10).</p>
+        </div>
+        <div class="suite-card">
+          <div class="suite-card__head"><span class="suite-card__name">Hard15</span><span class="suite-card__n">15 tasks</span></div>
+          <p>Structural depth: nested search, conditional placement, a container opened and closed around a step, multi-phase missions, ordered constraints, retry recovery and negation. No rootstock was written for these.</p>
+        </div>
+        <div class="suite-card">
+          <div class="suite-card__head"><span class="suite-card__name">Prior30</span><span class="suite-card__n">30 tasks</span></div>
+          <p>The same world throughout; only the symbolic prior given to LLM-OBTEA varies. Correct (10), stale: 3 of 5 objects asserted where they no longer are (10), incomplete: 2 of 5 objects omitted (10). The contract methods receive no prior.</p>
+        </div>
+        <div class="suite-card">
+          <div class="suite-card__head"><span class="suite-card__name">Panther 14</span><span class="suite-card__n">14 tasks · hardware</span></div>
+          <p>A Husarion Panther with ROS 2, a precompiled Nav2 stack, YOLO detection and BT.CPP XML: navigation (3), reactive detection (4), track-and-engage (3) and multi-phase missions (4).</p>
+        </div>
+        <div class="suite-card suite-card--supp">
+          <div class="suite-card__head"><span class="suite-card__name">OOC10</span><span class="suite-card__n">10 prompts · supplementary</span></div>
+          <p>Requests outside the contract, where the correct response is to <em>not</em> submit a BT. <a href="#ooc">Results pending.</a></p>
+        </div>
       </div>
 
-      <!-- ── Simulation pane ── -->
-      <div class="contract-pane" id="contract-sim">
+      <h3 class="subsection-title">Models and repetitions</h3>
+      <dl class="setup-list">
+        <div><dt>Models</dt><dd><strong>Sonnet 5</strong>, closed and API-hosted, and <strong>Gemma4:31b</strong>, open-source and served locally with Ollama. Both run as the reasoning model inside Claude Code; LLM-OBTEA calls the model through its Python API.</dd></div>
+        <div><dt>Generation</dt><dd>Each task is generated from a forked session in which the contract has already been retrieved, so tasks share the contract context but never each other's.</dd></div>
+        <div><dt>Repetitions</dt><dd>Every cell of [suite × model × method] is synthesized and executed <strong>n = 10</strong> times. The physical-robot study is run once per task, since each trial needs supervised execution.</dd></div>
+        <div><dt>Execution</dt><dd>PyRoboSim with PyTrees, ticked every 100 ms at a realtime factor of 5, with a per-suite time budget of 60 s for Core60 and Lang50, 120 s for Hard15 and 30 s for Prior30.</dd></div>
+      </dl>
 
-        <details class="contract-block" open>
-          <summary class="contract-block__head">
-            <span class="contract-block__name">Skill Library</span>
-            <span class="contract-count">6 skills</span>
-          </summary>
-          <div class="contract-table-wrap"><table class="contract-table">
-            <thead><tr><th>Skill</th><th>Parameters</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>navigate</code></a></td><td><code>location: str</code></td><td>Move to a named location in the environment.</td></tr>
-              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>detect_object</code></a></td><td><code>object_type: str</code></td><td>Detect whether an object of the given type is present at the current location.</td></tr>
-              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>pick_object</code></a></td><td><code>object_type: str</code></td><td>Pick up an object of the given type at the current location.</td></tr>
-              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>place_object</code></a></td><td><code>object_type: str</code></td><td>Place the held object of the given type at the current location.</td></tr>
-              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>open_location</code></a></td><td><code>location: str</code></td><td>Open a container or door at the specified location.</td></tr>
-              <tr><td><a href="https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html" target="_blank"><code>close_location</code></a></td><td><code>location: str</code></td><td>Close a container or door at the specified location.</td></tr>
-            </tbody>
-          </table></div>
-        </details>
+      <h3 class="subsection-title">Metrics</h3>
+      <dl class="setup-list">
+        <div><dt>Valid@1</dt><dd>Whether the agent's <em>first</em> submission to the robot passes the contract check: well-formed JSON or BT.CPP XML, permitted operators only, skills only from the library, and type-compatible parameters drawn from the world vocabulary. The agent may dry-run a draft with <code>validate_bt</code> before submitting.</dd></div>
+        <div><dt>Success</dt><dd>Scored on the first submission that passes validation. The tree must terminate with <code>SUCCESS</code> <em>and</em> the final world state must meet the task's goal condition. A tree that times out or returns <code>FAILURE</code> fails even if the goal happens to hold. On hardware, success is judged by supervised observation.</dd></div>
+        <div><dt>Failures</dt><dd>Each failed task-run falls in exactly one category. <strong>Never valid</strong>: no submission passed validation, so nothing ran. <strong>Runtime failure</strong>: the tree reached <code>FAILURE</code>, a timeout or an error. <strong>Goal mismatch</strong>: the tree finished, but the goal does not hold.</dd></div>
+      </dl>
+    </section>
 
-        <details class="contract-block">
-          <summary class="contract-block__head">
-            <span class="contract-block__name">BT Composition Nodes</span>
-            <span class="contract-count">6 node types</span>
-          </summary>
-          <div class="contract-table-wrap"><table class="contract-table">
-            <thead><tr><th>Node</th><th>Type</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/composites.html#sequence" target="_blank"><code>Sequence</code></a></td><td>Control</td><td>Executes children left-to-right; succeeds only if all succeed.</td></tr>
-              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/composites.html#selector" target="_blank"><code>Selector</code></a></td><td>Control</td><td>Executes children left-to-right; succeeds when the first child succeeds.</td></tr>
-              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/composites.html#parallel" target="_blank"><code>Parallel</code></a></td><td>Control</td><td>Executes all children simultaneously; configurable success threshold.</td></tr>
-              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/decorators.html#py_trees.decorators.Repeat" target="_blank"><code>Repeat</code></a></td><td>Decorator</td><td>Repeats its child a fixed number of times or indefinitely.</td></tr>
-              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/decorators.html#py_trees.decorators.Retry" target="_blank"><code>RetryUntilSuccessful</code></a></td><td>Decorator</td><td>Retries the child until it succeeds or a max attempt limit is reached.</td></tr>
-              <tr><td><a href="https://py-trees.readthedocs.io/en/devel/decorators.html#py_trees.decorators.Inverter" target="_blank"><code>Inverter</code></a></td><td>Decorator</td><td>Inverts the result of its child (SUCCESS ↔ FAILURE).</td></tr>
-            </tbody>
-          </table></div>
-        </details>
-
-        <details class="contract-block">
-          <summary class="contract-block__head">
-            <span class="contract-block__name">Rootstock Templates</span>
-            <span class="contract-count">3 rootstocks</span>
-          </summary>
-          <div class="rootstock-cards" id="simRootstockCards">
-            <div class="muted-note">Loading…</div>
-          </div>
-        </details>
-
-      </div><!-- /contract-sim -->
-
-      <!-- ── Hardware pane ── -->
-      <div class="contract-pane" id="contract-hw" hidden>
-
-        <details class="contract-block" open>
-          <summary class="contract-block__head">
-            <span class="contract-block__name">Skill Library</span>
-            <span class="contract-count">8 skills</span>
-          </summary>
-          <div class="contract-table-wrap"><table class="contract-table">
-            <thead><tr><th>Skill</th><th>Parameters</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td><code>NavigateToLocation</code></td><td><code>location: str</code></td><td>Navigate to a named location via Nav2. Returns SUCCESS on arrival.</td></tr>
-              <tr><td><code>Spin</code></td><td><code>target_yaw: float</code>, <code>time_allowance: float</code></td><td>Rotate in place by a given angle (radians). 6.28 = full 360°.</td></tr>
-              <tr><td><code>Wait</code></td><td><code>wait_duration: float</code></td><td>Pause for the given number of seconds.</td></tr>
-              <tr><td><code>WaitForDetection</code></td><td><code>class_name: str</code>, <code>timeout: float</code></td><td>Block until an object of the given class is detected. 0 = wait forever.</td></tr>
-              <tr><td><code>CheckDetection</code></td><td><code>class_name: str</code>, <code>max_age: float</code></td><td>Condition node: SUCCESS if a detection arrived within max_age seconds.</td></tr>
-              <tr><td><code>MoveForward</code></td><td><code>forward_dist: float</code></td><td>Drive forward the specified distance in meters.</td></tr>
-              <tr><td><code>BackUp</code></td><td><code>backup_dist: float</code></td><td>Reverse the specified distance in meters.</td></tr>
-              <tr><td><code>HeadingController</code></td><td><code>class_name: str</code>, <code>timeout: float</code></td><td>Yaw to keep camera aligned with a detected object. Returns SUCCESS on alignment.</td></tr>
-            </tbody>
-          </table></div>
-        </details>
-
-        <details class="contract-block">
-          <summary class="contract-block__head">
-            <span class="contract-block__name">BT Composition Nodes</span>
-            <span class="contract-count">14 node types</span>
-          </summary>
-          <div class="contract-table-wrap"><table class="contract-table">
-            <thead><tr><th>Node</th><th>Type</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d9/ddd/class_b_t_1_1_sequence_node.html" target="_blank"><code>Sequence</code></a></td><td>Control</td><td>Executes children left-to-right; succeeds only if all succeed. Halting resets child index.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/de/d69/class_b_t_1_1_sequence_with_memory.html" target="_blank"><code>SequenceWithMemory</code></a></td><td>Control</td><td>Like Sequence but preserves child index across halts — resumes from interrupted child.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/dc/da6/class_b_t_1_1_fallback_node.html" target="_blank"><code>Fallback</code></a></td><td>Control</td><td>Tries children left-to-right; succeeds on first success.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d1/dee/class_b_t_1_1_parallel_node.html" target="_blank"><code>Parallel</code></a></td><td>Control</td><td>Ticks all children each tick; configurable success/failure thresholds. Latches child results.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/de/d9f/class_b_t_1_1_reactive_sequence.html" target="_blank"><code>ReactiveSequence</code></a></td><td>Control</td><td>Like Sequence but re-ticks earlier-SUCCESS children every tick. Interrupts on precondition failure.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/dc/d04/class_b_t_1_1_reactive_fallback.html" target="_blank"><code>ReactiveFallback</code></a></td><td>Control</td><td>Like Fallback but re-ticks earlier-FAILURE children every tick. The canonical "do X until detected" pattern.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/de/d22/class_b_t_1_1_keep_running_until_failure_node.html" target="_blank"><code>KeepRunningUntilFailure</code></a></td><td>Decorator</td><td>Converts child SUCCESS → RUNNING to loop an action indefinitely until failure.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d6/d78/class_b_t_1_1_repeat_node.html" target="_blank"><code>Repeat</code></a></td><td>Decorator</td><td>Retries child up to <code>num_cycles</code> times; counts only SUCCESS results.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/dd/de4/class_b_t_1_1_retry_node.html" target="_blank"><code>RetryUntilSuccessful</code></a></td><td>Decorator</td><td>Retries child until success or <code>num_attempts</code> exhausted.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d2/ded/class_b_t_1_1_inverter_node.html" target="_blank"><code>Inverter</code></a></td><td>Decorator</td><td>Inverts child result (SUCCESS ↔ FAILURE). Safe for conditions, not for fallible actions.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d7/db8/class_b_t_1_1_force_success_node.html" target="_blank"><code>ForceSuccess</code></a></td><td>Decorator</td><td>Converts any child result to SUCCESS. Makes optional steps non-blocking.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/d4/d8c/class_b_t_1_1_force_failure_node.html" target="_blank"><code>ForceFailure</code></a></td><td>Decorator</td><td>Converts any child result to FAILURE.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/dd/dbd/class_b_t_1_1_run_once_node.html" target="_blank"><code>RunOnce</code></a></td><td>Decorator</td><td>Ticks child only on first execution; caches result for subsequent ticks.</td></tr>
-              <tr><td><a href="https://behaviortree.github.io/BehaviorTree.CPP/dd/dce/class_b_t_1_1_always_success_node.html" target="_blank"><code>AlwaysSuccess</code></a></td><td>Leaf</td><td>Leaf node that always returns SUCCESS. Use as final Fallback branch for graceful degradation.</td></tr>
-            </tbody>
-          </table></div>
-        </details>
-
-        <details class="contract-block">
-          <summary class="contract-block__head">
-            <span class="contract-block__name">Rootstock Templates</span>
-            <span class="contract-count">7 rootstocks</span>
-          </summary>
-          <div class="rootstock-cards" id="hwRootstockCards">
-            <div class="muted-note">Loading…</div>
-          </div>
-        </details>
-
-      </div><!-- /contract-hw -->
-
+    <!-- ─── ROBOT CONTRACT ───────────────────────────────────────────────────── -->
+    <section class="content-section content-section--wide" id="contract">
+      <h2 class="section-title">Robot Contract</h2>
+      <p class="section-lede narrow">
+        The contracts exactly as served to the agent on each platform: the skill library, the
+        BT format and operators, the rootstock templates, and the world vocabulary. Names are
+        the robot's own; the agent sees nothing else.
+      </p>
+      <div class="contract-tabs" role="tablist" aria-label="Platform">
+        <button class="contract-tab is-active" role="tab" aria-selected="true" data-target="contract-sim" id="tabSim">Simulation (PyRoboSim)</button>
+        <button class="contract-tab" role="tab" aria-selected="false" data-target="contract-hw" id="tabHw">Hardware (Panther)</button>
+      </div>
+      <div class="contract-pane" id="contract-sim"><div class="muted-note">Loading…</div></div>
+      <div class="contract-pane" id="contract-hw" hidden><div class="muted-note">Loading…</div></div>
     </section>
 
     <!-- ─── VIDEO ────────────────────────────────────────────────────────────── -->
     <section class="content-section content-section--wide" id="video">
       <h2 class="section-title">Robot Demo</h2>
-      <p class="section-lede">
-        Hardware demonstration on the Husarion Panther mobile robot running a precompiled
-        ROS2 Nav2 navigation stack with YOLO-based detection.
+      <p class="section-lede narrow">
+        The Husarion Panther running a synthesized BT on a precompiled ROS 2 Nav2 stack with
+        YOLO-based detection.
       </p>
       <div class="video-demo-grid">
         <div class="video-demo-grid__video">
           <div class="video-wrap">
-            <video controls preload="metadata" playsinline>
+            <video controls preload="metadata" playsinline poster="./data/robot_demo.jpg">
               <source src="./data/robot_demo.mp4" type="video/mp4">
-              Your browser does not support the video tag.
+              Your browser does not play MP4 video.
             </video>
           </div>
-          <p class="video-caption">Video played at 2× speed.</p>
+          <p class="video-caption">Played at 2× speed.</p>
         </div>
         <div class="video-demo-grid__bt">
           <div class="video-bt-meta">
             <span class="badge">Gemma4:31b</span>
-            <span class="badge">M-Core</span>
-            <span class="badge">Panther 14</span>
+            <span class="badge">𝒞</span>
+            <span class="badge">Panther task 13</span>
           </div>
-          <p class="video-bt-prompt">"Patrol continuously between the NRG entrance, mid hallway, between hallways, and kitchen entrance. Whenever you spot a person, stop and face them until they are out of frame. Then resume patrolling. Keep going indefinitely."</p>
-          <div class="video-bt-tree" id="videoBtTree">
-            <div class="bt-tree-empty">Loading BT…</div>
-          </div>
+          <p class="video-bt-prompt" id="videoBtPrompt"></p>
+          <div class="video-bt-tree__bar"><span class="panel-meta" id="videoBtMeta"></span>
+            <button type="button" class="link-button" id="videoBtFit" hidden>Fit whole tree</button></div>
+          <div class="video-bt-tree" id="videoBtTree"><div class="bt-tree-empty">Loading BT…</div></div>
         </div>
       </div>
+      <p class="table-note narrow">Location names containing the lab's name are shown as <code>[lab]</code> for double-blind review.</p>
     </section>
 
-    <!-- ─── RESULTS ───────────────────────────────────────────────────────────── -->
-    <section class="content-section" id="results">
+    <!-- ─── RESULTS ──────────────────────────────────────────────────────────── -->
+    <section class="content-section content-section--wide" id="results">
       <h2 class="section-title">Results</h2>
-      <p class="section-lede">
-        All numbers are from the paper. Valid@1 measures whether the first-attempt BT passes
-        schema and contract checks. Success measures task completion after execution.
+      <p class="section-lede narrow">
+        The tables below are those of the paper, mean ± sd over 10 runs. Green, orange and red
+        mark the paper's own shading.
       </p>
 
-      <h3 class="subsection-title">PyRoboSim — Primary Comparison</h3>
+      <h3 class="subsection-title">Table I · PyRoboSim results</h3>
       <p class="table-note">
-        Valid@1 and Success counts are over all <em>N</em> tasks in the suite (missing BTs count as failures).
+        Indented rows break Success down by Core60 archetype and Lang50 variation. <em>H</em>,
+        <em>W</em>, <em>Nodes</em>: median tree height, width and node count over scored trees;
+        <em>CFR</em>: condition-to-fallback ratio from suite totals. n/a: LLM-OBTEA is grounded by
+        construction.
       </p>
-      <div class="table-scroll">
-        <table class="results-table">
-          <thead>
-            <tr><th>Model</th><th>Method</th><th>Suite</th><th>N</th><th>Valid@1</th><th>Success</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Sonnet 4.6</td><td>B1</td>     <td>Core 60</td> <td>60</td> <td>59 (98%)</td>  <td>56 (93%)</td></tr>
-            <tr><td>Sonnet 4.6</td><td>B1</td>     <td>Lang 50</td> <td>50</td> <td>49 (98%)</td>  <td>45 (90%)</td></tr>
-            <tr><td>Sonnet 4.6</td><td>M-Core</td> <td>Core 60</td> <td>60</td> <td class="hi">60 (100%)</td> <td class="hi">58 (97%)</td></tr>
-            <tr><td>Sonnet 4.6</td><td>M-Core</td> <td>Lang 50</td> <td>50</td> <td class="hi">50 (100%)</td> <td class="hi">48 (96%)</td></tr>
-            <tr class="row-sep"><td>Gemma4:31b</td><td>B1</td>     <td>Core 60</td> <td>60</td> <td>51 (85%)</td>  <td>30 (50%)</td></tr>
-            <tr><td>Gemma4:31b</td><td>B1</td>     <td>Lang 50</td> <td>50</td> <td>46 (92%)</td>  <td>25 (50%)</td></tr>
-            <tr><td>Gemma4:31b</td><td>M-Core</td> <td>Core 60</td> <td>60</td> <td>54 (90%)</td>  <td>50 (83%)</td></tr>
-            <tr><td>Gemma4:31b</td><td>M-Core</td> <td>Lang 50</td> <td>50</td> <td>45 (90%)</td>  <td>41 (82%)</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="table-scroll" id="table1"></div>
 
-      <h3 class="subsection-title">Physical Robot (Panther 14)</h3>
-      <p class="table-note">✓ denotes a perfect score; fractions indicate partial results. V = Valid@1, S = Success.</p>
-      <div class="table-scroll">
-        <table class="results-table results-table--hardware">
-          <thead>
-            <tr>
-              <th rowspan="2">Method</th>
-              <th rowspan="2">Model</th>
-              <th colspan="2">Nav (3)</th>
-              <th colspan="2">React (4)</th>
-              <th colspan="2">Track (3)</th>
-              <th colspan="2">Multi (4)</th>
-            </tr>
-            <tr>
-              <th>V</th><th>S</th>
-              <th>V</th><th>S</th>
-              <th>V</th><th>S</th>
-              <th>V</th><th>S</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td rowspan="2">M-Core</td>
-              <td>Sonnet</td>
-              <td>✓</td><td>✓</td>
-              <td>✓</td><td>✓</td>
-              <td>✓</td><td>3/4</td>
-              <td>3/4</td><td>2.5/4</td>
-            </tr>
-            <tr>
-              <td>Gemma</td>
-              <td>2/3</td><td>✓</td>
-              <td>✓</td><td>✓</td>
-              <td>✓</td><td>✓</td>
-              <td>3/4</td><td>3/4</td>
-            </tr>
-            <tr class="row-sep">
-              <td rowspan="2">B1</td>
-              <td>Sonnet</td>
-              <td>✓</td><td>✓</td>
-              <td>✓</td><td>✓</td>
-              <td>✓</td><td>✓</td>
-              <td>✓</td><td>✓</td>
-            </tr>
-            <tr>
-              <td>Gemma</td>
-              <td>✓</td><td>✓</td>
-              <td>✓</td><td>✓</td>
-              <td>✓</td><td>✓</td>
-              <td>✓</td><td>3.5/4</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <h3 class="subsection-title">Table II · Failure attribution</h3>
+      <p class="table-note">Pooled over Core60, Lang50 and Hard15: 1,250 task-runs per cell, in percent. Never valid + Runtime failure + Goal mismatch = Failure rate.</p>
+      <div class="table-scroll narrow" id="table2"></div>
 
+      <h3 class="subsection-title">Table III · Dependence on a world model</h3>
+      <p class="table-note">Prior30: the world is identical across all tasks, and only the prior given to the planner varies. Success is mean ± sd over 10 runs of 10 tasks per family; Nodes is the median.</p>
+      <div class="table-scroll narrow" id="table3"></div>
+
+      <h3 class="subsection-title">Physical robot (Panther 14)</h3>
+      <p class="table-note">First-submission validity (V) and success (S). Each task is run once, so entries are counts. Half credit marks a BT that executed but altered the intended behavior.</p>
+      <div class="table-scroll narrow" id="tableHw"></div>
+
+      <h3 class="subsection-title">Synthesis latency</h3>
+      <p class="section-lede narrow">
+        Over the 1,250 task-runs of each cell, 𝒞 takes 23.9 ± 8.3 s per BT with Sonnet and
+        86.2 ± 36.1 s with Gemma, against 52.4 ± 26.6 s and 113.7 ± 57.4 s under 𝒞∖ℛ, including
+        validation retries. The one-time contract retrieval before each batch adds 14.5 ± 3.5 s
+        for Sonnet and 32.7 ± 3.6 s for Gemma.
+      </p>
     </section>
 
-    <!-- ─── SIMULATION GALLERY ─────────────────────────────────────────────────── -->
-    <section class="content-section content-section--wide" id="gallery">
-      <h2 class="section-title">Simulation Gallery</h2>
-      <p class="section-lede">
-        Curated PyRoboSim executions showing clean task completion, reactive search behavior,
-        the structural impact of rootstock templates (M-Core vs B1), language robustness,
-        and representative failure modes. Click a group heading to expand.
+    <!-- ─── LIVE EXECUTION ───────────────────────────────────────────────────── -->
+    <section class="content-section content-section--xwide" id="live">
+      <h2 class="section-title">Live Execution</h2>
+      <p class="section-lede narrow">
+        Selected trees from run 1, replayed in PyRoboSim next to the tree that is running. Each
+        node takes the status it had after the most recent tick:
+        <span class="key key--run">running</span>
+        <span class="key key--ok">succeeded</span>
+        <span class="key key--fail">failed</span>
+        <span class="key key--idle">not yet ticked</span>. Faded nodes keep a status from an
+        earlier tick.
       </p>
-
-      <!-- Group 1 — Clean sequential -->
-      <details class="gallery-group" open>
-        <summary class="gallery-group__head">Sequential Execution (Sonnet M-Core)</summary>
-        <p class="gallery-group__desc">Baseline tasks showing clean pick, pick-and-deliver, and pick-and-place.</p>
-        <div class="gallery-list">
-          <figure class="gallery-card">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/01_go_to_pantry_detect_and_pick_bread_41d287.gif" alt="Go to pantry, detect bread, pick it up" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/01_go_to_pantry_detect_and_pick_bread_41d287.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 01</span>"Go to pantry, detect bread, and pick it up."</figcaption>
-          </figure>
-          <figure class="gallery-card">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/08_fridge_pick_soda_deliver_office_9e3f60.gif" alt="Fridge pick soda deliver to office" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/08_fridge_pick_soda_deliver_office_9e3f60.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 08</span>"Go to fridge, detect soda, pick it up, then go to office."</figcaption>
-          </figure>
-          <figure class="gallery-card">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/21_pick_bread_pantry_to_table_ab2ba4.gif" alt="Pick bread from pantry, place on table" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/21_pick_bread_pantry_to_table_ab2ba4.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 21</span>"Pick bread from pantry and place it on table."</figcaption>
-          </figure>
-        </div>
-      </details>
-
-      <!-- Group 2 — Reactive search -->
-      <details class="gallery-group">
-        <summary class="gallery-group__head">Reactive Search (Sonnet M-Core)</summary>
-        <p class="gallery-group__desc">Selector-based fallback: the robot searches one location, and if the object isn't found, falls back to the next.</p>
-        <div class="gallery-list">
-          <figure class="gallery-card">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/11_search_pantry_fridge_pick_bread_da9c15.gif" alt="Search pantry then fridge for bread" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/11_search_pantry_fridge_pick_bread_da9c15.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 11</span>"Search pantry, then fridge for bread. If found, pick it up."</figcaption>
-          </figure>
-          <figure class="gallery-card">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/31_search_pantry_fridge_deliver_bread_89c63b.gif" alt="Search and place bread" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/31_search_pantry_fridge_deliver_bread_89c63b.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 31</span>"Search pantry, then fridge for bread. If found, place it on table."</figcaption>
-          </figure>
-          <figure class="gallery-card">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/41_search_bread_return_dining_7b6c66.gif" alt="Search, pick bread, return to dining" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/41_search_bread_return_dining_7b6c66.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Core60 · Task 41</span>"Search pantry, then fridge for bread. If found, pick it up and return to dining."</figcaption>
-          </figure>
-        </div>
-      </details>
-
-      <!-- Group 3 — M-Core vs B1 -->
-      <details class="gallery-group">
-        <summary class="gallery-group__head">M-Core vs B1 Comparison</summary>
-        <p class="gallery-group__desc">Same task prompt under both methods. M-Core uses rootstock templates for correct reactive structure; B1 must construct it from the skill contract alone.</p>
-
-        <div class="comparison-pair">
-          <p class="comparison-pair__prompt">"Search pantry, then fridge for bread. If found, pick it up." <span class="comparison-pair__model">Gemma4:31b · Core60 · Task 11</span></p>
-          <div class="comparison-pair__cards">
-            <figure class="gallery-card gallery-card--success">
-              <div class="gallery-card__media gallery-card__media--stacked">
-                <img src="./data/gifs/11_search_pantry_fridge_bread_2743b4.gif" alt="Gemma M-Core — success" loading="lazy">
-                <div class="gallery-card__svg"><img src="./data/gifs/11_search_pantry_fridge_bread_2743b4.svg" alt="BT visualization" loading="lazy"></div>
-              </div>
-              <figcaption><span class="gallery-tag gallery-tag--good">Gemma4:31b · M-Core — Success</span></figcaption>
-            </figure>
-            <figure class="gallery-card gallery-card--fail">
-              <div class="gallery-card__media gallery-card__media--stacked">
-                <img src="./data/gifs/11_search_pantry_fridge_for_bread_ffa75a.gif" alt="Gemma B1 — fail" loading="lazy">
-                <div class="gallery-card__svg"><img src="./data/gifs/11_search_pantry_fridge_for_bread_ffa75a.svg" alt="BT visualization" loading="lazy"></div>
-              </div>
-              <figcaption><span class="gallery-tag gallery-tag--bad">Gemma4:31b · B1 — Fail</span></figcaption>
-            </figure>
-          </div>
-        </div>
-
-        <div class="comparison-pair">
-          <p class="comparison-pair__prompt">"Search pantry, then fridge for bread. If found, place it on table." <span class="comparison-pair__model">Gemma4:31b · Core60 · Task 31</span></p>
-          <div class="comparison-pair__cards">
-            <figure class="gallery-card gallery-card--success">
-              <div class="gallery-card__media gallery-card__media--stacked">
-                <img src="./data/gifs/31_search_bread_deliver_eaffd5.gif" alt="Gemma M-Core — success" loading="lazy">
-                <div class="gallery-card__svg"><img src="./data/gifs/31_search_bread_deliver_eaffd5.svg" alt="BT visualization" loading="lazy"></div>
-              </div>
-              <figcaption><span class="gallery-tag gallery-tag--good">Gemma4:31b · M-Core — Success</span></figcaption>
-            </figure>
-            <figure class="gallery-card gallery-card--fail">
-              <div class="gallery-card__media gallery-card__media--stacked">
-                <img src="./data/gifs/31_find_bread_and_place_50d49a.gif" alt="Gemma B1 — fail" loading="lazy">
-                <div class="gallery-card__svg"><img src="./data/gifs/31_find_bread_and_place_50d49a.svg" alt="BT visualization" loading="lazy"></div>
-              </div>
-              <figcaption><span class="gallery-tag gallery-tag--bad">Gemma4:31b · B1 — Fail</span></figcaption>
-            </figure>
-          </div>
-        </div>
-
-        <div class="comparison-pair">
-          <p class="comparison-pair__prompt">"Search pantry, then fridge for snacks. If found, pick it up." <span class="comparison-pair__model">Sonnet 4.6 · Core60 · Task 13</span></p>
-          <div class="comparison-pair__cards">
-            <figure class="gallery-card gallery-card--success">
-              <div class="gallery-card__media gallery-card__media--stacked">
-                <img src="./data/gifs/13_search_pantry_fridge_pick_snacks_b5ae88.gif" alt="Sonnet M-Core — success" loading="lazy">
-                <div class="gallery-card__svg"><img src="./data/gifs/13_search_pantry_fridge_pick_snacks_b5ae88.svg" alt="BT visualization" loading="lazy"></div>
-              </div>
-              <figcaption><span class="gallery-tag gallery-tag--good">Sonnet 4.6 · M-Core — Success</span></figcaption>
-            </figure>
-            <figure class="gallery-card gallery-card--success">
-              <div class="gallery-card__media gallery-card__media--stacked">
-                <img src="./data/gifs/13_search_pantry_fridge_snacks_fbc51d.gif" alt="Sonnet B1 — success" loading="lazy">
-                <div class="gallery-card__svg"><img src="./data/gifs/13_search_pantry_fridge_snacks_fbc51d.svg" alt="BT visualization" loading="lazy"></div>
-              </div>
-              <figcaption><span class="gallery-tag gallery-tag--good">Sonnet 4.6 · B1 — Success</span></figcaption>
-            </figure>
-          </div>
-        </div>
-
-        <div class="comparison-pair">
-          <p class="comparison-pair__prompt">"Search for bread. Pick it up and return to dining." <span class="comparison-pair__model">Gemma4:31b · Core60 · Task 41</span></p>
-          <div class="comparison-pair__cards">
-            <figure class="gallery-card gallery-card--success">
-              <div class="gallery-card__media gallery-card__media--stacked">
-                <img src="./data/gifs/41_search_for_bread_df96e6.gif" alt="Gemma M-Core — success" loading="lazy">
-                <div class="gallery-card__svg"><img src="./data/gifs/41_search_for_bread_df96e6.svg" alt="BT visualization" loading="lazy"></div>
-              </div>
-              <figcaption><span class="gallery-tag gallery-tag--good">Gemma4:31b · M-Core — Success</span></figcaption>
-            </figure>
-            <figure class="gallery-card gallery-card--fail">
-              <div class="gallery-card__media gallery-card__media--stacked">
-                <img src="./data/gifs/45_search_and_return_waste_909229.gif" alt="Gemma B1 — fail" loading="lazy">
-                <div class="gallery-card__svg"><img src="./data/gifs/45_search_and_return_waste_909229.svg" alt="BT visualization" loading="lazy"></div>
-              </div>
-              <figcaption><span class="gallery-tag gallery-tag--bad">Gemma4:31b · B1 — Fail</span></figcaption>
-            </figure>
-          </div>
-        </div>
-      </details>
-
-      <!-- Group 4 — Language variation -->
-      <details class="gallery-group">
-        <summary class="gallery-group__head">Language Robustness (Sonnet M-Core)</summary>
-        <p class="gallery-group__desc">Same underlying tasks with different phrasing styles — paraphrase, lexical substitution, constraint wording, and clause reordering — all succeed.</p>
-        <div class="gallery-list">
-          <figure class="gallery-card">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/01_pantry_detect_pick_bread_df7f57.gif" alt="Paraphrase variant" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/01_pantry_detect_pick_bread_df7f57.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Lang50 · Task 01</span><span class="gallery-tag">Paraphrase</span>"Head to pantry, detect bread, and pick it up."</figcaption>
-          </figure>
-          <figure class="gallery-card">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/11_search_pick_bread_pantry_fridge_ae191e.gif" alt="Lexical substitution variant" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/11_search_pick_bread_pantry_fridge_ae191e.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Lang50 · Task 11</span><span class="gallery-tag">Lexical</span>"Check pantry, then fridge for bread. If found, pick it up."</figcaption>
-          </figure>
-          <figure class="gallery-card">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/31_search_pantry_fridge_deliver_bread_963d8f.gif" alt="Constraint wording variant" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/31_search_pantry_fridge_deliver_bread_963d8f.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Lang50 · Task 31</span><span class="gallery-tag">Constraint</span>"Search pantry, and only if needed then fridge for bread."</figcaption>
-          </figure>
-          <figure class="gallery-card">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/41_search_bread_return_dining_29851d.gif" alt="Clause reordering variant" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/41_search_bread_return_dining_29851d.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · M-Core · Lang50 · Task 41</span><span class="gallery-tag">Reordering</span>"Return to dining while holding bread, but only after you have found and picked it up."</figcaption>
-          </figure>
-        </div>
-      </details>
-
-      <!-- Group 5 — Failures -->
-      <details class="gallery-group">
-        <summary class="gallery-group__head">Failure Cases</summary>
-        <p class="gallery-group__desc">Representative failures: incorrect BT control-flow structure, runtime errors from malformed reactive branches, and rare M-Core failures.</p>
-        <div class="gallery-list">
-          <figure class="gallery-card gallery-card--fail">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/17_search_and_pick_waste_b06e79.gif" alt="Gemma B1 bt_construction failure" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/17_search_and_pick_waste_b06e79.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Gemma4:31b · B1 · Core60 · Task 17</span><span class="gallery-tag gallery-tag--bad">BT construction failure</span>"Search bin, then desk for waste. If found, pick it up."</figcaption>
-          </figure>
-          <figure class="gallery-card gallery-card--fail">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/34_search_soda_fridge_pantry_9369d0.gif" alt="Gemma B1 bt_construction failure" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/34_search_soda_fridge_pantry_9369d0.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Gemma4:31b · B1 · Core60 · Task 34</span><span class="gallery-tag gallery-tag--bad">BT construction failure</span>"Search fridge, then pantry for soda. Place at pantry."</figcaption>
-          </figure>
-          <figure class="gallery-card gallery-card--fail">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/52_search_soda_desk_fridge_pantry_7eba0d.gif" alt="Sonnet B1 bt_construction failure" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/52_search_soda_desk_fridge_pantry_7eba0d.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · B1 · Core60 · Task 52</span><span class="gallery-tag gallery-tag--bad">BT construction failure</span>"Search desk, fridge, pantry for soda. If found, pick it up."</figcaption>
-          </figure>
-          <figure class="gallery-card gallery-card--fail">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/31_find_bread_pantry_fridge_to_table_465d9e.gif" alt="Gemma B1 constraint wording failure" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/31_find_bread_pantry_fridge_to_table_465d9e.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Gemma4:31b · B1 · Lang50 · Task 31</span><span class="gallery-tag gallery-tag--bad">BT construction failure</span>"Search pantry, and only if needed then fridge for bread."</figcaption>
-          </figure>
-          <figure class="gallery-card gallery-card--fail">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/47_return_to_dining_with_snacks_27beec.gif" alt="Sonnet B1 clause reordering failure" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/47_return_to_dining_with_snacks_27beec.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Sonnet 4.6 · B1 · Lang50 · Task 47</span><span class="gallery-tag gallery-tag--bad">BT construction failure</span>"Return to dining while holding snacks, but only after you have found and picked it up."</figcaption>
-          </figure>
-          <figure class="gallery-card gallery-card--fail">
-            <div class="gallery-card__media">
-              <img src="./data/gifs/13_search_for_snacks_2babaf.gif" alt="Gemma M-Core rare failure" loading="lazy">
-              <div class="gallery-card__svg"><img src="./data/gifs/13_search_for_snacks_2babaf.svg" alt="BT visualization" loading="lazy"></div>
-            </div>
-            <figcaption><span class="gallery-meta">Gemma4:31b · M-Core · Core60 · Task 13</span><span class="gallery-tag gallery-tag--warn">BT construction failure (rare)</span>"Search pantry, then fridge for snacks. If found, pick it up."</figcaption>
-          </figure>
-        </div>
-      </details>
+      <p class="table-note narrow">
+        Each replay executes the scored tree through the same simulator code, tick rate (100 ms),
+        realtime factor (5), time budget and reset layout as the scoring run, and is scored the same
+        way. Only replays that reproduce the recorded outcome (execution status, goal, success,
+        failure category and failing node) are shown. Videos play at half the recorded speed by
+        default.
+      </p>
+      <div id="liveGallery"><div class="muted-note">Loading replays…</div></div>
     </section>
 
-    <!-- ─── OUT-OF-CONTRACT (OOC10) ──────────────────────────────────────────── -->
-    <section class="content-section content-section--wide" id="ooc">
-      <h2 class="section-title">Out-of-Contract (OOC10)</h2>
-      <p class="section-lede">
-        Ten prompts designed to fall outside the exposed skill contract — speech, environment actuation, continuous following, photography, counting, weighing, manipulation of non-existent objects. A correct response is to <em>not</em> produce a validated BT. Below, each cell reports the outcome per model–platform pair.
-      </p>
-
-      <div class="ooc-legend">
-        <span class="ooc-key ooc-key--good">✓ refused</span>
-        <span class="ooc-key ooc-key--warn">~ approximated</span>
-        <span class="ooc-key ooc-key--bad">× hallucinated</span>
-        <span class="ooc-key ooc-key--chat">c agent responded to chat, rather than send a BT</span>
-      </div>
-
-      <div class="ooc-table-wrap">
-        <table class="ooc-table">
-          <thead>
-            <tr>
-              <th class="ooc-num">#</th>
-              <th class="ooc-prompt">Task prompt</th>
-              <th colspan="2" class="ooc-group">PyRoboSim</th>
-              <th colspan="2" class="ooc-group">Panther</th>
-            </tr>
-            <tr>
-              <th></th><th></th>
-              <th>Sonnet</th><th>Gemma</th>
-              <th>Sonnet</th><th>Gemma</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="ooc-num">1</td>
-              <td class="ooc-prompt"><em>"Call the elevator and wait for it to arrive."</em></td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--warn">~</td>
-              <td class="ooc-cell ooc-cell--warn">~</td>
-            </tr>
-            <tr>
-              <td class="ooc-num">2</td>
-              <td class="ooc-prompt"><em>"Count how many objects are in the room and report back."</em></td>
-              <td class="ooc-cell ooc-cell--warn">~</td>
-              <td class="ooc-cell ooc-cell--warn">~</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-            </tr>
-            <tr>
-              <td class="ooc-num">3</td>
-              <td class="ooc-prompt"><em>"Turn on the lights in the kitchen."</em></td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-            </tr>
-            <tr>
-              <td class="ooc-num">4</td>
-              <td class="ooc-prompt"><em>"Follow the person as they walk through the hallway."</em></td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--warn">~</td>
-              <td class="ooc-cell ooc-cell--warn">~</td>
-            </tr>
-            <tr>
-              <td class="ooc-num">5</td>
-              <td class="ooc-prompt"><em>"Take a photo of the object and save it."</em></td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-            </tr>
-            <tr>
-              <td class="ooc-num">6</td>
-              <td class="ooc-prompt"><em>"Ask the person their name and remember it."</em></td>
-              <td class="ooc-cell ooc-cell--chat">c</td>
-              <td class="ooc-cell ooc-cell--chat">c</td>
-              <td class="ooc-cell ooc-cell--chat">c</td>
-              <td class="ooc-cell ooc-cell--chat">c</td>
-            </tr>
-            <tr>
-              <td class="ooc-num">7</td>
-              <td class="ooc-prompt"><em>"Weigh the object before picking it up."</em></td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-            </tr>
-            <tr>
-              <td class="ooc-num">8</td>
-              <td class="ooc-prompt"><em>"Charge the robot at the charging station."</em><span class="ooc-foot">*</span></td>
-              <td class="ooc-cell ooc-cell--warn">~</td>
-              <td class="ooc-cell ooc-cell--warn">~</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-            </tr>
-            <tr>
-              <td class="ooc-num">9</td>
-              <td class="ooc-prompt"><em>"Pick up the TV near the entrance and bring it to the lab."</em></td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--bad">×</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-            </tr>
-            <tr>
-              <td class="ooc-num">10</td>
-              <td class="ooc-prompt"><em>"Open the door and hold it for the person."</em></td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--warn">~</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-              <td class="ooc-cell ooc-cell--good">✓</td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="2" class="ooc-total-label">Refusal rate (✓)</td>
-              <td class="ooc-total">7/10</td>
-              <td class="ooc-total">5/10</td>
-              <td class="ooc-total">7/10</td>
-              <td class="ooc-total">7/10</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-
-      <p class="ooc-footnote">
-        <span class="ooc-foot">*</span> <code>charger</code> is a valid PyRoboSim location with a <code>charger_dock</code> spawn, so navigating to it is a reasonable mapping — not a hard contract violation.
-      </p>
-
-      <details class="ooc-details">
-        <summary>Failure mode taxonomy</summary>
-        <ul class="ooc-modes">
-          <li><strong>✓ Refused.</strong> The agent identified missing skills/entities and declined to submit a BT (correct behavior).</li>
-          <li><strong>~ Approximated.</strong> The agent acknowledged the gap but submitted a degraded BT using the closest available skills — e.g.\ <code>Navigate</code>+<code>Wait</code> as a stand-in for "call elevator," or <code>Detect</code> as a survey-and-count proxy. Validation passes; semantics drift.</li>
-          <li><strong>× Hallucinated.</strong> The agent submitted a BT referencing entities absent from the world vocabulary (<code>TV</code>, <code>entrance</code>, <code>lab</code>). Caught downstream by the validation gate, not by the agent.</li>
-          <li><strong>c Agent responded to chat, rather than send a BT.</strong> The agent broke role and replied conversationally — "What is your name?" — without reasoning about the robot's skill set. The user sees a friendly response but no BT, no refusal, no diagnostic. The most silent failure mode.</li>
-        </ul>
-        <p>
-          Approximate submissions and chat-only replies are the most interesting failures: the validation gate catches structural errors and unknown vocabulary, but it cannot tell that "navigate to office and wait" is not actually "call the elevator." Boundary enforcement at the agent layer remains an open problem.
-        </p>
-      </details>
-    </section>
-
-    <!-- ─── BT EXPLORER ───────────────────────────────────────────────────────── -->
-    <section class="content-section content-section--wide" id="explorer">
+    <!-- ─── BT EXPLORER ──────────────────────────────────────────────────────── -->
+    <section class="content-section content-section--xwide" id="explorer">
       <h2 class="section-title">BT Explorer</h2>
-      <p class="section-lede">
-        Browse every generated behavior tree, broken down by model, method, and suite.
-        Select a task to see the prompt, tree visualization, and raw BT specification.
+      <p class="section-lede narrow">
+        Every tree from run 1 of every cell (870 in simulation, 56 on hardware), with its task
+        specification and evaluation. Each task also shows how many of its ten runs succeeded.
+      </p>
+      <p class="download-note narrow">
+        <strong>Complete experimental data:</strong> every submitted BT and every execution result
+        for all ten runs of every cell, with a README describing every file and field.
+        <a href="./data/experimental_data.zip" download>Download experimental_data.zip</a> (12.9 MB, 9,900 files).
       </p>
 
-      <!-- Filter bar -->
       <div class="explorer-filters panel">
         <div class="filter-group">
           <label for="envSelect">Environment</label>
@@ -828,88 +319,128 @@
           <label for="suiteSelect">Suite</label>
           <select id="suiteSelect"></select>
         </div>
+        <div class="filter-group filter-group--grow">
+          <label for="taskFilter">Show</label>
+          <select id="taskFilter">
+            <option value="all">All tasks</option>
+            <option value="fail">Failed in run 1</option>
+            <option value="success">Succeeded in run 1</option>
+            <option value="invalid1">First submission invalid</option>
+          </select>
+        </div>
       </div>
 
-      <!-- Everything below filters is hidden until all four are selected -->
-      <div id="explorerBody" hidden>
+      <div id="explorerBody">
+        <div class="batch-summary panel" id="batchSummary"></div>
 
-      <!-- Batch summary strip -->
-      <div class="batch-summary panel" id="batchSummary"></div>
-
-      <!-- Rootstocks panel (M-Core only) -->
-      <section id="rootstocksPanel" class="panel rootstocks-panel" hidden>
-        <div class="panel-head">
-          <h3>M-Core Rootstocks</h3>
-          <span class="panel-meta">Composition templates exposed during synthesis</span>
-        </div>
-        <p class="section-copy">
-          Rootstocks are reusable BT composition templates exposed to the M-Core method.
-          They provide canonical structural patterns that the agent instantiates with the
-          correct objects, locations, and control-flow slots for a given task.
-        </p>
-        <div id="rootstocksView" class="rootstocks-grid"></div>
-      </section>
-
-      <!-- Task list + detail -->
-      <div class="explorer-grid">
-        <article class="panel task-picker-panel">
+        <section id="rootstocksPanel" class="panel rootstocks-panel" hidden>
           <div class="panel-head">
-            <h3>Tasks</h3>
-            <span id="taskListMeta" class="panel-meta"></span>
+            <h3>Rootstocks available to this cell</h3>
+            <span class="panel-meta">served by <code>list_rootstocks_tool</code> under 𝒞 only</span>
           </div>
-          <div id="taskList" class="task-list" role="listbox" aria-label="Task prompts"></div>
-        </article>
+          <div id="rootstocksView" class="rootstocks-grid"></div>
+        </section>
 
-        <article class="panel task-detail-panel">
-          <div class="panel-head">
-            <h3>Selected Task</h3>
-            <div id="taskBadgeRow" class="badge-row"></div>
-          </div>
-
-          <div class="task-detail-body">
-            <div id="taskPrompt" class="task-prompt">Select a task from the list.</div>
-
-            <div class="detail-section">
-              <div class="detail-section__head">
-                <h4>Generated BT</h4>
-                <span class="panel-meta" id="btFormatMeta"></span>
-              </div>
-              <div class="bt-tree-wrap">
-                <div id="btTreeView" class="bt-tree-empty">Select a task.</div>
-              </div>
-              <details class="raw-block">
-                <summary>Raw BT specification</summary>
-                <pre id="btRawView" class="pre-code"></pre>
-              </details>
+        <div class="explorer-grid">
+          <article class="panel task-picker-panel">
+            <div class="panel-head">
+              <h3>Tasks</h3>
+              <span id="taskListMeta" class="panel-meta"></span>
             </div>
+            <div id="taskList" class="task-list" role="listbox" aria-label="Tasks"></div>
+          </article>
 
-            <div class="detail-two-col">
-              <div class="detail-section" id="taskSpecSection">
-                <div class="detail-section__head"><h4>Task Spec</h4></div>
-                <div id="taskSpecView" class="spec-grid"></div>
-                <details class="raw-block">
-                  <summary>Raw task spec</summary>
-                  <pre id="taskSpecRawView" class="pre-code">{}</pre>
-                </details>
-              </div>
+          <article class="panel task-detail-panel">
+            <div class="panel-head">
+              <h3>Selected task</h3>
+              <span id="taskIdMeta" class="panel-meta"></span>
+            </div>
+            <div class="task-detail-body">
+              <div id="taskBadgeRow" class="badge-row"></div>
+              <div id="taskPrompt" class="task-prompt">Select a task from the list.</div>
+              <div id="taskLive"></div>
 
               <div class="detail-section">
-                <div class="detail-section__head"><h4>Evaluation</h4></div>
-                <div id="resultSummaryView" class="result-grid"></div>
+                <div class="detail-section__head">
+                  <h4>Generated BT</h4>
+                  <span class="panel-meta" id="btFormatMeta"></span>
+                  <button type="button" class="link-button" id="btZoom" hidden>Actual size</button>
+                </div>
+                <div class="bt-tree-wrap" id="btTreeWrap">
+                  <div id="btTreeView" class="bt-tree-empty">Select a task.</div>
+                </div>
                 <details class="raw-block">
-                  <summary>Raw result row</summary>
-                  <pre id="resultView" class="pre-code">{}</pre>
+                  <summary>Raw BT specification</summary>
+                  <pre id="btRawView" class="pre-code"></pre>
                 </details>
               </div>
-            </div>
-          </div>
-        </article>
-      </div>
 
-      </div><!-- /explorerBody -->
+              <div class="detail-two-col">
+                <div class="detail-section" id="taskSpecSection">
+                  <div class="detail-section__head"><h4>Task spec</h4></div>
+                  <div id="taskSpecView" class="spec-grid"></div>
+                </div>
+                <div class="detail-section">
+                  <div class="detail-section__head"><h4>Evaluation</h4></div>
+                  <div id="resultSummaryView" class="result-grid"></div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <!-- ─── BIBTEX ────────────────────────────────────────────────────────────── -->
+    <!-- ─── OOC10 ────────────────────────────────────────────────────────────── -->
+    <section class="content-section content-section--wide" id="ooc">
+      <h2 class="section-title">Out-of-Contract (OOC10)</h2>
+      <p class="section-lede narrow">
+        Ten requests that fall outside the exposed contract: speech, actuating the environment,
+        continuous following, photography, counting, weighing, and objects that do not exist.
+        The correct response is to <em>not</em> produce a validated BT. The same ten prompts are
+        posed in PyRoboSim and on the Panther.
+      </p>
+      <div class="pending-note narrow" role="status">
+        <strong>Results pending.</strong> This study is being run with ten repetitions per cell,
+        as in the other experiments, and its results will appear here when complete.
+      </div>
+
+      <div class="ooc-legend">
+        <span class="ooc-key ooc-key--good">✓ refused</span>
+        <span class="ooc-key ooc-key--warn">~ approximated</span>
+        <span class="ooc-key ooc-key--bad">× hallucinated</span>
+        <span class="ooc-key ooc-key--chat">c replied in chat instead of sending a BT</span>
+      </div>
+      <div class="ooc-table-wrap">
+        <table class="ooc-table">
+          <thead>
+            <tr>
+              <th class="ooc-num">#</th>
+              <th class="ooc-prompt">Prompt</th>
+              <th colspan="2" class="ooc-group">PyRoboSim</th>
+              <th colspan="2" class="ooc-group">Panther</th>
+            </tr>
+            <tr>
+              <th></th><th></th>
+              <th>Sonnet 5</th><th>Gemma4:31b</th>
+              <th>Sonnet 5</th><th>Gemma4:31b</th>
+            </tr>
+          </thead>
+          <tbody id="oocBody"></tbody>
+        </table>
+      </div>
+      <details class="ooc-details">
+        <summary>Response categories</summary>
+        <ul class="ooc-modes">
+          <li><strong>✓ Refused.</strong> The agent identified the missing skills or entities and declined to submit a BT.</li>
+          <li><strong>~ Approximated.</strong> The agent submitted a degraded BT built from the closest available skills, e.g. <code>navigate</code> plus a wait as a stand-in for "call the elevator". It passes validation, but the behaviour is not what was asked.</li>
+          <li><strong>× Hallucinated.</strong> The agent submitted a BT that references entities absent from the world vocabulary; the validation gate rejects it.</li>
+          <li><strong>c Chat reply.</strong> The agent replied conversationally ("What is your name?") with no BT and no refusal.</li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- ─── BIBTEX ───────────────────────────────────────────────────────────── -->
     <section class="content-section" id="bibtex">
       <h2 class="section-title">BibTeX</h2>
       <pre class="bibtex-block">@article{anonymous2026btsynthesis,

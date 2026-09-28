@@ -1,0 +1,16 @@
+[
+  {"key": "core60_sonnet_mcore_task31", "cell": "core60_sonnet_mcore", "run": "run01", "task_id": "task31_search_place_bread_table"},
+  {"key": "core60_sonnet_b1_task31", "cell": "core60_sonnet_b1", "run": "run01", "task_id": "task31_search_place_bread_table"},
+  {"key": "core60_gemma_mcore_task25", "cell": "core60_gemma_mcore", "run": "run01", "task_id": "task25_place_bread_fridge"},
+  {"key": "core60_gemma_b1_task25", "cell": "core60_gemma_b1", "run": "run01", "task_id": "task25_place_bread_fridge"},
+  {"key": "lang50_sonnet_mcore_lang47", "cell": "lang50_sonnet_mcore", "run": "run01", "task_id": "lang47_task47_search_return_snacks_table"},
+  {"key": "lang50_sonnet_b1_lang47", "cell": "lang50_sonnet_b1", "run": "run01", "task_id": "lang47_task47_search_return_snacks_table"},
+  {"key": "hard15_sonnet_mcore_hard11", "cell": "hard15_sonnet_mcore", "run": "run01", "task_id": "hard11_search_deliver_epilogue"},
+  {"key": "hard15_sonnet_obtea_hard11", "cell": "hard15_sonnet_obtea", "run": "run01", "task_id": "hard11_search_deliver_epilogue"},
+  {"key": "hard15_sonnet_mcore_hard08", "cell": "hard15_sonnet_mcore", "run": "run01", "task_id": "hard08_leave_as_found"},
+  {"key": "hard15_sonnet_obtea_hard07", "cell": "hard15_sonnet_obtea", "run": "run01", "task_id": "hard07_open_close_bracket"},
+  {"key": "core60_sonnet_obtea_task31", "cell": "core60_sonnet_obtea_full", "run": "run01", "task_id": "task31_search_place_bread_table"},
+  {"key": "prior30_sonnet_mcore_s04", "cell": "prior30_sonnet_mcore", "run": "run01", "task_id": "s04_bread_to_table"},
+  {"key": "prior30_sonnet_obtea_i03", "cell": "prior30_sonnet_obtea", "run": "run01", "task_id": "i03_butter_to_table"},
+  {"key": "prior30_sonnet_mcore_i03", "cell": "prior30_sonnet_mcore", "run": "run01", "task_id": "i03_butter_to_table"}
+]

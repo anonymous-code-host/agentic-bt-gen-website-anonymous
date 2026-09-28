@@ -1,0 +1,310 @@
+[
+  {
+    "key": "core60_sonnet_mcore_task31",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "SUCCESS",
+          "goal_satisfied": true,
+          "success": true,
+          "failure_cause": null,
+          "failed_node": null
+        },
+        "matched": true,
+        "ticks": 50
+      }
+    ],
+    "frames": 77
+  },
+  {
+    "key": "core60_sonnet_b1_task31",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "FAILURE",
+          "goal_satisfied": false,
+          "success": false,
+          "failure_cause": "runtime_failure",
+          "failed_node": "detect_bread_fridge"
+        },
+        "matched": true,
+        "ticks": 30
+      }
+    ],
+    "frames": 56
+  },
+  {
+    "key": "core60_gemma_mcore_task25",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "SUCCESS",
+          "goal_satisfied": true,
+          "success": true,
+          "failure_cause": null,
+          "failed_node": null
+        },
+        "matched": true,
+        "ticks": 30
+      }
+    ],
+    "frames": 56
+  },
+  {
+    "key": "core60_gemma_b1_task25",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "FAILURE",
+          "goal_satisfied": false,
+          "success": false,
+          "failure_cause": "control_flow_ordering",
+          "failed_node": "open_fridge"
+        },
+        "matched": true,
+        "ticks": 37
+      }
+    ],
+    "frames": 64
+  },
+  {
+    "key": "lang50_sonnet_mcore_lang47",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "SUCCESS",
+          "goal_satisfied": true,
+          "success": true,
+          "failure_cause": null,
+          "failed_node": null
+        },
+        "matched": true,
+        "ticks": 50
+      }
+    ],
+    "frames": 78
+  },
+  {
+    "key": "lang50_sonnet_b1_lang47",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "FAILURE",
+          "goal_satisfied": true,
+          "success": false,
+          "failure_cause": "runtime_failure",
+          "failed_node": "place_snacks"
+        },
+        "matched": true,
+        "ticks": 43
+      }
+    ],
+    "frames": 70
+  },
+  {
+    "key": "hard15_sonnet_mcore_hard11",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "SUCCESS",
+          "goal_satisfied": true,
+          "success": true,
+          "failure_cause": null,
+          "failed_node": null
+        },
+        "matched": true,
+        "ticks": 72
+      }
+    ],
+    "frames": 101
+  },
+  {
+    "key": "hard15_sonnet_obtea_hard11",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "FAILURE",
+          "goal_satisfied": false,
+          "success": false,
+          "failure_cause": "unmet_precondition",
+          "failed_node": "holding bread"
+        },
+        "matched": true,
+        "ticks": 1
+      }
+    ],
+    "frames": 25
+  },
+  {
+    "key": "hard15_sonnet_mcore_hard08",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "SUCCESS",
+          "goal_satisfied": false,
+          "success": false,
+          "failure_cause": "bt_construction",
+          "failed_node": null
+        },
+        "matched": true,
+        "ticks": 72
+      }
+    ],
+    "frames": 100
+  },
+  {
+    "key": "hard15_sonnet_obtea_hard07",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "SUCCESS",
+          "goal_satisfied": false,
+          "success": false,
+          "failure_cause": "bt_construction",
+          "failed_node": null
+        },
+        "matched": true,
+        "ticks": 86
+      }
+    ],
+    "frames": 115
+  },
+  {
+    "key": "core60_sonnet_obtea_task31",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "SUCCESS",
+          "goal_satisfied": true,
+          "success": true,
+          "failure_cause": null,
+          "failed_node": null
+        },
+        "matched": true,
+        "ticks": 48
+      }
+    ],
+    "frames": 75
+  },
+  {
+    "key": "prior30_sonnet_obtea_s04",
+    "matched": false,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "FAILURE",
+          "goal_satisfied": false,
+          "success": false,
+          "failure_cause": "runtime_failure",
+          "failed_node": "bread on table"
+        },
+        "matched": false,
+        "ticks": 41
+      },
+      {
+        "attempt": 2,
+        "got": {
+          "exec_status": "FAILURE",
+          "goal_satisfied": false,
+          "success": false,
+          "failure_cause": "runtime_failure",
+          "failed_node": "bread on table"
+        },
+        "matched": false,
+        "ticks": 39
+      },
+      {
+        "attempt": 3,
+        "got": {
+          "exec_status": "FAILURE",
+          "goal_satisfied": false,
+          "success": false,
+          "failure_cause": "runtime_failure",
+          "failed_node": "bread on table"
+        },
+        "matched": false,
+        "ticks": 24
+      }
+    ]
+  },
+  {
+    "key": "prior30_sonnet_mcore_s04",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "SUCCESS",
+          "goal_satisfied": true,
+          "success": true,
+          "failure_cause": null,
+          "failed_node": null
+        },
+        "matched": true,
+        "ticks": 53
+      }
+    ],
+    "frames": 81
+  },
+  {
+    "key": "prior30_sonnet_obtea_i03",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "TIMEOUT",
+          "goal_satisfied": false,
+          "success": false,
+          "failure_cause": "runtime_failure",
+          "failed_node": null
+        },
+        "matched": true,
+        "ticks": 281
+      }
+    ],
+    "frames": 326
+  },
+  {
+    "key": "prior30_sonnet_mcore_i03",
+    "matched": true,
+    "attempts": [
+      {
+        "attempt": 1,
+        "got": {
+          "exec_status": "SUCCESS",
+          "goal_satisfied": true,
+          "success": true,
+          "failure_cause": null,
+          "failed_node": null
+        },
+        "matched": true,
+        "ticks": 56
+      }
+    ],
+    "frames": 84
+  }
+]
