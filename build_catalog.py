@@ -762,28 +762,40 @@ def ooc10_catalog() -> dict[str, Any]:
             })
         cells.append(entry)
 
-    # Run 1 of each contract cell: the reply as the agent wrote it. LLM-OBTEA:
-    # the goals stage 1 produced for the prompt, counted over all runs.
+    # Every run, keyed examples[task][cell][run]. Contract cells: the reply as
+    # the agent wrote it and each tree it sent. LLM-OBTEA: each stage-1 attempt
+    # (reply and the feedback it drew) and the goal it ended with.
     examples: dict[str, dict[str, Any]] = {t["id"]: {} for t in tasks}
-    goals: dict[tuple[str, str], dict[str, int]] = {}
+    attempt_logs: dict[tuple[str, str], dict[str, Any]] = {}
+    for cell, method, _ in OOC10_CELLS:
+        if method != "obtea" or cell not in summaries:
+            continue
+        for run in summaries[cell]["runs"]:
+            report = load_json(OOC10_ROOT / cell / run / "stage_report.json")
+            for t in report["tasks"]:
+                attempt_logs[(cell, run, t["stage1"]["task_id"])] = t["stage1"].get("attempt_log") or []
+    runs: set[str] = set()
     for u in scores["units"]:
-        cell, tid = u["cell"], u["task_id"]
-        if u["method"] == "cr" and u["run"] == "run01":
-            examples[tid][cell] = {"label": u["label"], "sub": u.get("sub"),
-                                   "text": redact(u["evidence"].get("final_text") or ""),
-                                   "tools": u["evidence"].get("tool_summary", "")}
-        elif u["method"] == "obtea":
-            goal = " & ".join(u["attrs"].get("goal") or []) or "no goal"
-            bucket = goals.setdefault((cell, tid), {})
-            bucket[goal] = bucket.get(goal, 0) + 1
-    for (cell, tid), counts in goals.items():
-        examples[tid][cell] = {"goals": sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))}
+        cell, tid, run = u["cell"], u["task_id"], u["run"]
+        runs.add(run)
+        entry: dict[str, Any] = {"label": u["label"], "sub": u.get("sub")}
+        if u["method"] == "cr":
+            entry["text"] = redact(u["evidence"].get("final_text") or "")
+            entry["sends"] = [{"valid": s.get("kind") == "valid", "issues": s.get("issues") or [],
+                               "missed": [x for x in s.get("strict") or [] if s.get("kind") == "valid"]}
+                              for s in u["evidence"].get("sends") or []]
+        else:
+            entry["goal"] = " & ".join(u["attrs"].get("goal") or [])
+            entry["attempts"] = [{"reply": redact((a.get("raw_response") or "").strip())[:400],
+                                  "error": a.get("parse_error")}
+                                 for a in attempt_logs.get((cell, run, tid), [])]
+        examples[tid].setdefault(cell, {})[run] = entry
 
     sources: dict[str, int] = {}
     for u in scores["units"]:
         if u["method"] == "cr" and u.get("needs_text_judgement"):
             sources[u["label_source"]] = sources.get(u["label_source"], 0) + 1
-    return {"tasks": tasks, "cells": cells, "examples": examples,
+    return {"tasks": tasks, "cells": cells, "examples": examples, "runs": sorted(runs),
             "judge": {"model": scores.get("judge_model"), "votes": scores.get("votes"),
                       "label_sources": sources}}
 

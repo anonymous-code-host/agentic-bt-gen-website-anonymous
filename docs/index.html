@@ -18,7 +18,7 @@
       <nav class="hero-section__links" aria-label="Sections">
         <div class="nav-row">
           <a class="pill-link" href="#" aria-disabled="true">Paper (under review)</a>
-          <a class="pill-link" href="./data/experimental_data.zip" download>Data (zip, 13.0 MB)</a>
+          <a class="pill-link" href="./data/experimental_data.zip" download>Data (zip, 13.1 MB)</a>
           <a class="pill-link" href="#bibtex">BibTeX</a>
         </div>
         <div class="nav-row">
@@ -309,7 +309,7 @@
         <strong>Complete experimental data:</strong> every submitted BT and every execution result
         for all ten runs of every cell, plus every OOC10 reply, tree, label and judge vote, with a README
         describing every file and field.
-        <a href="./data/experimental_data.zip" download>Download experimental_data.zip</a> (13.0 MB, 10,018 files).
+        <a href="./data/experimental_data.zip" download>Download experimental_data.zip</a> (13.1 MB, 10,164 files).
       </p>
 
       <div class="explorer-filters panel">
@@ -413,18 +413,24 @@
       </p>
       <div class="pending-note narrow" role="status" id="oocStatus" hidden></div>
 
-      <h3 class="subsection-title">Sonnet 5</h3>
+      <h3 class="subsection-title">Findings</h3>
       <ul class="ooc-findings narrow">
-        <li><strong>𝒞 declined the same 8 of 10 prompts in every run</strong> and sent no invalid or
-          hallucinated tree. Each decline names the missing skill or entity; 74 of the 80 end by asking the
-          user how to proceed, sometimes offering a stand-in, without sending anything.</li>
-        <li><strong>The two trees 𝒞 did send are approximations.</strong> For prompt 2 it visits every location
-          and runs <code>detect</code>, which gathers the objects but cannot count or report them. For prompt 8
-          it navigates to <code>charger</code>, which does recharge the robot.</li>
-        <li><strong>LLM-OBTEA produced no goal for 45 ± 9% of prompts</strong> and a plannable substitute for
-          the rest, e.g. <code>RobotNear(kitchen)</code> for the kitchen lights and <code>Holding(bread)</code>
-          for weighing an object. Its first attempt found no goal in 78 of the 100 prompt-runs; the retry
-          feedback, which asks it to try again, turned 33 of those into a goal.</li>
+        <li><strong>With the contract, Sonnet 5 declined 80% of prompt-runs and Gemma4:31b 41%.</strong> Sonnet
+          declined the same 8 prompts in every run, naming the missing skill or entity, and 74 of its 80 declines
+          end by asking the user how to proceed. Gemma declined some prompts consistently (asking a name 10 of 10,
+          the elevator 9 of 10) and built a tree for others, such as following a person (8 of 10) and holding the
+          door (9 of 10). In 21 of its 46 valid trees, the reply says what the tree cannot do.</li>
+        <li><strong>The validator stopped most of Gemma’s hallucinated trees.</strong> For the TV prompt, Gemma sent
+          a tree naming the TV, the entrance and the lab in all 10 runs, and the validator rejected it in 9. In the
+          tenth, Gemma moved the names into the tree’s blackboard values, which the validator does not check, “to
+          ensure the behavior tree passed static validation”; the offline contract check caught it. Sonnet sent no
+          hallucinated tree.</li>
+        <li><strong>Both models sent a valid tree for prompts 2 and 8 in every run.</strong> Counting cannot be done
+          with <code>detect</code> alone; navigating to <code>charger</code> does recharge the robot.</li>
+        <li><strong>LLM-OBTEA produced no goal for 45% of prompt-runs with Sonnet 5 and 66% with Gemma4:31b,</strong>
+          and a plannable substitute otherwise, e.g. <code>RobotNear(kitchen)</code> for the kitchen lights with
+          both models. With Sonnet, the retry feedback drives the substitutions: its first attempt found no goal in
+          78 of 100 prompt-runs, and the feedback turned 33 of those into a goal. With Gemma it turned 3.</li>
       </ul>
 
       <div class="ooc-legend" aria-label="Labels">
@@ -466,8 +472,10 @@
 
       <details class="ooc-details">
         <summary>Replies and goals, prompt by prompt</summary>
-        <p class="ooc-details__intro">For 𝒞, the agent’s final reply in run 1, verbatim. For LLM-OBTEA, the goals
-          stage 1 produced for the prompt over all ten runs.</p>
+        <p class="ooc-details__intro">One run at a time, every prompt in all four cells. For 𝒞, the agent’s final
+          reply verbatim and each tree it sent. For LLM-OBTEA, each stage-1 attempt with the feedback it drew, and
+          the goal it ended with.</p>
+        <div class="ooc-runpick" id="oocRunPick" role="group" aria-label="Choose a run"></div>
         <div class="ooc-examples" id="oocExamples"></div>
       </details>
       <details class="ooc-details">
@@ -486,9 +494,11 @@
           tool calls and the robot’s submission log. A no-tree reply is labelled refused, chat, asked a question
           or other by a judge model outside the study (<code>claude-opus-5-5</code>), blind to which model wrote
           the reply: three independent votes, each required to quote the reply verbatim, majority label.</p>
-        <p class="ooc-details__intro">Settings: 𝒞 ran in Claude Code 2.1.283 headless with the contract’s MCP
-          tools only, extended thinking and effort high, as a forked session per task after one contract
-          retrieval. LLM-OBTEA stage 1 used the same model without thinking, with up to five attempts.</p>
+        <p class="ooc-details__intro">Settings: 𝒞 ran in Claude Code headless with the contract’s MCP tools only,
+          extended thinking and effort high, as a forked session per task after one contract retrieval. Sonnet 5
+          (CLI 2.1.283) loaded the robot’s tools on demand and Gemma4:31b (CLI 2.1.284 against Ollama 0.23.2) loaded
+          them up front, each as in its runs for the paper. LLM-OBTEA stage 1 used the same model without thinking,
+          with up to five attempts.</p>
       </details>
     </section>
 

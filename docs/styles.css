@@ -1425,9 +1425,45 @@ code { font-family: var(--font-mono); font-size: 0.9em; }
   max-height: 16em;
   overflow-y: auto;
 }
-.ooc-goals { list-style: none; font-size: 0.84rem; display: grid; gap: 4px; }
-.ooc-goals code { background: #f3f3f3; padding: 1px 6px; border-radius: 3px; overflow-wrap: anywhere; }
-.ooc-goals__n { color: var(--muted); font-variant-numeric: tabular-nums; margin-left: 4px; }
+/* Run picker: one run of every prompt at a time */
+.ooc-runpick {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 0 12px;
+  background: #fafafa;
+}
+.ooc-run-btn {
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.ooc-run-btn:hover { border-color: var(--accent); color: var(--accent); }
+.ooc-run-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ooc-run-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.ooc-sends, .ooc-attempts { font-size: 0.8rem; color: var(--ink-2); margin-top: 8px; line-height: 1.5; }
+.ooc-sends { list-style: none; display: grid; gap: 3px; }
+p.ooc-sends { color: var(--muted); }
+.ooc-sends__mark { display: inline-block; width: 1.2em; font-weight: 700; }
+.ooc-sends__mark--warn { color: var(--warn); }
+.ooc-sends__mark--bad { color: var(--bad); }
+.ooc-goal { font-size: 0.86rem; color: var(--ink); }
+.ooc-goal code, .ooc-attempts code { background: #f3f3f3; padding: 1px 6px; border-radius: 3px; overflow-wrap: anywhere; }
+.ooc-attempts { padding-left: 1.4em; display: grid; gap: 4px; }
+.ooc-attempts code { font-size: 0.95em; white-space: pre-wrap; }
+.ooc-attempts__err { color: var(--bad); margin-left: 4px; }
+.ooc-attempts__ok { color: var(--good); margin-left: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -354,25 +354,57 @@ function renderOoc() {
     $('oocStatus').hidden = false;
   }
 
+  const runs = o.runs || [];
+  $('oocRunPick').innerHTML = runs.map((r, i) => `<button type="button" class="ooc-run-btn" id="oocRun-${esc(r)}"
+      data-run="${esc(r)}" aria-pressed="${i === 0}">Run ${i + 1}</button>`).join('');
+  $('oocRunPick').onclick = (ev) => {
+    const btn = ev.target.closest('.ooc-run-btn');
+    if (!btn) return;
+    $('oocRunPick').querySelectorAll('.ooc-run-btn').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    renderOocRun(btn.dataset.run);
+  };
+  if (runs.length) renderOocRun(runs[0]);
+}
+
+function oocSends(sends) {
+  if (!sends.length) return '<p class="ooc-sends">Sent no tree.</p>';
+  const items = sends.map((s, i) => {
+    const what = s.valid ? 'accepted' : `rejected${s.issues.length ? ` (${[...new Set(s.issues)].join(', ')})` : ''}`;
+    const missed = s.missed.length ? `; the offline contract check flagged ${[...new Set(s.missed)].join(', ')}` : '';
+    return `<li><span class="ooc-sends__mark ooc-sends__mark--${s.valid ? (s.missed.length ? 'bad' : 'warn') : 'bad'}">${s.valid ? '✓' : '✗'}</span>
+      Tree ${i + 1} ${esc(what)}${esc(missed)}</li>`;
+  }).join('');
+  return `<ul class="ooc-sends">${items}</ul>`;
+}
+
+function oocAttempts(attempts) {
+  return `<ol class="ooc-attempts">${attempts.map((a) => `<li><code>${esc(a.reply || '(empty reply)')}</code>
+      ${a.error ? `<span class="ooc-attempts__err">rejected: ${esc(a.error)}</span>` : '<span class="ooc-attempts__ok">parsed</span>'}</li>`).join('')}</ol>`;
+}
+
+function renderOocRun(run) {
+  const o = state.catalog.ooc10;
+  const n = o.runs.indexOf(run) + 1;
   const cellName = (c) => `${c.method === 'obtea' ? 'LLM-OBTEA' : '𝒞'} · ${modelLabel(c.model)}`;
   $('oocExamples').innerHTML = o.tasks.map((t, i) => {
     const ex = o.examples[t.id] || {};
-    const parts = cells.filter((c) => !c.pending && ex[c.cell]).map((c) => {
-      const e = ex[c.cell];
-      if (c.method === 'obtea') {
-        return `<div class="ooc-ex"><div class="ooc-ex__who">${esc(cellName(c))} · goals over 10 runs</div>
-          <ul class="ooc-goals">${e.goals.map(([g, n]) => `<li><code>${esc(g)}</code> <span class="ooc-goals__n">×${n}</span></li>`).join('')}</ul></div>`;
-      }
+    const parts = o.cells.filter((c) => !c.pending && ex[c.cell]?.[run]).map((c) => {
+      const e = ex[c.cell][run];
       const [sym, tone, words] = OOC_LABELS[e.label] || ['', 'chat', e.label];
-      return `<div class="ooc-ex"><div class="ooc-ex__who">${esc(cellName(c))} · run 1
-          <span class="ooc-chip ooc-chip--${tone}">${sym} ${esc(words)}</span></div>
-        <blockquote class="ooc-reply">${esc(e.text)}</blockquote></div>`;
+      const head = `<div class="ooc-ex__who">${esc(cellName(c))}
+          <span class="ooc-chip ooc-chip--${tone}">${sym} ${esc(words)}</span></div>`;
+      if (c.method === 'obtea') {
+        const goal = e.goal ? `Goal <code>${esc(e.goal)}</code>` : `No goal after ${e.attempts.length} attempt${e.attempts.length === 1 ? '' : 's'}`;
+        return `<div class="ooc-ex">${head}<p class="ooc-goal">${goal}</p>${oocAttempts(e.attempts)}</div>`;
+      }
+      return `<div class="ooc-ex">${head}<blockquote class="ooc-reply">${esc(e.text)}</blockquote>${oocSends(e.sends)}</div>`;
     }).join('');
     return `<article class="ooc-example">
       <h4><span class="ooc-example__num">${i + 1}</span> “${esc(t.prompt)}”</h4>
       ${t.reason ? `<p class="ooc-reason">Out of contract: ${esc(t.reason)}.</p>` : ''}
       <div class="ooc-ex-grid">${parts}</div></article>`;
   }).join('');
+  $('oocExamples').setAttribute('aria-label', `Run ${n}`);
 }
 
 // ─── Live player ──────────────────────────────────────────────────────────────
