@@ -1360,7 +1360,74 @@ code { font-family: var(--font-mono); font-size: 0.9em; }
   margin-bottom: 16px;
   line-height: 1.55;
 }
-.ooc-cell--pending { color: #b5b0a8; background: #fafafa; }
+.ooc-cell--pending { color: #b5b0a8; background: #fafafa; font-size: 0.8rem; font-weight: 500; }
+.pending-note[hidden] { display: none; }
+
+/* OOC10 results: a cell holds one chip per outcome, with its count of 10 runs */
+.ooc-table .ooc-cell { width: auto; min-width: 112px; font-size: 0.9rem; line-height: 1.9; }
+.ooc-table thead tr:nth-child(2) th.ooc-group,
+.ooc-table td.ooc-group { border-left: 1px solid var(--line); }
+.ooc-chip {
+  display: inline-block;
+  min-width: 2.4em;
+  padding: 0 6px;
+  margin: 1px 2px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+}
+.ooc-chip--good { background: #d4edda; color: var(--good); border-color: #b0dab6; }
+.ooc-chip--warn { background: #fff3cd; color: var(--warn); border-color: #f1d68a; }
+.ooc-chip--bad  { background: #f8d7da; color: var(--bad);  border-color: #e8b0b0; }
+.ooc-chip--chat { background: #e2e3e5; color: #595e64;     border-color: #c8ccd0; }
+.ooc-table tfoot tr:first-child td { border-top: 2px solid var(--line); }
+.ooc-table tfoot td { border-top: none; font-variant-numeric: tabular-nums; font-size: 0.88rem; }
+.ooc-table tfoot tr + tr td { font-weight: 500; color: var(--muted); padding-top: 0; }
+
+.ooc-findings {
+  margin: 4px 0 18px;
+  padding-left: 20px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.ooc-findings li + li { margin-top: 6px; }
+
+.ooc-details__intro { font-size: 0.88rem; color: var(--ink-2); margin: 4px 0 12px; line-height: 1.55; max-width: 900px; }
+.ooc-examples { display: grid; gap: 14px; margin-bottom: 14px; }
+.ooc-example {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.ooc-example h4 { font-size: 0.95rem; font-weight: 600; font-style: italic; color: var(--ink); display: flex; gap: 8px; align-items: baseline; }
+.ooc-example__num { font-style: normal; color: #8a8a8a; font-size: 0.85rem; min-width: 1.4em; }
+.ooc-reason { font-size: 0.82rem; color: var(--muted); margin: 2px 0 10px 2.1em; }
+.ooc-ex-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.ooc-ex__who { font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
+.ooc-ex__who .ooc-chip { text-transform: none; letter-spacing: 0; font-size: 0.75rem; margin-left: 6px; }
+.ooc-reply {
+  margin: 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--line);
+  background: #fafafa;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 16em;
+  overflow-y: auto;
+}
+.ooc-goals { list-style: none; font-size: 0.84rem; display: grid; gap: 4px; }
+.ooc-goals code { background: #f3f3f3; padding: 1px 6px; border-radius: 3px; overflow-wrap: anywhere; }
+.ooc-goals__n { color: var(--muted); font-variant-numeric: tabular-nums; margin-left: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

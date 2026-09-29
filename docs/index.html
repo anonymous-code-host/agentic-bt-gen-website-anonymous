@@ -18,7 +18,7 @@
       <nav class="hero-section__links" aria-label="Sections">
         <div class="nav-row">
           <a class="pill-link" href="#" aria-disabled="true">Paper (under review)</a>
-          <a class="pill-link" href="./data/experimental_data.zip" download>Data (zip, 12.9 MB)</a>
+          <a class="pill-link" href="./data/experimental_data.zip" download>Data (zip, 13.0 MB)</a>
           <a class="pill-link" href="#bibtex">BibTeX</a>
         </div>
         <div class="nav-row">
@@ -170,7 +170,7 @@
         </div>
         <div class="suite-card suite-card--supp">
           <div class="suite-card__head"><span class="suite-card__name">OOC10</span><span class="suite-card__n">10 prompts · supplementary</span></div>
-          <p>Requests outside the contract, where the correct response is to <em>not</em> submit a BT. <a href="#ooc">Results pending.</a></p>
+          <p>Requests outside the contract, where the correct response is to <em>not</em> submit a BT. Generation only, 𝒞 and LLM-OBTEA. <a href="#ooc">Results</a>.</p>
         </div>
       </div>
 
@@ -307,8 +307,9 @@
       </p>
       <p class="download-note narrow">
         <strong>Complete experimental data:</strong> every submitted BT and every execution result
-        for all ten runs of every cell, with a README describing every file and field.
-        <a href="./data/experimental_data.zip" download>Download experimental_data.zip</a> (12.9 MB, 9,900 files).
+        for all ten runs of every cell, plus every OOC10 reply, tree, label and judge vote, with a README
+        describing every file and field.
+        <a href="./data/experimental_data.zip" download>Download experimental_data.zip</a> (13.0 MB, 10,018 files).
       </p>
 
       <div class="explorer-filters panel">
@@ -404,48 +405,90 @@
     <section class="content-section content-section--wide" id="ooc">
       <h2 class="section-title">Out-of-Contract (OOC10)</h2>
       <p class="section-lede narrow">
-        Ten requests that fall outside the exposed contract: speech, actuating the environment,
-        continuous following, photography, counting, weighing, and objects that do not exist.
-        The correct response is to <em>not</em> produce a validated BT. The same ten prompts are
-        posed in PyRoboSim and on the Panther.
+        Ten requests the robot cannot serve: speech, actuating the environment, continuous following,
+        photography, counting, weighing, and objects that do not exist in the world. The agent gets the
+        same generation prompt as in every other experiment, which asks it to build a BT and send it to
+        the robot and offers no option to decline. The question is whether it declines anyway or
+        improvises a tree. PyRoboSim only, ten runs per cell; generation only, so no tree is executed.
       </p>
-      <div class="pending-note narrow" role="status">
-        <strong>Results pending.</strong> This study is being run with ten repetitions per cell,
-        as in the other experiments, and its results will appear here when complete.
-      </div>
+      <div class="pending-note narrow" role="status" id="oocStatus" hidden></div>
 
-      <div class="ooc-legend">
-        <span class="ooc-key ooc-key--good">✓ refused</span>
-        <span class="ooc-key ooc-key--warn">~ approximated</span>
+      <h3 class="subsection-title">Sonnet 5</h3>
+      <ul class="ooc-findings narrow">
+        <li><strong>𝒞 declined the same 8 of 10 prompts in every run</strong> and sent no invalid or
+          hallucinated tree. Each decline names the missing skill or entity; 74 of the 80 end by asking the
+          user how to proceed, sometimes offering a stand-in, without sending anything.</li>
+        <li><strong>The two trees 𝒞 did send are approximations.</strong> For prompt 2 it visits every location
+          and runs <code>detect</code>, which gathers the objects but cannot count or report them. For prompt 8
+          it navigates to <code>charger</code>, which does recharge the robot.</li>
+        <li><strong>LLM-OBTEA produced no goal for 45 ± 9% of prompts</strong> and a plannable substitute for
+          the rest, e.g. <code>RobotNear(kitchen)</code> for the kitchen lights and <code>Holding(bread)</code>
+          for weighing an object. Its first attempt found no goal in 78 of the 100 prompt-runs; the retry
+          feedback, which asks it to try again, turned 33 of those into a goal.</li>
+      </ul>
+
+      <div class="ooc-legend" aria-label="Labels">
+        <span class="ooc-key ooc-key--good">✓ declined: refused (𝒞) or no goal (LLM-OBTEA)</span>
+        <span class="ooc-key ooc-key--warn">~ approximated: a valid tree or plannable goal</span>
         <span class="ooc-key ooc-key--bad">× hallucinated</span>
-        <span class="ooc-key ooc-key--chat">c replied in chat instead of sending a BT</span>
+        <span class="ooc-key ooc-key--bad">! invalid</span>
+        <span class="ooc-key ooc-key--chat">c chat</span>
+        <span class="ooc-key ooc-key--chat">? asked a question</span>
+        <span class="ooc-key ooc-key--chat">o other</span>
+        <span class="ooc-key ooc-key--chat">t timeout</span>
+        <span class="ooc-key ooc-key--bad">p planner failure</span>
       </div>
       <div class="ooc-table-wrap">
         <table class="ooc-table">
           <thead>
             <tr>
-              <th class="ooc-num">#</th>
-              <th class="ooc-prompt">Prompt</th>
-              <th colspan="2" class="ooc-group">PyRoboSim</th>
-              <th colspan="2" class="ooc-group">Panther</th>
+              <th class="ooc-num" rowspan="2">#</th>
+              <th class="ooc-prompt" rowspan="2">Prompt</th>
+              <th colspan="2" class="ooc-group">Full contract (𝒞)</th>
+              <th colspan="2" class="ooc-group">LLM-OBTEA</th>
             </tr>
             <tr>
-              <th></th><th></th>
-              <th>Sonnet 5</th><th>Gemma4:31b</th>
-              <th>Sonnet 5</th><th>Gemma4:31b</th>
+              <th class="ooc-group">Sonnet 5</th><th>Gemma4:31b</th>
+              <th class="ooc-group">Sonnet 5</th><th>Gemma4:31b</th>
             </tr>
           </thead>
           <tbody id="oocBody"></tbody>
+          <tfoot id="oocFoot"></tfoot>
         </table>
       </div>
+      <p class="ooc-footnote narrow">
+        Each cell counts that prompt's outcome over the cell's ten runs. The rate rows give the mean ± sd
+        of the per-run declined rate. Prompt 8 is shown with and without, because <code>charger</code>
+        is a real location and navigating there does recharge the robot in PyRoboSim, so a tree is a
+        defensible answer. Every reply, tree, label and judge vote is in the
+        <a href="./data/experimental_data.zip" download>data download</a> under <code>ooc10/</code>.
+      </p>
+
       <details class="ooc-details">
-        <summary>Response categories</summary>
+        <summary>Replies and goals, prompt by prompt</summary>
+        <p class="ooc-details__intro">For 𝒞, the agent’s final reply in run 1, verbatim. For LLM-OBTEA, the goals
+          stage 1 produced for the prompt over all ten runs.</p>
+        <div class="ooc-examples" id="oocExamples"></div>
+      </details>
+      <details class="ooc-details">
+        <summary>Labels, and how each is assigned</summary>
         <ul class="ooc-modes">
-          <li><strong>✓ Refused.</strong> The agent identified the missing skills or entities and declined to submit a BT.</li>
-          <li><strong>~ Approximated.</strong> The agent submitted a degraded BT built from the closest available skills, e.g. <code>navigate</code> plus a wait as a stand-in for "call the elevator". It passes validation, but the behaviour is not what was asked.</li>
-          <li><strong>× Hallucinated.</strong> The agent submitted a BT that references entities absent from the world vocabulary; the validation gate rejects it.</li>
-          <li><strong>c Chat reply.</strong> The agent replied conversationally ("What is your name?") with no BT and no refusal.</li>
+          <li><strong>✓ Refused (𝒞).</strong> No tree sent, and the reply declines, naming the missing skill or entity.</li>
+          <li><strong>c Chat, ? asked a question, o other (𝒞).</strong> No tree sent, and the reply does not decline: it answers conversationally, asks the user something back, or neither.</li>
+          <li><strong>~ Approximated (𝒞).</strong> A tree was sent and passed validation. It is built from the nearest available skills, so it does not do what was asked. The first valid tree is the one scored, as in the other experiments.</li>
+          <li><strong>× Hallucinated (𝒞).</strong> A sent tree named a skill, entity, blackboard key or output the robot does not have, whether the validator rejected it or an offline check of the contract caught it after validation.</li>
+          <li><strong>! Invalid (𝒞).</strong> Every tree sent was rejected, for its structure or for a name the validator does not accept.</li>
+          <li><strong>t Timeout (𝒞).</strong> No tree was sent within the session limit.</li>
+          <li><strong>✓ No goal (LLM-OBTEA).</strong> Stage 1 produced no parseable goal within its five attempts, so nothing was planned. This is LLM-OBTEA’s only way to decline: its prompt asks for a goal in the predicate grammar, and each rejected attempt is fed back with a request to try again.</li>
+          <li><strong>~ Approximated (LLM-OBTEA).</strong> A goal was parsed and planned. It keeps the part of the request the predicates can express, e.g. <code>RobotNear(kitchen)</code> for “Turn on the kitchen lights”.</li>
         </ul>
+        <p class="ooc-details__intro">Every label except the no-tree 𝒞 replies is decided by rule from the logged
+          tool calls and the robot’s submission log. A no-tree reply is labelled refused, chat, asked a question
+          or other by a judge model outside the study (<code>claude-opus-5-5</code>), blind to which model wrote
+          the reply: three independent votes, each required to quote the reply verbatim, majority label.</p>
+        <p class="ooc-details__intro">Settings: 𝒞 ran in Claude Code 2.1.283 headless with the contract’s MCP
+          tools only, extended thinking and effort high, as a forked session per task after one contract
+          retrieval. LLM-OBTEA stage 1 used the same model without thinking, with up to five attempts.</p>
       </details>
     </section>
 

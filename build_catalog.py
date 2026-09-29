@@ -721,6 +721,73 @@ def panther_contract() -> dict[str, Any]:
     }
 
 
+# ─── OOC10 ───────────────────────────────────────────────────────────────────
+# Scored by bt-eval-harness score_ooc10.py (branch ral/ooc10) into
+# <root>/_report/ooc10_scores.json. A cell that has not been run yet is shown
+# as pending rather than left out, so the table keeps its four columns.
+
+OOC10_ROOT = HARNESS / "generated_ral_resubmit" / "ooc10"
+OOC10_SCORES = OOC10_ROOT / "_report" / "ooc10_scores.json"
+OOC10_CELLS = [  # table column order: (scorer cell, method, model)
+    ("cr_sonnet", "mcore", "sonnet"), ("cr_gemma", "mcore", "gemma"),
+    ("obtea_sonnet", "obtea", "sonnet"), ("obtea_gemma", "obtea", "gemma"),
+]
+
+
+def ooc10_catalog() -> dict[str, Any]:
+    suite = yaml.safe_load((SUITE_DIR / "tasks_pyrobosim_ooc10.yaml").read_text())["tasks"]
+    tasks = [{"id": t["id"], "prompt": t["task_prompt"], "reason": t.get("ooc_reason", "")} for t in suite]
+    if not OOC10_SCORES.exists():
+        return {"tasks": tasks, "cells": [], "examples": {}}
+    scores = load_json(OOC10_SCORES)
+    summaries = scores["summaries"]
+
+    def rate(block: dict[str, Any]) -> dict[str, Any]:
+        return {"mean": block["mean"], "sd": block["sd_population"], "ci95": block["bootstrap95"]}
+
+    cells = []
+    for cell, method, model in OOC10_CELLS:
+        s = summaries.get(cell)
+        entry = {"cell": cell, "method": method, "model": model, "pending": s is None}
+        if s:
+            pos = "rejected" if method == "obtea" else "refused"
+            entry.update({
+                "runs": len(s["runs"]),
+                "positive": pos,
+                "per_task": {tid: v["counts"] for tid, v in s["per_task"].items()},
+                "rate": rate(s[f"{pos}_rate_all10"]),
+                "rate_wo08": rate(s[f"{pos}_rate_without_ooc08"]),
+                "totals": s["label_totals"],
+                "extra": s.get("obtea") or s.get("sensitivity") or {},
+            })
+        cells.append(entry)
+
+    # Run 1 of each contract cell: the reply as the agent wrote it. LLM-OBTEA:
+    # the goals stage 1 produced for the prompt, counted over all runs.
+    examples: dict[str, dict[str, Any]] = {t["id"]: {} for t in tasks}
+    goals: dict[tuple[str, str], dict[str, int]] = {}
+    for u in scores["units"]:
+        cell, tid = u["cell"], u["task_id"]
+        if u["method"] == "cr" and u["run"] == "run01":
+            examples[tid][cell] = {"label": u["label"], "sub": u.get("sub"),
+                                   "text": redact(u["evidence"].get("final_text") or ""),
+                                   "tools": u["evidence"].get("tool_summary", "")}
+        elif u["method"] == "obtea":
+            goal = " & ".join(u["attrs"].get("goal") or []) or "no goal"
+            bucket = goals.setdefault((cell, tid), {})
+            bucket[goal] = bucket.get(goal, 0) + 1
+    for (cell, tid), counts in goals.items():
+        examples[tid][cell] = {"goals": sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))}
+
+    sources: dict[str, int] = {}
+    for u in scores["units"]:
+        if u["method"] == "cr" and u.get("needs_text_judgement"):
+            sources[u["label_source"]] = sources.get(u["label_source"], 0) + 1
+    return {"tasks": tasks, "cells": cells, "examples": examples,
+            "judge": {"model": scores.get("judge_model"), "votes": scores.get("votes"),
+                      "label_sources": sources}}
+
+
 # ─── Main ────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -783,8 +850,7 @@ def main() -> None:
         "contract": {"sim": sim_contract(), "hw": panther_contract()},
         "tables": tables,
         "highlights": highlights,
-        "ooc10": [{"id": t["id"], "prompt": t["task_prompt"]}
-                  for t in yaml.safe_load((SUITE_DIR / "tasks_pyrobosim_ooc10.yaml").read_text())["tasks"]],
+        "ooc10": ooc10_catalog(),
     }
     write_json(OUT / "catalog.json", catalog)
     print(f"wrote {OUT / 'catalog.json'} ({(OUT / 'catalog.json').stat().st_size / 1e3:.0f} kB), "

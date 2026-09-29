@@ -302,13 +302,77 @@ function renderTables() {
       ${r.cells.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 }
 
-// ─── OOC10 placeholder ────────────────────────────────────────────────────────
+// ─── OOC10 ────────────────────────────────────────────────────────────────────
+
+// label -> [symbol, tone, words]; this is also the order chips appear in a cell
+const OOC_LABELS = {
+  refused: ['✓', 'good', 'refused'],
+  rejected: ['✓', 'good', 'no goal'],
+  approximated: ['~', 'warn', 'approximated'],
+  hallucinated: ['×', 'bad', 'hallucinated'],
+  invalid: ['!', 'bad', 'invalid'],
+  planner_fail: ['p', 'bad', 'planner failure'],
+  chat: ['c', 'chat', 'chat'],
+  clarify: ['?', 'chat', 'asked a question'],
+  other: ['o', 'chat', 'other'],
+  timeout: ['t', 'chat', 'timeout'],
+};
+
+function oocChips(counts) {
+  return Object.keys(OOC_LABELS).filter((k) => counts?.[k]).map((k) => {
+    const [sym, tone, words] = OOC_LABELS[k];
+    return `<span class="ooc-chip ooc-chip--${tone}" title="${esc(words)}: ${counts[k]} of 10 runs">${sym}${counts[k]}</span>`;
+  }).join('');
+}
+
+function oocRate(r) {
+  return r ? `${r.mean.toFixed(0)} ± ${r.sd.toFixed(0)}%` : '';
+}
 
 function renderOoc() {
-  $('oocBody').innerHTML = state.catalog.ooc10.map((t, i) => `<tr>
+  const o = state.catalog.ooc10;
+  const cells = o.cells;
+  const groupStart = (i) => (i % 2 === 0 ? ' ooc-group' : '');
+
+  $('oocBody').innerHTML = o.tasks.map((t, i) => `<tr>
     <td class="ooc-num">${i + 1}</td>
     <td class="ooc-prompt"><em>“${esc(t.prompt)}”</em></td>
-    ${'<td class="ooc-cell ooc-cell--pending" aria-label="pending">·</td>'.repeat(4)}</tr>`).join('');
+    ${cells.map((c, j) => (c.pending
+      ? `<td class="ooc-cell ooc-cell--pending${groupStart(j)}">pending</td>`
+      : `<td class="ooc-cell${groupStart(j)}">${oocChips(c.per_task[t.id])}</td>`)).join('')}</tr>`).join('');
+
+  const rateRow = (label, key) => `<tr><td></td><td class="ooc-total-label">${label}</td>
+    ${cells.map((c, j) => `<td class="ooc-total${groupStart(j)}">${c.pending ? '–' : oocRate(c[key])}</td>`).join('')}</tr>`;
+  $('oocFoot').innerHTML = cells.length
+    ? rateRow('Declined, all 10 prompts', 'rate') + rateRow('Declined, without prompt 8', 'rate_wo08')
+    : '';
+
+  const pending = cells.filter((c) => c.pending);
+  if (pending.length) {
+    const names = pending.map((c) => `${modelLabel(c.model)} ${c.method === 'obtea' ? 'LLM-OBTEA' : '𝒞'}`);
+    $('oocStatus').innerHTML = `<strong>In progress.</strong> ${esc(names.join(' and '))}: runs pending, shown here when complete. The other cells are final.`;
+    $('oocStatus').hidden = false;
+  }
+
+  const cellName = (c) => `${c.method === 'obtea' ? 'LLM-OBTEA' : '𝒞'} · ${modelLabel(c.model)}`;
+  $('oocExamples').innerHTML = o.tasks.map((t, i) => {
+    const ex = o.examples[t.id] || {};
+    const parts = cells.filter((c) => !c.pending && ex[c.cell]).map((c) => {
+      const e = ex[c.cell];
+      if (c.method === 'obtea') {
+        return `<div class="ooc-ex"><div class="ooc-ex__who">${esc(cellName(c))} · goals over 10 runs</div>
+          <ul class="ooc-goals">${e.goals.map(([g, n]) => `<li><code>${esc(g)}</code> <span class="ooc-goals__n">×${n}</span></li>`).join('')}</ul></div>`;
+      }
+      const [sym, tone, words] = OOC_LABELS[e.label] || ['', 'chat', e.label];
+      return `<div class="ooc-ex"><div class="ooc-ex__who">${esc(cellName(c))} · run 1
+          <span class="ooc-chip ooc-chip--${tone}">${sym} ${esc(words)}</span></div>
+        <blockquote class="ooc-reply">${esc(e.text)}</blockquote></div>`;
+    }).join('');
+    return `<article class="ooc-example">
+      <h4><span class="ooc-example__num">${i + 1}</span> “${esc(t.prompt)}”</h4>
+      ${t.reason ? `<p class="ooc-reason">Out of contract: ${esc(t.reason)}.</p>` : ''}
+      <div class="ooc-ex-grid">${parts}</div></article>`;
+  }).join('');
 }
 
 // ─── Live player ──────────────────────────────────────────────────────────────
