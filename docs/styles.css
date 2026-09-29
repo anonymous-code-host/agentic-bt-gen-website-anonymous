@@ -1424,3 +1424,7 @@ body { overflow-x: hidden; }
 .setup-figure figcaption { text-align: center; }
 .method-figure { max-width: 640px; margin: 0 auto 8px; }
 .download-note { font-size: 0.86rem; color: var(--ink-2); background: #f3f8f4; border: 1px solid #cfe0d5; border-radius: 8px; padding: 10px 14px; margin: -6px 0 18px; line-height: 1.55; }
+
+/* Navigation: one row per category */
+.hero-section__links { flex-direction: column; align-items: center; gap: 10px; }
+.nav-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }

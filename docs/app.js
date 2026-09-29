@@ -169,20 +169,52 @@ function rootstockCard(r, extra = '') {
   </div>`;
 }
 
+// Documentation for the skills and operators each contract names.
+const PYROBOSIM_ACTIONS = 'https://pyrobosim.readthedocs.io/en/latest/usage/robot_actions.html';
+const PYTREES_DOCS = {
+  sequence: 'https://py-trees.readthedocs.io/en/devel/composites.html#sequence',
+  selector: 'https://py-trees.readthedocs.io/en/devel/composites.html#selector',
+  parallel: 'https://py-trees.readthedocs.io/en/devel/composites.html#parallel',
+  inverter: 'https://py-trees.readthedocs.io/en/devel/decorators.html#py_trees.decorators.Inverter',
+  retry: 'https://py-trees.readthedocs.io/en/devel/decorators.html#py_trees.decorators.Retry',
+};
+const BTCPP = 'https://behaviortree.github.io/BehaviorTree.CPP/';
+const BTCPP_DOCS = {
+  Sequence: 'd9/ddd/class_b_t_1_1_sequence_node.html',
+  SequenceWithMemory: 'de/d69/class_b_t_1_1_sequence_with_memory.html',
+  Fallback: 'dc/da6/class_b_t_1_1_fallback_node.html',
+  Parallel: 'd1/dee/class_b_t_1_1_parallel_node.html',
+  ReactiveSequence: 'de/d9f/class_b_t_1_1_reactive_sequence.html',
+  ReactiveFallback: 'dc/d04/class_b_t_1_1_reactive_fallback.html',
+  KeepRunningUntilFailure: 'de/d22/class_b_t_1_1_keep_running_until_failure_node.html',
+  Repeat: 'd6/d78/class_b_t_1_1_repeat_node.html',
+  RetryUntilSuccessful: 'dd/de4/class_b_t_1_1_retry_node.html',
+  Inverter: 'd2/ded/class_b_t_1_1_inverter_node.html',
+  ForceSuccess: 'd7/db8/class_b_t_1_1_force_success_node.html',
+  ForceFailure: 'd4/d8c/class_b_t_1_1_force_failure_node.html',
+  RunOnce: 'dd/dbd/class_b_t_1_1_run_once_node.html',
+  AlwaysSuccess: 'dd/dce/class_b_t_1_1_always_success_node.html',
+};
+
+function docCode(name, url) {
+  const code = `<code>${esc(name)}</code>`;
+  return url ? `<a class="doc-link" href="${esc(url)}" target="_blank" rel="noopener">${code}</a>` : code;
+}
+
 function renderContract() {
   const sim = state.catalog.contract.sim;
   const hw = state.catalog.contract.hw;
   const skills = `<div class="contract-table-wrap"><table class="contract-table">
     <thead><tr><th>Skill</th><th>Parameters</th><th>Description</th></tr></thead><tbody>
-    ${sim.skills.map((s) => `<tr><td><code>${esc(s.name)}</code></td><td>${paramList(s.params)}</td>
+    ${sim.skills.map((s) => `<tr><td>${docCode(s.name, PYROBOSIM_ACTIONS)}</td><td>${paramList(s.params)}</td>
       <td>${esc(s.description)}<div class="outputs">writes: ${s.outputs.map((o) => `<code>${esc(o)}</code>`).join(' ')}</div></td></tr>`).join('')}
     </tbody></table></div>`;
   const f = sim.format;
   const format = `<div class="contract-table-wrap"><table class="contract-table">
     <thead><tr><th>Element</th><th>Allowed</th></tr></thead><tbody>
-      <tr><td>Node types</td><td>${f.node_types.map((n) => `<code>${esc(n)}</code>`).join(' ')}</td></tr>
-      <tr><td>Composites</td><td><code>sequence</code>, <code>selector</code>: <code>children</code>, <code>memory</code>. <code>parallel</code>: <code>children</code>, <code>policy</code> (<code>success_on_all</code> | <code>success_on_one</code>)</td></tr>
-      <tr><td>Decorators</td><td>${f.decorators.map((n) => `<code>${esc(n)}</code>`).join(' ')} (one <code>child</code>; <code>retry</code> takes <code>num_failures</code>)</td></tr>
+      <tr><td>Node types</td><td>${f.node_types.map((n) => docCode(n, PYTREES_DOCS[n])).join(' ')}</td></tr>
+      <tr><td>Composites</td><td>${docCode('sequence', PYTREES_DOCS.sequence)}, ${docCode('selector', PYTREES_DOCS.selector)}: <code>children</code>, <code>memory</code>. ${docCode('parallel', PYTREES_DOCS.parallel)}: <code>children</code>, <code>policy</code> (<code>success_on_all</code> | <code>success_on_one</code>)</td></tr>
+      <tr><td>Decorators</td><td>${f.decorators.map((n) => docCode(n, PYTREES_DOCS[n])).join(' ')} (one <code>child</code>; <code>retry</code> takes <code>num_failures</code>)</td></tr>
       <tr><td>Conditions</td><td><code>key</code> <em>operator</em> <code>value</code> on the blackboard, with operators ${f.condition_operators.map((n) => `<code>${esc(n)}</code>`).join(' ')}</td></tr>
       <tr><td>Blackboard</td><td>optional <code>blackboard.initial</code>; action <code>outputs</code> map results to keys</td></tr>
     </tbody></table></div>
@@ -210,7 +242,7 @@ function renderContract() {
     </tbody></table></div>`;
   const hwOps = `<div class="contract-table-wrap"><table class="contract-table">
     <thead><tr><th>Node</th><th>Description</th></tr></thead><tbody>
-    ${hw.operators.map((o) => `<tr><td><code>${esc(o.name)}</code></td><td>${esc(o.description)}</td></tr>`).join('')}
+    ${hw.operators.map((o) => `<tr><td>${docCode(o.name, BTCPP_DOCS[o.name] && BTCPP + BTCPP_DOCS[o.name])}</td><td>${esc(o.description)}</td></tr>`).join('')}
     </tbody></table></div>`;
   const hwRs = `<div class="rootstock-cards">${hw.rootstocks.map((r) => rootstockCard(r,
     `<details class="raw-block"><summary>Template text as served</summary><pre class="pre-code">${esc(r.prose)}</pre></details>`)).join('')}</div>`;
