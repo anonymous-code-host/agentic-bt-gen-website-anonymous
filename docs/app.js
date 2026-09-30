@@ -96,6 +96,7 @@ const state = {
   suite: 'core60',
   taskId: null,
   filter: 'all',
+  search: '',
   zoom: false,
 };
 
@@ -149,7 +150,7 @@ function block(name, count, body, open = false) {
 
 function paramList(params) {
   if (!params.length) return '<span class="muted-note">none</span>';
-  return params.map((p) => `<code>${esc(p.name)}: ${esc(p.type ?? 'any')}</code>${p.required ? '' : '<span class="opt">?</span>'}`).join(' ');
+  return params.map((p) => `<code>${esc(p.name)}: ${esc(p.type ?? 'any')}</code>`).join(' ');
 }
 
 function vocabBlock(vocab, labels) {
@@ -207,7 +208,7 @@ function renderContract() {
   const skills = `<div class="contract-table-wrap"><table class="contract-table">
     <thead><tr><th>Skill</th><th>Parameters</th><th>Description</th></tr></thead><tbody>
     ${sim.skills.map((s) => `<tr><td>${docCode(s.name, PYROBOSIM_ACTIONS)}</td><td>${paramList(s.params)}</td>
-      <td>${esc(s.description)}<div class="outputs">writes: ${s.outputs.map((o) => `<code>${esc(o)}</code>`).join(' ')}</div></td></tr>`).join('')}
+      <td>${esc(s.description)}<details class="outputs"><summary>Blackboard outputs (${s.outputs.length})</summary>${s.outputs.map((o) => `<code>${esc(o)}</code>`).join(' ')}</details></td></tr>`).join('')}
     </tbody></table></div>`;
   const f = sim.format;
   const format = `<div class="contract-table-wrap"><table class="contract-table">
@@ -277,12 +278,18 @@ function renderTables() {
   const t = state.catalog.tables;
   const head = `<thead>
     <tr><th rowspan="2"></th><th colspan="3">Sonnet 5</th><th colspan="3" class="group-start">Gemma4:31b</th></tr>
-    <tr><th>LLM-OBTEA</th><th>𝒞∖ℛ</th><th>𝒞</th><th class="group-start">LLM-OBTEA</th><th>𝒞∖ℛ</th><th>𝒞</th></tr></thead>`;
+    <tr><th>LLM-OBTEA</th><th>𝒞∖ℛ</th><th class="col-full">𝒞</th><th class="group-start">LLM-OBTEA</th><th>𝒞∖ℛ</th><th class="col-full">𝒞</th></tr></thead>`;
   const body = t.table1.map((sec) => `
     <tr class="section-row"><td colspan="7"><strong>${esc(sec.suite)}</strong> <span class="muted-note">${esc(sec.note)}</span></td></tr>
     ${sec.rows.map((r) => `<tr class="${r.level ? 'sub-row' : 'main-row'}"><td>${esc(r.label)}</td>
-      ${r.cells.map((c, i) => toneCell(c).replace('<td class="', `<td class="${i === 3 ? 'group-start ' : ''}`)).join('')}</tr>`).join('')}`).join('');
-  $('table1').innerHTML = `<table class="results-table results-table--paper">${head}<tbody>${body}</tbody></table>`;
+      ${r.cells.map((c, i) => toneCell(c).replace('<td class="', `<td class="${i === 3 ? 'group-start ' : ''}${i === 2 || i === 5 ? 'col-full ' : ''}`)).join('')}</tr>`).join('')}`).join('');
+  $('table1').innerHTML = `<div class="table-tools"><button type="button" class="link-button" id="toggleSubRows" aria-pressed="false">Hide the archetype and variation rows</button></div>
+    <table class="results-table results-table--paper" id="table1Grid">${head}<tbody>${body}</tbody></table>`;
+  $('toggleSubRows').addEventListener('click', (e) => {
+    const hide = $('table1Grid').classList.toggle('hide-sub');
+    e.target.setAttribute('aria-pressed', String(hide));
+    e.target.textContent = hide ? 'Show the archetype and variation rows' : 'Hide the archetype and variation rows';
+  });
 
   $('table2').innerHTML = `<table class="results-table results-table--paper">
     <thead><tr><th>Model</th><th>Method</th><th>Never valid</th><th>Runtime failure</th><th>Goal mismatch</th><th>Failure rate</th></tr></thead>
@@ -700,7 +707,9 @@ function taskOutcome(task, panther) {
 }
 
 function filteredTasks(tasks, panther) {
+  const q = state.search.trim().toLowerCase();
   return tasks.filter((t) => {
+    if (q && !`${t.prompt ?? ''} ${t.id}`.toLowerCase().includes(q)) return false;
     switch (state.filter) {
       case 'fail': return panther ? false : !t.success;
       case 'success': return panther ? true : t.success;
@@ -854,6 +863,14 @@ $('modelSelect').addEventListener('change', onSelect('model'));
 $('methodSelect').addEventListener('change', onSelect('method'));
 $('suiteSelect').addEventListener('change', onSelect('suite'));
 $('taskFilter').addEventListener('change', onSelect('filter'));
+$('taskSearch').addEventListener('input', (e) => {
+  state.search = e.target.value;
+  const batch = currentBatch();
+  const detail = batch && state.cache[batch.name];
+  if (!detail) return;
+  renderTaskList(batch, detail);
+  renderTaskDetail(batch, detail);
+});
 $('taskList').addEventListener('click', (e) => {
   const btn = e.target.closest('[data-task-id]');
   if (!btn) return;
@@ -926,6 +943,37 @@ async function renderVideoBt() {
     $('videoBtTree').innerHTML = '<div class="bt-tree-empty">Tree not found.</div>';
   }
 }
+
+// ─── Navigation bar ───────────────────────────────────────────────────────────
+
+(function topbar() {
+  const bar = $('topbar');
+  const links = [...bar.querySelectorAll('.topbar__links a')];
+  const sections = links.map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const hero = $('top');
+  new IntersectionObserver(([entry]) => bar.classList.toggle('is-visible', !entry.isIntersecting))
+    .observe(hero);
+  let queued = false;
+  const mark = () => {
+    queued = false;
+    const y = bar.offsetHeight + 24;
+    let current = null;
+    for (const sec of sections) if (sec.getBoundingClientRect().top <= y) current = sec;
+    links.forEach((a) => {
+      const on = current && a.getAttribute('href') === `#${current.id}`;
+      a.classList.toggle('is-current', Boolean(on));
+      if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
+    });
+    // Keep the current section's link in view when the bar is narrower than its links.
+    const cur = links.find((a) => a.classList.contains('is-current'));
+    const box = bar.querySelector('.topbar__links');
+    if (cur && (cur.offsetLeft < box.scrollLeft || cur.offsetLeft + cur.offsetWidth > box.scrollLeft + box.clientWidth)) {
+      box.scrollLeft = cur.offsetLeft - (box.clientWidth - cur.offsetWidth) / 2;
+    }
+  };
+  window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(mark); } }, { passive: true });
+  mark();
+})();
 
 // ─── Boot ─────────────────────────────────────────────────────────────────────
 

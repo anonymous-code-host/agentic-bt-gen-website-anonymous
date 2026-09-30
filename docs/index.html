@@ -9,9 +9,28 @@
 </head>
 <body>
 
+  <nav class="topbar" id="topbar" aria-label="Sections">
+    <div class="topbar__inner">
+      <a class="topbar__title" href="#top">Contract-Grounded BT Synthesis</a>
+      <div class="topbar__links">
+        <a href="#abstract">Abstract</a>
+        <a href="#method">Method</a>
+        <a href="#mcp-interface">MCP Interface</a>
+        <a href="#setup">Experimental Setup</a>
+        <a href="#contract">Robot Contract</a>
+        <a href="#video">Robot Demo</a>
+        <a href="#results">Results</a>
+        <a href="#live">Live Execution</a>
+        <a href="#explorer">BT Explorer</a>
+        <a href="#ooc">OOC10</a>
+        <a href="#bibtex">BibTeX</a>
+      </div>
+    </div>
+  </nav>
+
   <main class="page">
 
-    <section class="hero-section">
+    <section class="hero-section" id="top">
       <h1 class="hero-section__title">Contract-Grounded Behavior Tree Synthesis</h1>
       <p class="hero-section__authors">Anonymous Authors</p>
       <p class="hero-section__affil">Anonymous Institution</p>
@@ -47,7 +66,7 @@
         This makes deployment brittle when an operator does not know which skills the robot can execute, how those skills are parameterized, or how the robot runtime software constrains valid BT structure.
         This paper proposes a contract-grounded BT synthesis architecture in which a coding agent queries a robot-side Model Context Protocol (MCP) server to retrieve an explicit contract consisting of a skill library, permitted BT operators, and optional BT composition templates, before synthesizing a BT for validation and execution.
         Non-expert operators therefore issue NL commands without knowledge of robot implementation details.
-        We evaluate two LLMs, a closed model (Sonnet 5) and a smaller open-source model (Gemma4:31b), across 155 simulated tasks in PyRoboSim and 14 tasks on a physical Husarion Panther robot, with ten repetitions per task, and we compare against a hybrid symbolic-LLM baseline under correct, stale, and incomplete symbolic world models.
+        We evaluate two LLMs, a closed model (Sonnet 5) and a smaller open-source model (Gemma4:31b), across 155 simulated tasks in PyRoboSim and 14 tasks on a physical Husarion Panther robot and we compare against a hybrid symbolic-LLM baseline under correct, stale, and incomplete symbolic world models.
         Results show that the contract is sufficient to synthesize valid BTs and achieve high task success, that composition templates recover 16 to 26 points of success for both LLMs, and that the hybrid baseline, strong when its world model is correct, solves none of the twenty tasks whose world model is stale or incomplete.
         The architecture transfers to physical hardware running a Nav2 stack opaque to both operator and agent.
       </p>
@@ -131,7 +150,7 @@
       </p>
       <ol class="question-list">
         <li><span class="q">Q1:</span><span><strong>Contract grounding.</strong> Does the proposed skill contract expose the grounding information needed for valid BT synthesis?</span></li>
-        <li><span class="q">Q2:</span><span><strong>Composition priors.</strong> How do rootstock templates affect task success across task archetypes and language variations?</span></li>
+        <li><span class="q">Q2:</span><span><strong>Composition priors.</strong> How do rootstock templates affect task success across task archetypes, language variations, and tasks the rootstocks are not designed for?</span></li>
         <li><span class="q">Q3:</span><span><strong>Dependence on an authored world model.</strong> How does comparative methods' task success depend on a symbolic world model supplied before execution, and what does each method require the runtime to publish?</span></li>
         <li><span class="q">Q4:</span><span><strong>Physical deployment.</strong> Does the contract support deployable BT synthesis on a physical robot running an opaque Nav2 stack with complex ROS2 data interactions?</span></li>
       </ol>
@@ -329,7 +348,11 @@
           <label for="suiteSelect">Suite</label>
           <select id="suiteSelect"></select>
         </div>
-        <div class="filter-group filter-group--grow">
+        <div class="filter-group filter-group--search">
+          <label for="taskSearch">Search prompts</label>
+          <input type="search" id="taskSearch" placeholder="e.g. fridge, task31" autocomplete="off">
+        </div>
+        <div class="filter-group">
           <label for="taskFilter">Show</label>
           <select id="taskFilter">
             <option value="all">All tasks</option>
